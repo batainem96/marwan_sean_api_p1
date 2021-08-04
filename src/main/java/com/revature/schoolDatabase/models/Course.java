@@ -12,6 +12,9 @@ public class Course {
     private int openSeats;
 
     // Constructors
+    public Course(String title) {
+        this.title = title;
+    }
 
     // Getters and Setters
 

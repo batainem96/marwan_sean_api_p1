@@ -6,21 +6,25 @@ import com.revature.schoolDatabase.util.ScreenRouter;
 import java.io.BufferedReader;
 
 public abstract class Menu extends Screen {
+    // Variables
     protected String name;
-    protected String[] menuOptions;
+    protected String[] menuOptions = {"This menu is empty!"};
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
 
+
+    // Constructors
     public Menu(String name, String route, BufferedReader consoleReader, ScreenRouter router, String[] menuOptions) {
         super(name, route, consoleReader, router);
         this.name = name;
         this.menuOptions = menuOptions;
     }
 
+    // Methods
     public void displayMenu() {
-        System.out.println(name);
-        System.out.println("Please select an option:");
-        for (int i = 0; i < menuOptions.length; i++) {
+        System.out.println("\n" + ANSI_PURPLE + name + ANSI_RESET + "\nPlease select an option:");
+        for (int i = 0; i < menuOptions.length; i++)
             System.out.println((i+1) + ". " + menuOptions[i]);
-        }
     }
 
     @Override

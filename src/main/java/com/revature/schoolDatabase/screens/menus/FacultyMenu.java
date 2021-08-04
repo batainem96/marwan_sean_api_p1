@@ -10,11 +10,13 @@ import java.io.BufferedReader;
 
 public class FacultyMenu extends Menu {
     // Variables
+    private final Faculty fac;
     private final UserService userService;
 
     // Constructors
-    public FacultyMenu(BufferedReader consoleReader, ScreenRouter router, UserService userService) {
+    public FacultyMenu(Faculty fac, BufferedReader consoleReader, ScreenRouter router, UserService userService) {
         super("Faculty", "/faculty", consoleReader, router, new String[] {"View My Courses", "View Available Courses", "View All Courses", "Add Course", "Edit Course", "Remove Course"});
+        this.fac = fac;
         this.userService = userService;
     }
 
@@ -23,9 +25,11 @@ public class FacultyMenu extends Menu {
     public void render() throws Exception {
         displayMenu();
 
-        String userSelection = consoleReader.readLine();
+        // Split user input on whitespace
+        String[] userSelection = consoleReader.readLine().split(" ");
+        System.out.println();
 
-        switch (userSelection) {
+        switch (userSelection[0]) {
             case "1":
                 userService.showCourses();
                 break;
@@ -36,10 +40,16 @@ public class FacultyMenu extends Menu {
                 userService.showCourses();
                 break;
             case "4":
-                userService.createCourse(new Faculty("test", "test", "test", "test"), new Course() );
+                userService.createCourse(new Faculty("test", "test", "test", "test"), new Course("Test Course") );
                 break;
             default:
                 System.out.println("Taking you back to main menu...");
+
+                // Remove FacultyMenu from HashSet
+                if (router.getScreens().contains(this)) {
+                    router.removeScreen(this);
+                }
+
                 router.navigate("/main");
                 break;
         }

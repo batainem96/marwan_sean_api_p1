@@ -26,9 +26,8 @@ public class ProgramManager {
         // TODO Potentially fix it to only instantiate screens as they are used.
         router.addScreen(new MainMenu(consoleReader, router));
         router.addScreen(new RegisterScreen(consoleReader, router));
-        router.addScreen(new LoginScreen(consoleReader, router));
-        router.addScreen(new StudentMenu(consoleReader, router, userService));
-        router.addScreen(new FacultyMenu(consoleReader, router, userService));
+        router.addScreen(new LoginScreen(consoleReader, router, userService));
+
 
     }
 

@@ -2,6 +2,7 @@ package com.revature.schoolDatabase.screens.menus;
 
 import com.revature.schoolDatabase.models.Course;
 import com.revature.schoolDatabase.models.Student;
+import com.revature.schoolDatabase.screens.Screen;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
 
@@ -9,11 +10,13 @@ import java.io.BufferedReader;
 
 public class StudentMenu extends Menu {
     // Variables
+    private final Student stud;
     private final UserService userService;
 
     // Constructors
-    public StudentMenu(BufferedReader consoleReader, ScreenRouter router, UserService userService) {
-        super("Student", "/student", consoleReader, router, new String[] {"View My Courses", "View Available Courses", "View All Courses", "Add Course", "Remove Course", "Cancel Registration"});
+    public StudentMenu(Student stud, BufferedReader consoleReader, ScreenRouter router, UserService userService) {
+        super("Student", "/student", consoleReader, router, new String[] {"View My Courses", "View Available Courses", "View All Courses", "Add Course <CourseID>", "Remove Course", "Cancel Registration"});
+        this.stud = stud;
         this.userService = userService;
     }
 
@@ -22,9 +25,11 @@ public class StudentMenu extends Menu {
     public void render() throws Exception {
         displayMenu();
 
-        String userSelection = consoleReader.readLine();
+        // Split user input on whitespace
+        String[] userSelection = consoleReader.readLine().split(" ");
+        System.out.println();
 
-        switch (userSelection) {
+        switch (userSelection[0]) {
             case "1":
                 userService.showCourses();
                 break;
@@ -34,11 +39,20 @@ public class StudentMenu extends Menu {
             case "3":
                 userService.showCourses();
                 break;
-            case "4":
-                userService.addCourse(new Student("test", "test", "test", "test"), new Course() );
+            case "4":   // User wants to add a course, check if they gave a course ID, otherwise show usage
+                if (userSelection.length > 1) {
+                    userService.addCourse(new Student("test", "test", "test", "test"), Integer.parseInt(userSelection[1]));
+                }
+                else System.out.println("Usage: 4 <CourseID>");
                 break;
             default:
                 System.out.println("Taking you back to main menu...");
+
+                // Remove StudentMenu from HashSet
+                if (router.getScreens().contains(this)) {
+                    router.removeScreen(this);
+                }
+
                 router.navigate("/main");
                 break;
         }
