@@ -4,7 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc54228c-a9b7-402c-aae6-646e77152026" name="Default Changelist" comment="" />
+    <list default="true" id="fc54228c-a9b7-402c-aae6-646e77152026" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Faculty.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Person.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Student.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/LoginScreen.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/RegisterScreen.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/FacultyMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/MainMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/Menu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/StudentMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/util/ProgramManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/util/ProgramManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/revature/schoolDatabase/util/ProgramManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/revature/schoolDatabase/util/ProgramManager.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -59,5 +75,17 @@
       <updated>1627757764197</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
