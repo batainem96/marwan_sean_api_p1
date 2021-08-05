@@ -18,21 +18,20 @@ public class ProgramManager {
     // Constructors
     public ProgramManager() {
         programRunning = true;
+
+        // Through Dependency Injection, we will use these variables throughout the application
         router = new ScreenRouter();
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
         UserService userService = new UserService();
 
         // Add a number of screens we will use to the router HashSet
-        // TODO Potentially fix it to only instantiate screens as they are used.
+        // Others are added on a need basis
         router.addScreen(new MainMenu(consoleReader, router));
-        router.addScreen(new RegisterScreen(consoleReader, router));
+        router.addScreen(new RegisterScreen(consoleReader, router, userService));
         router.addScreen(new LoginScreen(consoleReader, router, userService));
-
-
     }
 
     // Methods
-
     /**
      * This is the main while loop which enables the program to run. The screen router is
      * initialized at the main menu, then is continuously re-rendered until an exception is

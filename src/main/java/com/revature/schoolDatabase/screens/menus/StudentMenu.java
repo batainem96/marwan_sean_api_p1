@@ -41,7 +41,7 @@ public class StudentMenu extends Menu {
                 break;
             case "4":   // User wants to add a course, check if they gave a course ID, otherwise show usage
                 if (userSelection.length > 1) {
-                    userService.addCourse(new Student("test", "test", "test", "test"), Integer.parseInt(userSelection[1]));
+                    userService.addCourse(stud, Integer.parseInt(userSelection[1]));
                 }
                 else System.out.println("Usage: 4 <CourseID>");
                 break;

@@ -1,5 +1,9 @@
 package com.revature.schoolDatabase.screens;
 
+import com.revature.schoolDatabase.models.Faculty;
+import com.revature.schoolDatabase.models.Person;
+import com.revature.schoolDatabase.models.Student;
+import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,10 +13,11 @@ import java.io.BufferedReader;
 public class RegisterScreen extends Screen{
 
     private final Logger logger = LogManager.getLogger(RegisterScreen.class);
-//    private final UserService userService;
+    private final UserService userService;
 
-    public RegisterScreen(BufferedReader consoleReader, ScreenRouter router) {
+    public RegisterScreen(BufferedReader consoleReader, ScreenRouter router, UserService userService) {
         super("RegisterScreen", "/register", consoleReader, router);
+        this.userService = userService;
     }
 
     @Override
@@ -34,12 +39,32 @@ public class RegisterScreen extends Screen{
         System.out.print("Password: ");
         String password = consoleReader.readLine();
 
-//        AppUser newUser = new AppUser(firstName, lastName, email, username, password);
+        System.out.println("Are you registering as a student or faculty?\n" +
+                            "1. Student\n" +
+                            "2. Faculty\n");
+        int studOrFac = Integer.parseInt(consoleReader.readLine());
+        
+        Person newUser;
+        switch (studOrFac) {
+            case 1:
+                newUser = new Student(firstName, lastName, username, password);
+                break;
+            case 2:
+                newUser = new Faculty(firstName, lastName, username, password);
+                break;
+            default:
+                System.out.println("Invalid criteria");
+                return;
+        }
 
         try {
-//            userService.register(newUser);
+            newUser = userService.register(newUser);
             logger.info("User successfully registered!");
             System.out.println("User successfully registered!");
+
+            if (studOrFac == 2)
+                System.out.println("Please note that a faculty account must be admin validated, and you will not be able to access it right away.");
+
             router.navigate("/main");
         } catch (Exception e) {
             logger.error(e.getMessage());

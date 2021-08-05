@@ -7,6 +7,7 @@ import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 
 public class FacultyMenu extends Menu {
     // Variables
@@ -21,6 +22,30 @@ public class FacultyMenu extends Menu {
     }
 
     // Methods
+
+    /**
+     * Creates a new course for the catalog given course information
+     *
+     * @return
+     * @throws IOException
+     */
+    public Course createCourse() throws IOException {
+        System.out.println("Create a new course!");
+
+        System.out.println("Enter course ID");
+        int id = Integer.parseInt(consoleReader.readLine());
+
+        System.out.println("Enter course title");
+        String title = consoleReader.readLine();
+
+        System.out.println("Enter course department");
+        String dept = consoleReader.readLine();
+
+        Course newCourse = new Course(id, title, dept);
+
+        return newCourse;
+    }
+
     @Override
     public void render() throws Exception {
         displayMenu();
@@ -40,7 +65,10 @@ public class FacultyMenu extends Menu {
                 userService.showCourses();
                 break;
             case "4":
-                userService.createCourse(new Faculty("test", "test", "test", "test"), new Course("Test Course") );
+                // Create a new course
+                // Prompt user for course information
+                Course newCourse = createCourse();
+                userService.createCourse(fac, newCourse);
                 break;
             default:
                 System.out.println("Taking you back to main menu...");

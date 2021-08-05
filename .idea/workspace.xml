@@ -5,20 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc54228c-a9b7-402c-aae6-646e77152026" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/exceptions/InvalidRequestException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/UserServiceTestSuite.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Person.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/LoginScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/Screen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/RegisterScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/RegisterScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/FacultyMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/FacultyMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/Menu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/StudentMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/StudentMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/util/ProgramManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/util/ProgramManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/util/ScreenRouter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/util/ScreenRouter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/revature/schoolDatabase/util/ProgramManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/revature/schoolDatabase/util/ProgramManager.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,7 +40,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Console Font" />
   </component>
-  <component name="RunManager" selected="JUnit.UserServiceTestSuite">
+  <component name="RunManager" selected="Application.MainDriver">
     <configuration name="MainDriver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.MainDriver" />
       <module name="sean_dunn_p0" />
@@ -77,8 +71,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.UserServiceTestSuite" />
         <item itemvalue="Application.MainDriver" />
+        <item itemvalue="JUnit.UserServiceTestSuite" />
       </list>
     </recent_temporary>
   </component>

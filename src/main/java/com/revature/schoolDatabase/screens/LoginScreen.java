@@ -32,6 +32,10 @@ public class LoginScreen extends Screen {
 
         // TODO follow to UserService -> expand later
         Person newPerson = userService.login(username, password);
+        if (newPerson != null) {
+
+            System.out.println(newPerson.getClass());
+        } else System.out.println("newPerson is null");
 
         switch (username) {
             case "faculty":
