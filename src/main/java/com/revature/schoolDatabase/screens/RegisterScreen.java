@@ -43,7 +43,7 @@ public class RegisterScreen extends Screen{
                             "1. Student\n" +
                             "2. Faculty\n");
         int studOrFac = Integer.parseInt(consoleReader.readLine());
-        
+
         Person newUser;
         switch (studOrFac) {
             case 1:
