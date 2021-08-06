@@ -25,9 +25,9 @@ public class UserRepository implements CrudRepository<Person> {
             MongoCollection<Document> usersCollection = bookstoreDb.getCollection("users");
             Document newPersonDoc = new Document("firstName", newPerson.getFirstName())
                     .append("lastName", newPerson.getLastName())
-//                    .append("email", newPerson.getEmail())
                     .append("username", newPerson.getUsername())
-                    .append("password", newPerson.getPassword());
+                    .append("password", newPerson.getPassword())
+                    .append("userType", newPerson.getUserType());
 
             usersCollection.insertOne(newPersonDoc);
             newPerson.setId(newPersonDoc.get("_id").toString());
@@ -36,9 +36,8 @@ public class UserRepository implements CrudRepository<Person> {
 
         } catch (Exception e) {
             e.printStackTrace(); // TODO log this to a file
-//            throw new DataSourceException("An unexpected exception occurred.", e);
+            throw new DataSourceException("An unexpected exception occurred.", e);
         }
-        return null;
     }
 
     @Override

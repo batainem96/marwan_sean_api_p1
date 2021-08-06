@@ -18,9 +18,10 @@ public class MongoClientFactory {
     private MongoClient mongoClient;
     private static final MongoClientFactory mongoClientFactory = new MongoClientFactory();
 
-
+    /**
+     * Singleton Factory used to abstract a database connection, and to ensure only one instance is created.
+     */
     private MongoClientFactory() {
-
         Properties appProperties = new Properties();
 
         try {
@@ -48,7 +49,6 @@ public class MongoClientFactory {
             e.printStackTrace(); // TODO log this to a file
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
-
     }
 
     public void cleanUp(){

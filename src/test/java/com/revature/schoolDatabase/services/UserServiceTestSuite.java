@@ -25,6 +25,7 @@ public class UserServiceTestSuite {
             - @Ignore
      */
 
+    // TODO spoof database access
     @BeforeClass // runs before all test cases; runs only once
     public static void setUpSuite() {
 
