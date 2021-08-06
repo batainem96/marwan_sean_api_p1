@@ -4,20 +4,21 @@ import com.revature.schoolDatabase.models.Course;
 import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
-import com.revature.schoolDatabase.exceptions.InvalidRequestException;
+//import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
+import com.revature.schoolDatabase.repositories.UserRepository;
 
 public class UserService {
 
     // Variables
-//    private final UserRepository userRepo;
+    private final UserRepository userRepo;
     private Student stud;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
 
-//    public UserService(UserRepository userRepo) {
-//        this.userRepo = userRepo;
-//    }
+    public UserService(UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
 
 
     /**
@@ -91,7 +92,7 @@ public class UserService {
     public Person register(Person newUser) {
 
         if (!isUserValid(newUser)) {
-            throw new InvalidRequestException("Invalid user data provided!");
+//            throw new InvalidRequestException("Invalid user data provided!");
         }
 
 //        if (userRepo.findUserByUsername(newUser.getUsername()) != null) {
@@ -112,7 +113,7 @@ public class UserService {
     public Person login(String username, String password) {
 
         if (username == null || username.trim().equals("") || password == null || password.trim().equals("")) {
-            throw new InvalidRequestException("Invalid user credentials provided!");
+//            throw new InvalidRequestException("Invalid user credentials provided!");
         }
         // TODO Change login as database is connected
         else {
@@ -122,6 +123,7 @@ public class UserService {
                 return new Faculty("test", "test", username, password);
             else return null;
         }
+        return null;
     }
 
     /**

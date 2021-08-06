@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public abstract class Person {
     // Variables
-    protected int id;
+    protected String id;
     protected String firstName;
     protected String lastName;
     protected String username;
@@ -20,17 +20,17 @@ public abstract class Person {
     }
 
     // Overloaded constructor with id passed
-    public Person(int id, String firstName, String lastName, String username, String password) {
+    public Person(String id, String firstName, String lastName, String username, String password) {
         this(firstName, lastName, username, password);
         this.id = id;
     }
 
     // Getters and Setters
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

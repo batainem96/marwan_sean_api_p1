@@ -1,10 +1,13 @@
 package com.revature.schoolDatabase.util;
 
+import com.revature.schoolDatabase.repositories.CourseRepository;
+import com.revature.schoolDatabase.repositories.UserRepository;
 import com.revature.schoolDatabase.screens.LoginScreen;
 import com.revature.schoolDatabase.screens.RegisterScreen;
 import com.revature.schoolDatabase.screens.menus.FacultyMenu;
 import com.revature.schoolDatabase.screens.menus.MainMenu;
 import com.revature.schoolDatabase.screens.menus.StudentMenu;
+import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 
 import java.io.BufferedReader;
@@ -22,7 +25,10 @@ public class ProgramManager {
         // Through Dependency Injection, we will use these variables throughout the application
         router = new ScreenRouter();
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
-        UserService userService = new UserService();
+        UserRepository userRepository = new UserRepository();
+        UserService userService = new UserService(userRepository);
+        CourseRepository courseRepository = new CourseRepository();
+        CourseService courseService = new CourseService(courseRepository);
 
         // Add a number of screens we will use to the router HashSet
         // Others are added on a need basis

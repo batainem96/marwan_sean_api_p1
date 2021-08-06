@@ -1,0 +1,29 @@
+[
+  {
+    "isbn": "978-1118974400",
+    "title": "OCA Study Guide",
+    "publisher": "Sybex | Wiley",
+    "authors": [
+      "Jeanne Boyarsky",
+      "Scott Selikoff"
+    ],
+    "availableFormats": [
+      {
+        "medium": "paperback",
+        "price": 34.99,
+        "stockCount": 13
+      },
+      {
+        "medium": "ebook",
+        "price": 36.00
+      }
+    ],
+    "genres": [
+      "Non-Fiction",
+      "Technical",
+      "Computer Science",
+      "Educational Guides"
+    ]
+  }
+
+]

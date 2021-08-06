@@ -2,14 +2,17 @@ package com.revature.schoolDatabase.services;
 
 import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
+import com.revature.schoolDatabase.repositories.UserRepository;
 import org.junit.*;
-import com.revature.schoolDatabase.exceptions.InvalidRequestException;
+//import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
+
+import org.mockito.Mockito;
 
 public class UserServiceTestSuite {
 
     UserService sut; // SUT = System Under Test (the thing being tested)
 
-//    private UserRepository mockUserRepo;
+    private UserRepository mockUserRepo;
 
     /*
         Common JUnit 4 Annotations
@@ -20,7 +23,6 @@ public class UserServiceTestSuite {
             - @After
             - @Test
             - @Ignore
-
      */
 
     @BeforeClass // runs before all test cases; runs only once
@@ -35,8 +37,8 @@ public class UserServiceTestSuite {
 
     @Before // runs before each test case
     public void beforeEachTest() {
-//        mockUserRepo = Mockito.mock(UserRepository.class);
-        sut = new UserService();
+        mockUserRepo = Mockito.mock(UserRepository.class);
+        sut = new UserService(mockUserRepo);
     }
 
     @After // runs after each test case

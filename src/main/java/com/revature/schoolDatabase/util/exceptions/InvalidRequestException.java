@@ -1,4 +1,4 @@
-package com.revature.schoolDatabase.exceptions;
+package com.revature.schoolDatabase.util.exceptions;
 
 public class InvalidRequestException extends RuntimeException{
     public InvalidRequestException(String message) {
