@@ -1,0 +1,149 @@
+[
+  {
+    "firstName": "Alfonso" ,
+    "lastName": "Holmes",
+    "username": "aholmes",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Benjamin",
+    "lastName": "Koshy",
+    "username": "bkoshy",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Bill",
+    "lastName": "Thomas",
+    "username": "bthomas",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Charles",
+    "lastName": "Mettee",
+    "username": "cmettee",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Cody",
+    "lastName": "McDonald",
+    "username": "cmcdonald",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Colby",
+    "lastName": "Wall",
+    "username": "cwall",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Heather",
+    "lastName": "Guilfoyle",
+    "username": "hguilfoyle",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Hiroshi",
+    "lastName": "Nobuoka",
+    "username": "hnobuoka",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Jack",
+    "lastName": "Raney",
+    "username": "jraney",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Jamaal",
+    "lastName": "Smith",
+    "username": "jsmith",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "John",
+    "lastName": "Callahan",
+    "username": "jcallahan",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Jose",
+    "lastName": "Tejada",
+    "username": "jtejada",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Kim",
+    "lastName": "Tran",
+    "username": "ktran",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Luna",
+    "lastName": "Haines",
+    "username": "lhaines",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Marwan",
+    "lastName": "Bataineh",
+    "username": "mbataineh",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Mitchell",
+    "lastName": "Panenko",
+    "username": "mpanenko",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Robert",
+    "lastName": "Ni",
+    "username": "robertni",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Sean",
+    "lastName": "Dunn",
+    "username": "sdunn",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Sean",
+    "lastName": "Smith",
+    "username": "ssmith",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Thusneem",
+    "lastName": "Mohamed",
+    "username": "tmohamed",
+    "password": "password",
+    "userType": "student"
+  },
+  {
+    "firstName": "Wezley",
+    "lastName": "Singleton",
+    "username": "wsingleton",
+    "password": "password",
+    "userType": "faculty"
+  }
+]
