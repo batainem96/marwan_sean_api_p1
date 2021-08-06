@@ -43,10 +43,10 @@ public class MongoClientFactory {
 
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace(); // TODO log this to a file
-//            throw new DataSourceException("Unable to load database properties file.", fnfe);
+            throw new DataSourceException("Unable to load database properties file.", fnfe);
         } catch(Exception e){
             e.printStackTrace(); // TODO log this to a file
-//            throw new DataSourceException("An unexpected exception occurred.", e);
+            throw new DataSourceException("An unexpected exception occurred.", e);
         }
 
     }

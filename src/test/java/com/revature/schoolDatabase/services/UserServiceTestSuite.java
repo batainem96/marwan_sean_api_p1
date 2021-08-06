@@ -4,7 +4,7 @@ import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
 import com.revature.schoolDatabase.repositories.UserRepository;
 import org.junit.*;
-//import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
+import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 
 import org.mockito.Mockito;
 
