@@ -9,6 +9,7 @@ public abstract class Person {
     protected String lastName;
     protected String username;
     protected String password;
+    // TODO Add schedule arraylist
 
     // Constructors
     public Person(String firstName, String lastName, String username, String password) {

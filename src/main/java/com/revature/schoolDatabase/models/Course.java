@@ -8,6 +8,7 @@ public class Course {
     private int id;
     private String title;
     private String department;
+    private String shortDept;
     private int deptID;
     private String[] prereqs;
     private String[] professors;
@@ -47,6 +48,10 @@ public class Course {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public void setShortDept(String shortDept) {
+        this.shortDept = shortDept;
     }
 
     public int getDeptID() {
@@ -130,8 +135,12 @@ public class Course {
     }
 
     // Methods
+    /**
+     * Displays course information in an easily readable format
+     */
     public void displayCourse() {
         System.out.println(this.title);
         System.out.println(this.department + this.id);
     }
+
 }
