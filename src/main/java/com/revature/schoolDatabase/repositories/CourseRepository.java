@@ -1,9 +1,84 @@
 package com.revature.schoolDatabase.repositories;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.client.*;
 import com.revature.schoolDatabase.models.Course;
+import com.revature.schoolDatabase.util.MongoClientFactory;
+import com.revature.schoolDatabase.util.exceptions.DataSourceException;
+import org.bson.Document;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class CourseRepository implements CrudRepository<Course>{
 
+    /**
+     * Returns an arrayList of courses from the database
+     *
+     * @return
+     */
+    public List<Course> retrieveCourses() {
+        List<Course> courseList = new ArrayList<>();
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
+            ObjectMapper mapper = new ObjectMapper();
+            
+            // Store all documents into a findIterable object
+            MongoCursor<Document> cursor = courseCollection.find().iterator();
+            while (cursor.hasNext()) {
+                Course newCourse = mapper.readValue((cursor.next()).toJson(), Course.class);
+                courseList.add(newCourse);
+            }
+
+            return courseList;
+
+        } catch (JsonMappingException jme) {
+            jme.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An exception occurred while mapping the document.", jme);
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
+    }
+
+    /**
+     * Finds course in database according to given credentials
+     *
+     * @param dept
+     * @param courseNo
+     * @param sectionNo
+     * @return
+     */
+    public Course findById(String dept, int courseNo, int sectionNo) {
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
+            Document queryDoc = new Document("deptShort", dept).append("courseNo", courseNo)
+                                        .append("sectionNo", sectionNo);
+            Document authCourseDoc = courseCollection.find(queryDoc).first();
+
+            if (authCourseDoc == null)
+                return null;
+
+            ObjectMapper mapper = new ObjectMapper();
+            Course newCourse = mapper.readValue(authCourseDoc.toJson(), Course.class);
+            System.out.println(newCourse);
+
+            return newCourse;
+
+        } catch (JsonMappingException jme) {
+            jme.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An exception occurred while mapping the document.", jme);
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
+    }
 
     @Override
     public Course findById(int id) {

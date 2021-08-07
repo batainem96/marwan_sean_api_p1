@@ -49,18 +49,9 @@ public class UserService {
      * @param password
      */
     public Person login(String username, String password) {
-
         if (username == null || username.trim().equals("") || password == null || password.trim().equals("")) {
             throw new InvalidRequestException("Invalid user credentials provided!");
         }
-        // TODO Change login as database is connected
-//        else {
-//            if (username.equals("student"))
-//                return new Student("test", "test", username, password);
-//            else if (username.equals("faculty"))
-//                return new Faculty("test", "test", username, password);
-//            else return null;
-//        }
         return userRepo.findUserByCredentials(username, password);
     }
 

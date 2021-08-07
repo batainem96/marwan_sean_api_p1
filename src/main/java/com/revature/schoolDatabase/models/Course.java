@@ -1,17 +1,21 @@
 package com.revature.schoolDatabase.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Arrays;
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Course {
     // Variables
     private int id;
     private String title;
     private String department;
-    private String shortDept;
-    private int deptID;
-    private String[] prereqs;
-    private String[] professors;
+    private String deptShort;
+    private int courseNo;
+    private int sectionNo;
+//    private String[] prerequisites;
+    private String instructor;
     private int startTime;
     private int endTime;
     private String[] days;
@@ -19,6 +23,10 @@ public class Course {
     private int openSeats;
 
     // Constructors
+    public Course() {
+
+    }
+
     public Course(int id, String title, String department) {
         this.id = id;
         this.title = title;
@@ -50,32 +58,44 @@ public class Course {
         this.department = department;
     }
 
-    public void setShortDept(String shortDept) {
-        this.shortDept = shortDept;
+    public String getDeptShort() {
+        return deptShort;
     }
 
-    public int getDeptID() {
-        return deptID;
+    public void setDeptShort(String deptShort) {
+        this.deptShort = deptShort;
     }
 
-    public void setDeptID(int deptID) {
-        this.deptID = deptID;
+    public int getSectionNo() {
+        return sectionNo;
     }
 
-    public String[] getPrereqs() {
-        return prereqs;
+    public void setSectionNo(int sectionNo) {
+        this.sectionNo = sectionNo;
     }
 
-    public void setPrereqs(String[] prereqs) {
-        this.prereqs = prereqs;
+    public int getCourseNo() {
+        return courseNo;
     }
 
-    public String[] getProfessors() {
-        return professors;
+    public void setCourseNo(int courseNo) {
+        this.courseNo = courseNo;
     }
 
-    public void setProfessors(String[] professors) {
-        this.professors = professors;
+//    public String[] getPrerequisites() {
+//        return prerequisites;
+//    }
+//
+//    public void setPrerequisites(String[] prerequisites) {
+//        this.prerequisites = prerequisites;
+//    }
+
+    public String getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(String instructor) {
+        this.instructor = instructor;
     }
 
     public int getStartTime() {
@@ -118,21 +138,21 @@ public class Course {
         this.openSeats = openSeats;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Course course = (Course) o;
-        return id == course.id && startTime == course.startTime && endTime == course.endTime && totalSeats == course.totalSeats && openSeats == course.openSeats && Objects.equals(title, course.title) && Objects.equals(department, course.department) && Arrays.equals(prereqs, course.prereqs) && Arrays.equals(days, course.days);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Course course = (Course) o;
+//        return id == course.id && startTime == course.startTime && endTime == course.endTime && totalSeats == course.totalSeats && openSeats == course.openSeats && Objects.equals(title, course.title) && Objects.equals(department, course.department) && Arrays.equals(prerequisites, course.prerequisites) && Arrays.equals(days, course.days);
+//    }
 
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(id, title, department, startTime, endTime, totalSeats, openSeats);
-        result = 31 * result + Arrays.hashCode(prereqs);
-        result = 31 * result + Arrays.hashCode(days);
-        return result;
-    }
+//    @Override
+//    public int hashCode() {
+//        int result = Objects.hash(id, title, department, startTime, endTime, totalSeats, openSeats);
+//        result = 31 * result + Arrays.hashCode(prerequisites);
+//        result = 31 * result + Arrays.hashCode(days);
+//        return result;
+//    }
 
     // Methods
     /**
@@ -140,7 +160,7 @@ public class Course {
      */
     public void displayCourse() {
         System.out.println(this.title);
-        System.out.println(this.department + this.id);
+        System.out.println(this.deptShort + " " + this.courseNo + "-" + this.sectionNo);
     }
 
 }

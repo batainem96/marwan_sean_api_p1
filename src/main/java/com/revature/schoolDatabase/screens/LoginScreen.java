@@ -35,10 +35,11 @@ public class LoginScreen extends Screen {
 
         // TODO follow to UserService -> expand later
         Person newPerson = userService.login(username, password);
-        if (newPerson != null) {
-
-            System.out.println(newPerson.getClass());
-        } else System.out.println("newPerson is null");
+        if (newPerson == null) {
+            System.out.println("No user found, taking you back to main menu...");
+            router.navigate("/main");
+            return;
+        }
 
         switch (newPerson.getUserType()) {
             case "faculty":

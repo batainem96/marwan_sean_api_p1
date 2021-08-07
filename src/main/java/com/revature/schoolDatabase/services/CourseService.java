@@ -6,6 +6,8 @@ import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
 import com.revature.schoolDatabase.repositories.CourseRepository;
 
+import java.util.List;
+
 public class CourseService {
     // Variables
     private final CourseRepository courseRepo;
@@ -26,6 +28,10 @@ public class CourseService {
                 "Course ID: 2784\n");
 
         // TODO List all courses currently stored in database
+        List<Course> courseList = courseRepo.retrieveCourses();
+        for (Course course : courseList) {
+            course.displayCourse();
+        }
     }
 
     /**
@@ -35,8 +41,8 @@ public class CourseService {
      *             List of flags:
      *                  -- 'open' = courses with open seats
      *                  -- 'closed' = courses which have no open seats
-     *                  -- 'user' = courses in a given Person's schedule
-     *                  -- 'schedule' = courses that fit in schedule
+     *                  -- 'user' = courses currently in a given Person's schedule
+     *                  -- 'schedule' = courses that would fit in schedule
      *                  -- 'dept' = courses in a given Department
      */
     public void showCourses(Person user, String... flags) {
@@ -51,13 +57,13 @@ public class CourseService {
      * @param stud
      * @param courseID
      */
-    public void addCourse(Student stud, int courseID) {
+    public void addCourse(Student stud, String deptNo, int courseID) {
         // TODO -------------------------------
         // Verify student is in database
 
         // Find course in database given courseID
 
-        // Compare new course info with student (schedule, etc) to ensure the add is valid
+        // TODO Compare new course info with student (schedule, etc) to ensure the add is valid
 
         // Add new course to student's schedule
 

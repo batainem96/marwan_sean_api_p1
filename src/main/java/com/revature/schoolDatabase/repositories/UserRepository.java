@@ -43,7 +43,6 @@ public class UserRepository implements CrudRepository<Person> {
             // TODO Clean this up - very ugly
             // Retrieves the value of the userType field in the database
             String userType = usersCollection.find(new BasicDBObject("username", username)).projection(Projections.fields(Projections.include("userType"), Projections.excludeId())).first().getString("userType");
-            System.out.println(userType);
             switch (userType) {
                 case "student":
                     authUser = mapper.readValue(authUserDoc.toJson(), Student.class);
@@ -57,7 +56,6 @@ public class UserRepository implements CrudRepository<Person> {
             }
 
             authUser.setId(authUserDoc.get("_id").toString());
-            System.out.println(authUser);
             return authUser;
 
         } catch (JsonMappingException jme) {
