@@ -6,6 +6,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Person;
@@ -16,6 +17,15 @@ import org.bson.Document;
 
 public class UserRepository implements CrudRepository<Person> {
 
+    // Methods
+
+    /**
+     * Search the database for an entry with the given username and password combination
+     *
+     * @param username
+     * @param password
+     * @return
+     */
     public Person findUserByCredentials(String username, String password) {
         try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
@@ -30,6 +40,8 @@ public class UserRepository implements CrudRepository<Person> {
 
             ObjectMapper mapper = new ObjectMapper();
             Person authUser;
+            // TODO Clean this up - very ugly
+            // Retrieves the value of the userType field in the database
             String userType = usersCollection.find(new BasicDBObject("username", username)).projection(Projections.fields(Projections.include("userType"), Projections.excludeId())).first().getString("userType");
             System.out.println(userType);
             switch (userType) {
@@ -56,6 +68,30 @@ public class UserRepository implements CrudRepository<Person> {
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
 
+    }
+
+    /**
+     * Search the database for an entry with the given username and, if it exists, delete it.
+     *
+     * @param username
+     * @return
+     */
+    public boolean deleteUserByCredentials(String username) {
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("bookstore");
+            MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
+
+            // delete user
+            usersCollection.deleteOne(Filters.eq("username", username));
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
     }
 
     @Override
@@ -94,6 +130,21 @@ public class UserRepository implements CrudRepository<Person> {
 
     @Override
     public boolean deleteById(int id) {
-        return false;
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("bookstore");
+            MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
+
+            // delete user
+            usersCollection.deleteOne(Filters.eq("id", id));
+
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
     }
 }
