@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc54228c-a9b7-402c-aae6-646e77152026" name="Default Changelist" comment="" />
+    <list default="true" id="fc54228c-a9b7-402c-aae6-646e77152026" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Faculty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Faculty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Student.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/UserServiceTestSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/UserServiceTestSuite.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -50,7 +56,7 @@
       <recent name="com.revature.schoolDatabase.util" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.MainDriver">
+  <component name="RunManager" selected="JUnit.UserServiceTestSuite.login_returnsNull_whenGivenBadCredentials">
     <configuration name="MainDriver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.MainDriver" />
       <module name="sean_dunn_p0" />
@@ -79,8 +85,25 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="UserServiceTestSuite.login_returnsNull_whenGivenBadCredentials" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sean_dunn_p0" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.revature.schoolDatabase.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.revature.schoolDatabase.services" />
+      <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.UserServiceTestSuite" />
+      <option name="METHOD_NAME" value="login_returnsNull_whenGivenBadCredentials" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.UserServiceTestSuite.login_returnsNull_whenGivenBadCredentials" />
         <item itemvalue="Application.MainDriver" />
         <item itemvalue="JUnit.UserServiceTestSuite" />
       </list>

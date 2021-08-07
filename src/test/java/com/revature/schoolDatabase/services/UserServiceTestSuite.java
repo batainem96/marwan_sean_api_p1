@@ -1,12 +1,17 @@
 package com.revature.schoolDatabase.services;
 
+import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
 import com.revature.schoolDatabase.repositories.UserRepository;
 import org.junit.*;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
+import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 
 import org.mockito.Mockito;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 public class UserServiceTestSuite {
 
@@ -53,78 +58,112 @@ public class UserServiceTestSuite {
 
         // Arrange
         boolean expectedResult = true;
-        Person validUser = new Student("valid", "valid", "valid", "valid");
+        Person validStudent = new Student("valid", "valid", "valid", "valid");
+        Person validFaculty = new Faculty("valid", "valid", "valid", "valid");
 
         // Act
-        boolean actualResult = sut.isUserValid(validUser);
+        boolean actualResult1 = sut.isUserValid(validStudent);
+        boolean actualResult2 = sut.isUserValid(validFaculty);
 
         // Assert
-        Assert.assertEquals("Expected user to be considered valid!", expectedResult, actualResult);
+        Assert.assertEquals("Expected user to be considered valid!", expectedResult, actualResult1);
+        Assert.assertEquals("Expected user to be considered valid!", expectedResult, actualResult2);
     }
 
     @Test
     public void isUserValid_returnsFalse_givenUserWithNullOrEmptyFirstName() {
 
         // Arrange
-        Person invalidUser1 = new Student(null, "valid", "valid", "valid");
-        Person invalidUser2 = new Student("", "valid", "valid", "valid");
-        Person invalidUser3 = new Student("        ", "valid", "valid", "valid");
+        Person invalidStudent1 = new Student(null, "valid", "valid", "valid");
+        Person invalidStudent2 = new Student("", "valid", "valid", "valid");
+        Person invalidStudent3 = new Student("        ", "valid", "valid", "valid");
+
+        Person invalidFaculty1 = new Faculty(null, "valid", "valid", "valid");
+        Person invalidFaculty2 = new Faculty("", "valid", "valid", "valid");
+        Person invalidFaculty3 = new Faculty("        ", "valid", "valid", "valid");
 
         // Act
-        boolean actualResult1 = sut.isUserValid(invalidUser1);
-        boolean actualResult2 = sut.isUserValid(invalidUser2);
-        boolean actualResult3 = sut.isUserValid(invalidUser3);
+        boolean actualResult1 = sut.isUserValid(invalidStudent1);
+        boolean actualResult2 = sut.isUserValid(invalidStudent2);
+        boolean actualResult3 = sut.isUserValid(invalidStudent3);
+
+        boolean actualResult4 = sut.isUserValid(invalidFaculty1);
+        boolean actualResult5 = sut.isUserValid(invalidFaculty2);
+        boolean actualResult6 = sut.isUserValid(invalidFaculty3);
 
         // Assert
         Assert.assertFalse("User first name cannot be null!", actualResult1);
         Assert.assertFalse("User first name cannot be an empty string!", actualResult2);
         Assert.assertFalse("User first name cannot be only whitespace!", actualResult3);
 
+        Assert.assertFalse("User first name cannot be null!", actualResult4);
+        Assert.assertFalse("User first name cannot be an empty string!", actualResult5);
+        Assert.assertFalse("User first name cannot be only whitespace!", actualResult6);
     }
 
-//    @Test
-//    public void register_returnsSuccessfully_whenGivenValidUser() {
+    @Test
+    public void register_returnsSuccessfully_whenGivenValidUser() {
         // Arrange
-//        AppUser expectedResult = new AppUser(1, "valid", "valid", "valid", "valid", "valid");
-//        AppUser validUser = new AppUser("valid", "valid", "valid", "valid", "valid");
-//        when(mockUserRepo.save(any())).thenReturn(expectedResult);
+        Person expectedResult = new Student("1", "valid", "valid", "valid", "valid");
+        Person validUser = new Student("valid", "valid", "valid", "valid");
+        when(mockUserRepo.save(any())).thenReturn(expectedResult);
 
         // Act
-//        AppUser actualResult = sut.register(validUser);
+        Person actualResult = sut.register(validUser);
 
         // Assert
-//        Assert.assertEquals(expectedResult, actualResult);
-//        Mockito.verify(mockUserRepo, times(1)).save(any());
-//    }
+        Assert.assertEquals(expectedResult, actualResult);
+        verify(mockUserRepo, times(1)).save(any());
+    }
 
-//    @Test(expected = InvalidRequestException.class)
-//    public void register_throwsException_whenGivenInvalidUser() {
+    @Test(expected = InvalidRequestException.class)
+    public void register_throwsException_whenGivenInvalidUser() {
         // Arrange
-//        AppUser invalidUser = new AppUser(null, "", "", "", "");
+        Person invalidUser = new Student(null, "", "", "");
 
         // Act
-//        try {
-//            sut.register(invalidUser);
-//        } finally {
-//            // Assert
-//            Mockito.verify(mockUserRepo, times(0)).save(any());
-//        }
-//    }
+        try {
+            sut.register(invalidUser);
+        } finally {
+            // Assert
+            verify(mockUserRepo, times(0)).save(any());
+        }
+    }
 
-//    @Test(expected = ResourcePersistenceException.class)
-//    public void register_throwsException_whenGivenUserWithDuplicateUsername() {
-//        // Arrange
-//        AppUser existingUser = new AppUser("original", "last", "email", "duplicate", "original");
-//        AppUser duplicate = new AppUser("first", "last", "email", "duplicate", "password");
-//        when(mockUserRepo.findUserByUsername(duplicate.getUsername())).thenReturn(existingUser);
-//
-//        // Act
-//        try {
-//            sut.register(duplicate);
-//        } finally {
-//            // Assert
-//            verify(mockUserRepo, times(1)).findUserByUsername(duplicate.getUsername());
-//            verify(mockUserRepo, times(0)).save(duplicate);
-//        };
-//    }
+    @Test(expected = ResourcePersistenceException.class)
+    public void register_throwsException_whenGivenUserWithDuplicateUsername() {
+        // Arrange
+        Person existingUser = new Student("original", "last", "duplicate", "original");
+        Person duplicate = new Student("first", "last", "duplicate", "password");
+        when(mockUserRepo.findUserByCredentials(duplicate.getUsername(), duplicate.getPassword())).thenReturn(existingUser);
+
+        // Act
+        try {
+            sut.register(duplicate);
+        } finally {
+            // Assert
+            verify(mockUserRepo, times(1)).findUserByCredentials(duplicate.getUsername(), duplicate.getPassword());
+            verify(mockUserRepo, times(0)).save(duplicate);
+        };
+    }
+
+    @Test
+    public void login_returnsNull_whenGivenBadCredentials() {
+        // Arrange
+        String newUsername = "blankblank";
+        String newPassword = "password";
+        Person expectedResult1 = null;
+
+        String existingUsername = "sdunn";
+        String wrongPassword = "wrongpassword";
+        Person expectedResult2 = null;
+
+        // Act
+        Person actualResult1 = sut.login(newUsername, newPassword);
+        Person actualResult2 = sut.login(existingUsername, wrongPassword);
+
+        // Assert
+        Assert.assertEquals("User not found in database.", expectedResult1, actualResult1);
+        Assert.assertEquals("Username or password is incorrect.", expectedResult2, actualResult2);
+    }
 }
