@@ -3,6 +3,7 @@ package com.revature.schoolDatabase.screens.menus;
 import com.revature.schoolDatabase.models.Course;
 import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Student;
+import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
 
@@ -13,12 +14,14 @@ public class FacultyMenu extends Menu {
     // Variables
     private final Faculty fac;
     private final UserService userService;
+    private final CourseService courseService;
 
     // Constructors
-    public FacultyMenu(Faculty fac, BufferedReader consoleReader, ScreenRouter router, UserService userService) {
+    public FacultyMenu(Faculty fac, BufferedReader consoleReader, ScreenRouter router, UserService userService, CourseService courseService) {
         super("Faculty", "/faculty", consoleReader, router, new String[] {"View My Courses", "View Available Courses", "View All Courses", "Add Course", "Edit Course", "Remove Course"});
         this.fac = fac;
         this.userService = userService;
+        this.courseService = courseService;
     }
 
     // Methods
@@ -56,19 +59,19 @@ public class FacultyMenu extends Menu {
 
         switch (userSelection[0]) {
             case "1":
-                userService.showCourses();
+                courseService.showCourses();
                 break;
             case "2":
-                userService.showCourses();
+                courseService.showCourses();
                 break;
             case "3":
-                userService.showCourses();
+                courseService.showCourses();
                 break;
             case "4":
                 // Create a new course
                 // Prompt user for course information
                 Course newCourse = createCourse();
-                userService.createCourse(fac, newCourse);
+                courseService.createCourse(fac, newCourse);
                 break;
             default:
                 System.out.println("Taking you back to main menu...");

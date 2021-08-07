@@ -22,66 +22,7 @@ public class UserService {
     }
 
 
-    /**
-     * Lists all courses in catalog
-     */
-    public void showCourses() {
-        System.out.println(ANSI_CYAN + "Title: Introduction to Programming\n" + ANSI_RESET +
-                            "Department: COSC\n" +
-                            "Course ID: 2784\n");
 
-        // TODO List all courses currently stored in database
-    }
-
-    /**
-     * Lists courses in catalog according to flags
-     *
-     * @param flags -- used to specify which courses to display
-     *             List of flags:
-     *                  -- 'open' = courses with open seats
-     *                  -- 'closed' = courses which have no open seats
-     *                  -- 'user' = courses in a given Person's schedule
-     *                  -- 'schedule' = courses that fit in schedule
-     *                  -- 'dept' = courses in a given Department
-     */
-    public void showCourses(Person user, String... flags) {
-        System.out.println(ANSI_CYAN + "Title: Introduction to Programming\n" + ANSI_RESET +
-                "Department: COSC\n" +
-                "Course ID: 2784\n");
-    }
-
-    /**
-     * Adds a new course to a Student's schedule
-     *
-     * @param stud
-     * @param courseID
-     */
-    public void addCourse(Student stud, int courseID) {
-        // TODO -------------------------------
-        // Verify student is in database
-
-        // Find course in database given courseID
-
-        // Compare new course info with student (schedule, etc) to ensure the add is valid
-
-        // Add new course to student's schedule
-
-    }
-
-    /**
-     * Creates a new course, given user is a Faculty member
-     *
-     * @param fac
-     * @param newCourse
-     */
-    public void createCourse(Faculty fac, Course newCourse) {
-        // TODO -------------------------------
-        // Verify faculty is in database and is qualified to create a course
-
-        // Verify that the new course does not already exist in the database
-
-        // Store course in database with given faculty as "professor"
-    }
 
 
     /**

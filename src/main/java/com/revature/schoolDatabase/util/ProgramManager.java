@@ -34,7 +34,7 @@ public class ProgramManager {
         // Others are added on a need basis
         router.addScreen(new MainMenu(consoleReader, router));
         router.addScreen(new RegisterScreen(consoleReader, router, userService));
-        router.addScreen(new LoginScreen(consoleReader, router, userService));
+        router.addScreen(new LoginScreen(consoleReader, router, userService, courseService));
     }
 
     // Methods

@@ -5,6 +5,7 @@ import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
 import com.revature.schoolDatabase.screens.menus.FacultyMenu;
 import com.revature.schoolDatabase.screens.menus.StudentMenu;
+import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
 
@@ -13,10 +14,12 @@ import java.io.BufferedReader;
 public class LoginScreen extends Screen {
 
     private final UserService userService;
+    private final CourseService courseService;
 
-    public LoginScreen(BufferedReader consoleReader, ScreenRouter router, UserService userService) {
+    public LoginScreen(BufferedReader consoleReader, ScreenRouter router, UserService userService, CourseService courseService) {
         super("LoginScreen", "/login", consoleReader, router);
         this.userService = userService;
+        this.courseService = courseService;
     }
 
     @Override
@@ -41,13 +44,13 @@ public class LoginScreen extends Screen {
             case "faculty":
                 System.out.println("Logging in as faculty...");
                 // Add FacultyMenu to HashSet
-                router.addScreen(new FacultyMenu((Faculty) newPerson, consoleReader, router, userService));
+                router.addScreen(new FacultyMenu((Faculty) newPerson, consoleReader, router, userService, courseService));
                 router.navigate("/faculty");
                 break;
             case "student":
                 System.out.println("Logging in as student...");
                 // Add StudentMenu to HashSet
-                router.addScreen(new StudentMenu((Student) newPerson, consoleReader, router, userService));
+                router.addScreen(new StudentMenu((Student) newPerson, consoleReader, router, userService, courseService));
                 router.navigate("/student");
                 break;
             default:

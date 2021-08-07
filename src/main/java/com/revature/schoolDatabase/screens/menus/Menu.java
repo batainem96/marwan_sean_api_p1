@@ -24,7 +24,8 @@ public abstract class Menu extends Screen {
     public void displayMenu() {
         System.out.println("\n" + ANSI_PURPLE + name + ANSI_RESET + "\nPlease select an option:");
         for (int i = 0; i < menuOptions.length; i++)
-            System.out.println((i+1) + ". " + menuOptions[i]);
+            System.out.println((i+1) + ") " + menuOptions[i]);
+        System.out.print("> ");
     }
 
     @Override
