@@ -1,7 +1,10 @@
 package com.revature.schoolDatabase.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Objects;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Person {
     // Variables
     protected String id;
@@ -13,6 +16,10 @@ public abstract class Person {
     // TODO Add schedule arraylist
 
     // Constructors
+    public Person() {
+        super();
+    }
+
     public Person(String firstName, String lastName, String username, String password, String userType) {
         this.firstName = firstName;
         this.lastName = lastName;

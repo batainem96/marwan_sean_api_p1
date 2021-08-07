@@ -37,7 +37,7 @@ public class LoginScreen extends Screen {
             System.out.println(newPerson.getClass());
         } else System.out.println("newPerson is null");
 
-        switch (username) {
+        switch (newPerson.getUserType()) {
             case "faculty":
                 System.out.println("Logging in as faculty...");
                 // Add FacultyMenu to HashSet

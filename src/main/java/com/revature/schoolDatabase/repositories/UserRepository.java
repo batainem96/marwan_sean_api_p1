@@ -2,10 +2,14 @@ package com.revature.schoolDatabase.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Projections;
+import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Person;
+import com.revature.schoolDatabase.models.Student;
 import com.revature.schoolDatabase.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import org.bson.Document;
@@ -15,8 +19,8 @@ public class UserRepository implements CrudRepository<Person> {
     public Person findUserByCredentials(String username, String password) {
         try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-            MongoDatabase bookstoreDatabase = mongoClient.getDatabase("bookstore");
-            MongoCollection<Document> usersCollection = bookstoreDatabase.getCollection("users");
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+            MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
             Document queryDoc = new Document("username", username).append("password", password);
             Document authUserDoc = usersCollection.find(queryDoc).first();
 
@@ -25,8 +29,23 @@ public class UserRepository implements CrudRepository<Person> {
             }
 
             ObjectMapper mapper = new ObjectMapper();
-            Person authUser = mapper.readValue(authUserDoc.toJson(), Person.class);
+            Person authUser;
+            String userType = usersCollection.find(new BasicDBObject("username", username)).projection(Projections.fields(Projections.include("userType"), Projections.excludeId())).first().getString("userType");
+            System.out.println(userType);
+            switch (userType) {
+                case "student":
+                    authUser = mapper.readValue(authUserDoc.toJson(), Student.class);
+                    break;
+                case "faculty":
+                    authUser = mapper.readValue(authUserDoc.toJson(), Faculty.class);
+                    break;
+                default:
+                    System.out.println("Invalid user type");
+                    return null;
+            }
+
             authUser.setId(authUserDoc.get("_id").toString());
+            System.out.println(authUser);
             return authUser;
 
         } catch (JsonMappingException jme) {
@@ -49,8 +68,8 @@ public class UserRepository implements CrudRepository<Person> {
         try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
 
-            MongoDatabase bookstoreDb = mongoClient.getDatabase("bookstore");
-            MongoCollection<Document> usersCollection = bookstoreDb.getCollection("users");
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("bookstore");
+            MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
             Document newPersonDoc = new Document("firstName", newPerson.getFirstName())
                     .append("lastName", newPerson.getLastName())
                     .append("username", newPerson.getUsername())
