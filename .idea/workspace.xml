@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc54228c-a9b7-402c-aae6-646e77152026" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/MeetingTime.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Person.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/repositories/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/repositories/CourseRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/repositories/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/StudentMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/StudentMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/CourseService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

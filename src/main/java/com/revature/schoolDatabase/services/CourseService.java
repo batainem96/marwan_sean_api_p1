@@ -31,6 +31,7 @@ public class CourseService {
         List<Course> courseList = courseRepo.retrieveCourses();
         for (Course course : courseList) {
             course.displayCourse();
+            course.displayMeetingTimes();
         }
     }
 

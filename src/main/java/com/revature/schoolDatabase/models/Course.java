@@ -1,7 +1,10 @@
 package com.revature.schoolDatabase.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -16,16 +19,13 @@ public class Course {
     private int sectionNo;
 //    private String[] prerequisites;
     private String instructor;
-    private int startTime;
-    private int endTime;
-    private String[] days;
+    @JsonProperty("meetingTimes")
+    private ArrayList<MeetingTime> meetingTimes;
     private int totalSeats;
     private int openSeats;
 
     // Constructors
-    public Course() {
-
-    }
+    public Course() {}
 
     public Course(int id, String title, String department) {
         this.id = id;
@@ -98,30 +98,6 @@ public class Course {
         this.instructor = instructor;
     }
 
-    public int getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(int startTime) {
-        this.startTime = startTime;
-    }
-
-    public int getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(int endTime) {
-        this.endTime = endTime;
-    }
-
-    public String[] getDays() {
-        return days;
-    }
-
-    public void setDays(String[] days) {
-        this.days = days;
-    }
-
     public int getTotalSeats() {
         return totalSeats;
     }
@@ -161,6 +137,15 @@ public class Course {
     public void displayCourse() {
         System.out.println(this.title);
         System.out.println(this.deptShort + " " + this.courseNo + "-" + this.sectionNo);
+    }
+
+    /**
+     *
+     */
+    public void displayMeetingTimes() {
+        for (MeetingTime meetingTime : meetingTimes) {
+            System.out.println(meetingTime.getDay());
+        }
     }
 
 }
