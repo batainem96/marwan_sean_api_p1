@@ -2,6 +2,7 @@ package com.revature.schoolDatabase.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -14,6 +15,7 @@ public abstract class Person {
     protected String password;
     protected String userType;
     // TODO Add schedule arraylist
+    protected ArrayList<Course> courseList;
 
     // Constructors
     public Person() {

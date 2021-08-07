@@ -55,6 +55,7 @@ public class CourseRepository implements CrudRepository<Course>{
      */
     public Course findById(String dept, int courseNo, int sectionNo) {
         try {
+            System.out.println("Searching for " + dept + " " + courseNo + "-" + sectionNo + "...");
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
             MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
             MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
@@ -67,7 +68,7 @@ public class CourseRepository implements CrudRepository<Course>{
 
             ObjectMapper mapper = new ObjectMapper();
             Course newCourse = mapper.readValue(authCourseDoc.toJson(), Course.class);
-            System.out.println(newCourse);
+            newCourse.displayCourse();
 
             return newCourse;
 

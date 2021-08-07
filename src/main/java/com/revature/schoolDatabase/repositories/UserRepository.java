@@ -18,7 +18,6 @@ import org.bson.Document;
 public class UserRepository implements CrudRepository<Person> {
 
     // Methods
-
     /**
      * Search the database for an entry with the given username and password combination
      *

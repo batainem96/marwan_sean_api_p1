@@ -24,6 +24,8 @@ public class StudentMenu extends Menu {
     }
 
     // Methods
+
+
     @Override
     public void render() throws Exception {
         displayMenu();
@@ -44,9 +46,9 @@ public class StudentMenu extends Menu {
                 break;
             case "4":   // User wants to add a course, check if they gave a course ID, otherwise show usage
                 if (userSelection.length > 1) {
-                    courseService.addCourse(stud, userSelection[1].toUpperCase(), Integer.parseInt(userSelection[2]));
+                    courseService.addCourse(stud, userSelection[1].toUpperCase(), userSelection[2]);
                 }
-                else System.out.println("Usage: 4 <DeptShorthand> <CourseID>\nExample: 4 COSC 101001");
+                else System.out.println("Usage: 4 <DeptShorthand> <CourseID>\nExample: 4 COSC 101-1");
                 break;
             case "5":   // Remove Course
                 break;

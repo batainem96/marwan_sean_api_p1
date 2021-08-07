@@ -57,12 +57,14 @@ public class CourseService {
      * @param stud
      * @param courseID
      */
-    public void addCourse(Student stud, String deptNo, int courseID) {
+    public void addCourse(Student stud, String dept, String courseID) {
         // TODO -------------------------------
-        // Verify student is in database
 
         // Find course in database given courseID
+        String[] splitID = courseID.split("-");
+        Course newCourse = courseRepo.findById(dept, Integer.parseInt(splitID[0]), Integer.parseInt(splitID[1]));
 
+        newCourse.displayCourse();
         // TODO Compare new course info with student (schedule, etc) to ensure the add is valid
 
         // Add new course to student's schedule
