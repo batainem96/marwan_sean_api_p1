@@ -13,7 +13,8 @@ import static com.revature.schoolDatabase.models.DeptShorthand.deptToShort;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Course {
     // Variables
-    private String id;
+    @JsonProperty("_id")
+    private String _id;
     private String title;
     private String department;
     private String deptShort;
@@ -40,12 +41,12 @@ public class Course {
     }
 
     // Getters and Setters
-    public String getId() {
-        return id;
+    public String get_id() {
+        return _id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getTitle() {
@@ -145,7 +146,7 @@ public class Course {
             System.out.println(this.title);
             System.out.println(this.deptShort + " " + this.courseNo + "-" + this.sectionNo);
             for (Field field : this.getClass().getDeclaredFields()) {
-                if (field.getName().equals("id") ||
+                if (field.getName().equals("_id") ||
                         field.getName().equals("prerequisites") ||
                         field.getName().equals("meetingTimes"))
                     continue;

@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.mongodb.client.model.Filters.eq;
+
 public class CourseRepository implements CrudRepository<Course>{
 
     /**
@@ -120,7 +122,7 @@ public class CourseRepository implements CrudRepository<Course>{
                     .append("instructor", newCourse.getInstructor());
 
             courseCollection.insertOne(newCourseDoc);
-            newCourse.setId(newCourseDoc.get("_id").toString());
+            newCourse.set_id(newCourseDoc.get("_id").toString());
 
             return newCourse;
 
@@ -131,7 +133,27 @@ public class CourseRepository implements CrudRepository<Course>{
     }
 
     @Override
-    public boolean update(Course updatedResource) {
+    public boolean update(Course updatedCourse) {
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
+
+            // Convert Course to BasicDBObject
+            ObjectMapper mapper = new ObjectMapper();
+            String courseJson = mapper.writeValueAsString(updatedCourse);
+            Document courseDoc = Document.parse(courseJson);
+            courseCollection.findOneAndReplace(eq("_id", updatedCourse.get_id()), courseDoc);
+
+
+
+
+        } catch (JsonMappingException jme) {
+            jme.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
