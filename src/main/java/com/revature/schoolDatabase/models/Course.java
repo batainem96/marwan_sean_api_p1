@@ -152,6 +152,7 @@ public class Course {
                 System.out.println(field.getName() + ": " + field.get(this));
             }
             this.displayMeetingTimes();
+            System.out.println();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -167,10 +168,10 @@ public class Course {
         else {
             System.out.println("Meeting Times:");
             for (MeetingTime meetingTime : meetingTimes) {
-                System.out.println("/t" + meetingTime.getDay());
-                System.out.println("/t" + meetingTime.getStartTime());
-                System.out.println("/t" + meetingTime.getEndTime());
-                System.out.println("/t" + meetingTime.getClassType());
+                System.out.println("\t" + meetingTime.getDay());
+                System.out.println("\t" + meetingTime.getStartTime());
+                System.out.println("\t" + meetingTime.getEndTime());
+                System.out.println("\t" + meetingTime.getClassType());
             }
         }
     }

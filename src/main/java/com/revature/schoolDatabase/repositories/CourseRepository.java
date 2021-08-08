@@ -2,7 +2,10 @@ package com.revature.schoolDatabase.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.DeleteResult;
 import com.revature.schoolDatabase.models.Course;
 import com.revature.schoolDatabase.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
@@ -68,13 +71,30 @@ public class CourseRepository implements CrudRepository<Course>{
 
             ObjectMapper mapper = new ObjectMapper();
             Course newCourse = mapper.readValue(authCourseDoc.toJson(), Course.class);
-            newCourse.displayCourse();
 
             return newCourse;
 
         } catch (JsonMappingException jme) {
             jme.printStackTrace(); // TODO log this to a file
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
+    }
+
+    public boolean deleteById(String dept, int courseNo, int sectionNo) {
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
+            Document queryDoc = new Document("deptShort", dept)
+                                        .append("courseNo", courseNo)
+                                        .append("sectionNo", sectionNo);
+
+            // delete course
+            DeleteResult result = courseCollection.deleteOne(queryDoc);
+            return result.wasAcknowledged();
         } catch (Exception e) {
             e.printStackTrace(); // TODO log this to a file
             throw new DataSourceException("An unexpected exception occurred.", e);

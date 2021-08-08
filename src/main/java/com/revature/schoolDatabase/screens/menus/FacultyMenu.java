@@ -57,21 +57,27 @@ public class FacultyMenu extends Menu {
         String[] userSelection = consoleReader.readLine().split(" ");
         System.out.println();
 
+        // TODO Finish implementations of Faculty functions
         switch (userSelection[0]) {
-            case "1":
+            case "1":       // View My Courses
                 courseService.showCourses();
                 break;
-            case "2":
+            case "2":       // View Available Courses
                 courseService.showCourses();
                 break;
-            case "3":
+            case "3":       // View All Courses
                 courseService.showCourses();
                 break;
-            case "4":
+            case "4":       // Add Course
                 // Create a new course
                 // Prompt user for course information
                 Course newCourse = createCourse();
                 courseService.createCourse(fac, newCourse);
+                break;
+            case "5":       // Edit Course
+                break;
+            case "6":       // Remove Course
+                courseService.deleteCourse(userSelection[1], Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
                 break;
             default:
                 System.out.println("Taking you back to main menu...");

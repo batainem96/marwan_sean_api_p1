@@ -1,5 +1,6 @@
 package com.revature.schoolDatabase.services;
 
+import com.mongodb.client.MongoClient;
 import com.revature.schoolDatabase.models.Course;
 import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Person;
@@ -31,7 +32,6 @@ public class CourseService {
         List<Course> courseList = courseRepo.retrieveCourses();
         for (Course course : courseList) {
             course.displayCourse();
-            course.displayMeetingTimes();
         }
     }
 
@@ -79,11 +79,20 @@ public class CourseService {
      * @param newCourse
      */
     public void createCourse(Faculty fac, Course newCourse) {
+        // TODO Auto Increment Course IDs
         // TODO -------------------------------
         // Verify faculty is in database and is qualified to create a course
 
         // Verify that the new course does not already exist in the database
 
         // Store course in database with given faculty as "professor"
+    }
+
+    /**
+     * Deletes a course from the database
+     */
+    public void deleteCourse(String dept, int courseNo, int sectionNo) {
+        boolean result = courseRepo.deleteById(dept, courseNo, sectionNo);
+        System.out.println(result);
     }
 }
