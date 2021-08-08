@@ -87,8 +87,27 @@ public class CourseRepository implements CrudRepository<Course>{
     }
 
     @Override
-    public Course save(Course newResource) {
-        return null;
+    public Course save(Course newCourse) {
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
+            Document newCourseDoc = new Document("title", newCourse.getTitle())
+                    .append("department", newCourse.getDepartment())
+                    .append("courseNo", newCourse.getCourseNo())
+                    .append("sectionNo", newCourse.getSectionNo())
+                    .append("instructor", newCourse.getInstructor());
+
+            courseCollection.insertOne(newCourseDoc);
+            newCourse.setId(newCourseDoc.get("_id").toString());
+
+            return newCourse;
+
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
     }
 
     @Override

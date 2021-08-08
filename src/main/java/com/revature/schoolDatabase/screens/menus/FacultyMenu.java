@@ -44,7 +44,7 @@ public class FacultyMenu extends Menu {
         System.out.println("Enter course department");
         String dept = consoleReader.readLine();
 
-        Course newCourse = new Course(id, title, dept);
+        Course newCourse = new Course(title, dept, id, id);
 
         return newCourse;
     }

@@ -4,41 +4,47 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
+import java.lang.reflect.Field;
+import java.sql.SQLOutput;
+import java.util.*;
+
+import static com.revature.schoolDatabase.models.DeptShorthand.deptToShort;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Course {
     // Variables
-    private int id;
+    private String id;
     private String title;
     private String department;
     private String deptShort;
     private int courseNo;
     private int sectionNo;
-//    private String[] prerequisites;
+    @JsonProperty("prerequisites")
+    private ArrayList<PreReq> prerequisites = new ArrayList<>();
     private String instructor;
     @JsonProperty("meetingTimes")
-    private ArrayList<MeetingTime> meetingTimes;
+    private ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
     private int totalSeats;
     private int openSeats;
 
     // Constructors
     public Course() {}
 
-    public Course(int id, String title, String department) {
-        this.id = id;
+    public Course(String title, String department, int courseNo, int sectionNo) {
         this.title = title;
         this.department = department;
+        this.courseNo = courseNo;
+        this.sectionNo = sectionNo;
+        this.deptShort = deptToShort.get(department);
+        this.instructor = "None";
     }
 
     // Getters and Setters
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -135,16 +141,37 @@ public class Course {
      * Displays course information in an easily readable format
      */
     public void displayCourse() {
-        System.out.println(this.title);
-        System.out.println(this.deptShort + " " + this.courseNo + "-" + this.sectionNo);
+        try {
+            System.out.println(this.title);
+            System.out.println(this.deptShort + " " + this.courseNo + "-" + this.sectionNo);
+            for (Field field : this.getClass().getDeclaredFields()) {
+                if (field.getName().equals("id") ||
+                        field.getName().equals("prerequisites") ||
+                        field.getName().equals("meetingTimes"))
+                    continue;
+                System.out.println(field.getName() + ": " + field.get(this));
+            }
+            this.displayMeetingTimes();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
+     * Displays meeting times of Course if available
      *
      */
     public void displayMeetingTimes() {
-        for (MeetingTime meetingTime : meetingTimes) {
-            System.out.println(meetingTime.getDay());
+        if (meetingTimes.isEmpty())
+            return;
+        else {
+            System.out.println("Meeting Times:");
+            for (MeetingTime meetingTime : meetingTimes) {
+                System.out.println("/t" + meetingTime.getDay());
+                System.out.println("/t" + meetingTime.getStartTime());
+                System.out.println("/t" + meetingTime.getEndTime());
+                System.out.println("/t" + meetingTime.getClassType());
+            }
         }
     }
 

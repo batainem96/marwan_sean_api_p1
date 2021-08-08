@@ -77,7 +77,7 @@ public class UserRepository implements CrudRepository<Person> {
         try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
 
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("bookstore");
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
             MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
 
             // delete user
@@ -101,7 +101,7 @@ public class UserRepository implements CrudRepository<Person> {
         try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
 
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("bookstore");
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
             MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
             Document newPersonDoc = new Document("firstName", newPerson.getFirstName())
                     .append("lastName", newPerson.getLastName())
@@ -130,7 +130,7 @@ public class UserRepository implements CrudRepository<Person> {
         try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
 
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("bookstore");
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
             MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
 
             // delete user
