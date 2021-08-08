@@ -8,12 +8,16 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
+import com.mongodb.client.result.DeleteResult;
 import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
 import com.revature.schoolDatabase.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import org.bson.Document;
+import org.bson.types.ObjectId;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class UserRepository implements CrudRepository<Person> {
 
@@ -91,11 +95,55 @@ public class UserRepository implements CrudRepository<Person> {
         }
     }
 
+    /**
+     * Overridden User CRUD operations
+     *
+     * @param id = Unique Object ID given by the Mongo Database
+     */
+
     @Override
     public Person findById(int id) {
-        return null;
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+            MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
+            Document queryDoc = new Document("_id", new ObjectId(String.valueOf(id)));
+            Document authUserDoc = usersCollection.find(queryDoc).first();
+
+            if (authUserDoc == null)
+                return null;
+
+            ObjectMapper mapper = new ObjectMapper();
+            Person authUser;
+            // TODO Clean this up - very ugly
+            // Retrieves the value of the userType field in the database
+            String userType = (String) authUserDoc.get("userType"); //(new BasicDBObject("username", username)).projection(Projections.fields(Projections.include("userType"), Projections.excludeId())).first().getString("userType");
+            switch (userType) {
+                case "student":
+                    authUser = mapper.readValue(authUserDoc.toJson(), Student.class);
+                    break;
+                case "faculty":
+                    authUser = mapper.readValue(authUserDoc.toJson(), Faculty.class);
+                    break;
+                default:
+                    System.out.println("Invalid user type");
+                    return null;
+            }
+
+            authUser.setId(authUserDoc.get("_id").toString());
+            return authUser;
+
+        } catch (JsonMappingException jme) {
+            jme.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An exception occurred while mapping the document.", jme);
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
+
     }
 
+    // TODO Fully implement
     @Override
     public Person save(Person newPerson) {
         try {
@@ -121,7 +169,25 @@ public class UserRepository implements CrudRepository<Person> {
     }
 
     @Override
-    public boolean update(Person updatedResource) {
+    public boolean update(Person updatedPerson) {
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("users");
+
+            // Convert Person to BasicDBObject
+            ObjectMapper mapper = new ObjectMapper();
+            String courseJson = mapper.writeValueAsString(updatedPerson);
+            Document courseDoc = Document.parse(courseJson);
+            courseCollection.findOneAndReplace(eq(("_id"), new ObjectId(updatedPerson.getId())), courseDoc);
+
+            return true;
+
+        } catch (JsonMappingException jme) {
+            jme.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -129,16 +195,13 @@ public class UserRepository implements CrudRepository<Person> {
     public boolean deleteById(int id) {
         try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-
             MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
             MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
+            Document queryDoc = new Document("_id", new ObjectId(String.valueOf(id)));
 
             // delete user
-            usersCollection.deleteOne(Filters.eq("id", id));
-
-
-            return true;
-
+            DeleteResult result = usersCollection.deleteOne(queryDoc);
+            return result.wasAcknowledged();
         } catch (Exception e) {
             e.printStackTrace(); // TODO log this to a file
             throw new DataSourceException("An unexpected exception occurred.", e);

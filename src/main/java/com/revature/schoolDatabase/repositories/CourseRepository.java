@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import com.revature.schoolDatabase.models.Course;
 import com.revature.schoolDatabase.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
@@ -104,9 +105,35 @@ public class CourseRepository implements CrudRepository<Course>{
         }
     }
 
+    /**
+     * Overridden Course CRUD operations
+     *
+     * @param id = Unique Object ID given by the Mongo Database
+     */
+
     @Override
     public Course findById(int id) {
-        return null;
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
+            Document queryDoc = new Document("_id", new ObjectId(String.valueOf(id)));
+            Document authCourseDoc = courseCollection.find(queryDoc).first();
+
+            if (authCourseDoc == null)
+                return null;
+
+            ObjectMapper mapper = new ObjectMapper();
+            Course newCourse = mapper.readValue(authCourseDoc.toJson(), Course.class);
+            newCourse.setId(authCourseDoc.get("_id").toString());
+
+            return newCourse;
+
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
     }
 
     @Override
@@ -137,7 +164,6 @@ public class CourseRepository implements CrudRepository<Course>{
     public boolean update(Course updatedCourse) {
         try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-
             MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
             MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
 
@@ -146,6 +172,7 @@ public class CourseRepository implements CrudRepository<Course>{
             String courseJson = mapper.writeValueAsString(updatedCourse);
             Document courseDoc = Document.parse(courseJson);
             courseCollection.findOneAndReplace(eq(("_id"), new ObjectId(updatedCourse.getId())), courseDoc);
+
             return true;
 
         } catch (JsonMappingException jme) {
@@ -158,6 +185,18 @@ public class CourseRepository implements CrudRepository<Course>{
 
     @Override
     public boolean deleteById(int id) {
-        return false;
+        try {
+            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
+            Document queryDoc = new Document("_id", new ObjectId(String.valueOf(id)));
+
+            // delete course
+            DeleteResult result = courseCollection.deleteOne(queryDoc);
+            return result.wasAcknowledged();
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
     }
 }
