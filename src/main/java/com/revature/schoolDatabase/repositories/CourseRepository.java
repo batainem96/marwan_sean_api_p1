@@ -2,17 +2,15 @@ package com.revature.schoolDatabase.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
-import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.revature.schoolDatabase.models.Course;
 import com.revature.schoolDatabase.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -35,7 +33,9 @@ public class CourseRepository implements CrudRepository<Course>{
             // Store all documents into a findIterable object
             MongoCursor<Document> cursor = courseCollection.find().iterator();
             while (cursor.hasNext()) {
-                Course newCourse = mapper.readValue((cursor.next()).toJson(), Course.class);
+                Document curCourse = cursor.next();
+                Course newCourse = mapper.readValue((curCourse).toJson(), Course.class);
+                newCourse.setId(curCourse.get("_id").toString());
                 courseList.add(newCourse);
             }
 
@@ -73,6 +73,7 @@ public class CourseRepository implements CrudRepository<Course>{
 
             ObjectMapper mapper = new ObjectMapper();
             Course newCourse = mapper.readValue(authCourseDoc.toJson(), Course.class);
+            newCourse.setId(authCourseDoc.get("_id").toString());
 
             return newCourse;
 
@@ -122,7 +123,7 @@ public class CourseRepository implements CrudRepository<Course>{
                     .append("instructor", newCourse.getInstructor());
 
             courseCollection.insertOne(newCourseDoc);
-            newCourse.set_id(newCourseDoc.get("_id").toString());
+            newCourse.setId(newCourseDoc.get("_id").toString());
 
             return newCourse;
 
@@ -144,10 +145,8 @@ public class CourseRepository implements CrudRepository<Course>{
             ObjectMapper mapper = new ObjectMapper();
             String courseJson = mapper.writeValueAsString(updatedCourse);
             Document courseDoc = Document.parse(courseJson);
-            courseCollection.findOneAndReplace(eq("_id", updatedCourse.get_id()), courseDoc);
-
-
-
+            courseCollection.findOneAndReplace(eq(("_id"), new ObjectId(updatedCourse.getId())), courseDoc);
+            return true;
 
         } catch (JsonMappingException jme) {
             jme.printStackTrace();

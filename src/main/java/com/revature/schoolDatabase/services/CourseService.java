@@ -89,6 +89,23 @@ public class CourseService {
     }
 
     /**
+     *
+     * @param dept
+     * @param courseNo
+     * @param sectionNo
+     * @return
+     */
+    public Course findCourseByID(String dept, int courseNo, int sectionNo) {
+        Course foundCourse = courseRepo.findById(dept, courseNo, sectionNo);
+        return foundCourse;
+    }
+
+    public void updateCourse(Course course) {
+        boolean result = courseRepo.update(course);
+        System.out.println(result);
+    }
+
+    /**
      * Deletes a course from the database
      */
     public void deleteCourse(String dept, int courseNo, int sectionNo) {

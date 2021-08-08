@@ -17,8 +17,11 @@ public class FacultyMenu extends Menu {
     private final CourseService courseService;
 
     // Constructors
-    public FacultyMenu(Faculty fac, BufferedReader consoleReader, ScreenRouter router, UserService userService, CourseService courseService) {
-        super("Faculty", "/faculty", consoleReader, router, new String[] {"View My Courses", "View Available Courses", "View All Courses", "Add Course", "Edit Course", "Remove Course"});
+    public FacultyMenu(Faculty fac, BufferedReader consoleReader, ScreenRouter router,
+                       UserService userService, CourseService courseService) {
+        super("Faculty", "/faculty", consoleReader, router,
+                        new String[] {"View My Courses", "View Available Courses", "View All Courses", "Add Course",
+                        "Edit Course", "Remove Course"});
         this.fac = fac;
         this.userService = userService;
         this.courseService = courseService;
@@ -75,6 +78,15 @@ public class FacultyMenu extends Menu {
                 courseService.createCourse(fac, newCourse);
                 break;
             case "5":       // Edit Course
+                Course editCourse = courseService.findCourseByID(userSelection[1],
+                        Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
+                String[] menuOptions = {"Title", "Department", "Course Number", "Section Number", "Instructor",
+                                        "Credits", "Total Number of Seats", "Prerequisites {WIP}", "Meeting Times {WIP}",
+                                        "Description"};
+                UpdateMenu updateMenu = new UpdateMenu<Course>(editCourse, "Edit Course", "/update",
+                        consoleReader, router, userService, courseService, menuOptions);
+                router.addScreen(updateMenu);
+                router.navigate("/update");
                 break;
             case "6":       // Remove Course
                 courseService.deleteCourse(userSelection[1], Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));

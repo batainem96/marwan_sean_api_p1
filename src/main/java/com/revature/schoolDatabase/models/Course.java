@@ -2,10 +2,8 @@ package com.revature.schoolDatabase.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.lang.reflect.Field;
-import java.sql.SQLOutput;
 import java.util.*;
 
 import static com.revature.schoolDatabase.models.DeptShorthand.deptToShort;
@@ -13,8 +11,7 @@ import static com.revature.schoolDatabase.models.DeptShorthand.deptToShort;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Course {
     // Variables
-    @JsonProperty("_id")
-    private String _id;
+    private String id;
     private String title;
     private String department;
     private String deptShort;
@@ -23,10 +20,12 @@ public class Course {
     @JsonProperty("prerequisites")
     private ArrayList<PreReq> prerequisites = new ArrayList<>();
     private String instructor;
-    @JsonProperty("meetingTimes")
-    private ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
+    private int credits;
     private int totalSeats;
     private int openSeats;
+    @JsonProperty("meetingTimes")
+    private ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
+    private String description;
 
     // Constructors
     public Course() {}
@@ -41,12 +40,12 @@ public class Course {
     }
 
     // Getters and Setters
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
