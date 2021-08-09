@@ -39,6 +39,7 @@ public class CourseRepository implements CrudRepository<Course>{
                 newCourse.setId(curCourse.get("_id").toString());
                 courseList.add(newCourse);
             }
+            cursor.close();
 
             return courseList;
 
@@ -59,7 +60,7 @@ public class CourseRepository implements CrudRepository<Course>{
      * @param sectionNo
      * @return
      */
-    public Course findById(String dept, int courseNo, int sectionNo) {
+    public Course findByCredentials(String dept, int courseNo, int sectionNo) {
         try {
             System.out.println("Searching for " + dept + " " + courseNo + "-" + sectionNo + "...");
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
@@ -87,7 +88,7 @@ public class CourseRepository implements CrudRepository<Course>{
         }
     }
 
-    public boolean deleteById(String dept, int courseNo, int sectionNo) {
+    public boolean deleteByCredentials(String dept, int courseNo, int sectionNo) {
         try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
             MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
@@ -112,13 +113,13 @@ public class CourseRepository implements CrudRepository<Course>{
      */
 
     @Override
-    public Course findById(int id) {
+    public Course findById(String id) {
         try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
 
             MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
             MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
-            Document queryDoc = new Document("_id", new ObjectId(String.valueOf(id)));
+            Document queryDoc = new Document("_id", new ObjectId(id));
             Document authCourseDoc = courseCollection.find(queryDoc).first();
 
             if (authCourseDoc == null)
@@ -184,12 +185,12 @@ public class CourseRepository implements CrudRepository<Course>{
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(String id) {
         try {
             MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
             MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
             MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
-            Document queryDoc = new Document("_id", new ObjectId(String.valueOf(id)));
+            Document queryDoc = new Document("_id", new ObjectId(id));
 
             // delete course
             DeleteResult result = courseCollection.deleteOne(queryDoc);

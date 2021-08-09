@@ -19,9 +19,63 @@ import org.bson.types.ObjectId;
 
 import static com.mongodb.client.model.Filters.eq;
 
+// TODO Handle Exceptions
 public class UserRepository implements CrudRepository<Person> {
+    // Variables
+    private final MongoCollection<Document> usersCollection;
+    private final ObjectMapper mapper;
+
+    // Constructor
+    public UserRepository(ObjectMapper mapper) {
+        this.mapper = mapper;
+        MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+        MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+        this.usersCollection = schoolDatabase.getCollection("users");
+    }
 
     // Methods
+    /**
+     * Find user in database given a username
+     *
+     * @param username
+     * @return
+     */
+    public Person findUserByCredentials(String username) {
+        try {
+            Document queryDoc = new Document("username", username);
+            Document authUserDoc = usersCollection.find(queryDoc).first();
+
+            if (authUserDoc == null)
+                return null;
+
+            Person authUser;
+            // Retrieves the value of the userType field in the database
+            String userType = authUserDoc.get("userType").toString();
+            switch (userType) {
+                case "student":
+                    authUser = mapper.readValue(authUserDoc.toJson(), Student.class);
+                    break;
+                case "faculty":
+                    authUser = mapper.readValue(authUserDoc.toJson(), Faculty.class);
+                    break;
+                default:
+                    System.out.println("Invalid user type");
+                    return null;
+            }
+
+            authUser.setId(authUserDoc.get("_id").toString());
+            return authUser;
+
+        } catch (JsonMappingException jme) {
+            jme.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An exception occurred while mapping the document.", jme);
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
+
+    }
+
     /**
      * Search the database for an entry with the given username and password combination
      *
@@ -31,21 +85,15 @@ public class UserRepository implements CrudRepository<Person> {
      */
     public Person findUserByCredentials(String username, String password) {
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
             Document queryDoc = new Document("username", username).append("password", password);
             Document authUserDoc = usersCollection.find(queryDoc).first();
 
-            if (authUserDoc == null) {
+            if (authUserDoc == null)
                 return null;
-            }
 
-            ObjectMapper mapper = new ObjectMapper();
             Person authUser;
-            // TODO Clean this up - very ugly
             // Retrieves the value of the userType field in the database
-            String userType = usersCollection.find(new BasicDBObject("username", username)).projection(Projections.fields(Projections.include("userType"), Projections.excludeId())).first().getString("userType");
+            String userType = authUserDoc.get("userType").toString();
             switch (userType) {
                 case "student":
                     authUser = mapper.readValue(authUserDoc.toJson(), Student.class);
@@ -102,22 +150,17 @@ public class UserRepository implements CrudRepository<Person> {
      */
 
     @Override
-    public Person findById(int id) {
+    public Person findById(String id) {
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
-            Document queryDoc = new Document("_id", new ObjectId(String.valueOf(id)));
+            Document queryDoc = new Document("_id", new ObjectId(id));
             Document authUserDoc = usersCollection.find(queryDoc).first();
 
             if (authUserDoc == null)
                 return null;
 
-            ObjectMapper mapper = new ObjectMapper();
             Person authUser;
-            // TODO Clean this up - very ugly
             // Retrieves the value of the userType field in the database
-            String userType = (String) authUserDoc.get("userType"); //(new BasicDBObject("username", username)).projection(Projections.fields(Projections.include("userType"), Projections.excludeId())).first().getString("userType");
+            String userType = authUserDoc.get("userType").toString();
             switch (userType) {
                 case "student":
                     authUser = mapper.readValue(authUserDoc.toJson(), Student.class);
@@ -147,18 +190,12 @@ public class UserRepository implements CrudRepository<Person> {
     @Override
     public Person save(Person newPerson) {
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+            // Convert Person to BasicDBObject
+            String userJson = mapper.writeValueAsString(newPerson);
+            Document userDoc = Document.parse(userJson);
 
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
-            Document newPersonDoc = new Document("firstName", newPerson.getFirstName())
-                    .append("lastName", newPerson.getLastName())
-                    .append("username", newPerson.getUsername())
-                    .append("password", newPerson.getPassword())
-                    .append("userType", newPerson.getUserType());
-
-            usersCollection.insertOne(newPersonDoc);
-            newPerson.setId(newPersonDoc.get("_id").toString());
+            usersCollection.insertOne(userDoc);
+            newPerson.setId(userDoc.get("_id").toString());
 
             return newPerson;
 
@@ -171,15 +208,10 @@ public class UserRepository implements CrudRepository<Person> {
     @Override
     public boolean update(Person updatedPerson) {
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("users");
-
             // Convert Person to BasicDBObject
-            ObjectMapper mapper = new ObjectMapper();
-            String courseJson = mapper.writeValueAsString(updatedPerson);
-            Document courseDoc = Document.parse(courseJson);
-            courseCollection.findOneAndReplace(eq(("_id"), new ObjectId(updatedPerson.getId())), courseDoc);
+            String userJson = mapper.writeValueAsString(updatedPerson);
+            Document userDoc = Document.parse(userJson);
+            usersCollection.findOneAndReplace(eq(("_id"), new ObjectId(updatedPerson.getId())), userDoc);
 
             return true;
 
@@ -192,12 +224,9 @@ public class UserRepository implements CrudRepository<Person> {
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(String id) {
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> usersCollection = schoolDatabase.getCollection("users");
-            Document queryDoc = new Document("_id", new ObjectId(String.valueOf(id)));
+            Document queryDoc = new Document("_id", new ObjectId(id));
 
             // delete user
             DeleteResult result = usersCollection.deleteOne(queryDoc);
