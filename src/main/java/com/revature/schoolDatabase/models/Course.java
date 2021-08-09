@@ -27,6 +27,9 @@ public class Course {
     private ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
     private String description;
 
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_RESET = "\u001B[0m";
+
     // Constructors
     public Course() {}
 
@@ -72,14 +75,6 @@ public class Course {
         this.deptShort = deptShort;
     }
 
-    public int getSectionNo() {
-        return sectionNo;
-    }
-
-    public void setSectionNo(int sectionNo) {
-        this.sectionNo = sectionNo;
-    }
-
     public int getCourseNo() {
         return courseNo;
     }
@@ -88,13 +83,21 @@ public class Course {
         this.courseNo = courseNo;
     }
 
-//    public String[] getPrerequisites() {
-//        return prerequisites;
-//    }
-//
-//    public void setPrerequisites(String[] prerequisites) {
-//        this.prerequisites = prerequisites;
-//    }
+    public int getSectionNo() {
+        return sectionNo;
+    }
+
+    public void setSectionNo(int sectionNo) {
+        this.sectionNo = sectionNo;
+    }
+
+    public ArrayList<PreReq> getPrerequisites() {
+        return prerequisites;
+    }
+
+    public void setPrerequisites(ArrayList<PreReq> prerequisites) {
+        this.prerequisites = prerequisites;
+    }
 
     public String getInstructor() {
         return instructor;
@@ -102,6 +105,14 @@ public class Course {
 
     public void setInstructor(String instructor) {
         this.instructor = instructor;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+
+    public void setCredits(int credits) {
+        this.credits = credits;
     }
 
     public int getTotalSeats() {
@@ -120,21 +131,34 @@ public class Course {
         this.openSeats = openSeats;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Course course = (Course) o;
-//        return id == course.id && startTime == course.startTime && endTime == course.endTime && totalSeats == course.totalSeats && openSeats == course.openSeats && Objects.equals(title, course.title) && Objects.equals(department, course.department) && Arrays.equals(prerequisites, course.prerequisites) && Arrays.equals(days, course.days);
-//    }
+    public ArrayList<MeetingTime> getMeetingTimes() {
+        return meetingTimes;
+    }
 
-//    @Override
-//    public int hashCode() {
-//        int result = Objects.hash(id, title, department, startTime, endTime, totalSeats, openSeats);
-//        result = 31 * result + Arrays.hashCode(prerequisites);
-//        result = 31 * result + Arrays.hashCode(days);
-//        return result;
-//    }
+    public void setMeetingTimes(ArrayList<MeetingTime> meetingTimes) {
+        this.meetingTimes = meetingTimes;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return courseNo == course.courseNo && sectionNo == course.sectionNo && credits == course.credits && totalSeats == course.totalSeats && openSeats == course.openSeats && Objects.equals(id, course.id) && Objects.equals(title, course.title) && Objects.equals(department, course.department) && Objects.equals(deptShort, course.deptShort) && Objects.equals(prerequisites, course.prerequisites) && Objects.equals(instructor, course.instructor) && Objects.equals(meetingTimes, course.meetingTimes) && Objects.equals(description, course.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, department, deptShort, courseNo, sectionNo, prerequisites, instructor, credits, totalSeats, openSeats, meetingTimes, description);
+    }
 
     // Methods
     /**
@@ -142,25 +166,42 @@ public class Course {
      */
     public void displayCourse() {
         try {
-            System.out.println(this.title);
+            System.out.println(ANSI_CYAN + this.title + ANSI_RESET);
             System.out.println(this.deptShort + " " + this.courseNo + "-" + this.sectionNo);
             for (Field field : this.getClass().getDeclaredFields()) {
-                if (field.getName().equals("_id") ||
+                if (field.getName().equals("id") ||
+                        field.getName().equals("title") ||
+                        field.getName().equals("deptShort") ||
                         field.getName().equals("prerequisites") ||
-                        field.getName().equals("meetingTimes"))
+                        field.getName().equals("meetingTimes") ||
+                        field.getName().equals("ANSI_CYAN") ||
+                        field.getName().equals("ANSI_RESET") ||
+                        field.get(this) == null)
                     continue;
                 System.out.println(field.getName() + ": " + field.get(this));
             }
             this.displayMeetingTimes();
             System.out.println();
+            this.displayPrerequisites();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
+     * Displays minimal course information
+     */
+    public void displayShortCourse() {
+        try {
+            System.out.println(ANSI_CYAN + this.title + ANSI_RESET);
+            System.out.println(this.deptShort + " " + this.courseNo + "-" + this.sectionNo);
+        } catch (Exception e) { // TODO Handle exceptions
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Displays meeting times of Course if available
-     *
      */
     public void displayMeetingTimes() {
         if (meetingTimes.isEmpty())
@@ -168,10 +209,26 @@ public class Course {
         else {
             System.out.println("Meeting Times:");
             for (MeetingTime meetingTime : meetingTimes) {
-                System.out.println("\t" + meetingTime.getDay());
-                System.out.println("\t" + meetingTime.getStartTime());
-                System.out.println("\t" + meetingTime.getEndTime());
-                System.out.println("\t" + meetingTime.getClassType());
+                System.out.print("\t" + meetingTime.getDay());
+                System.out.print(" " + meetingTime.getStartTime());
+                System.out.print(" - " + meetingTime.getEndTime());
+                System.out.println(" (" + meetingTime.getClassType() + ")");
+            }
+        }
+    }
+
+    /**
+     * Displays prerequisites of Course if available
+     */
+    public void displayPrerequisites() {
+        if (prerequisites.isEmpty())
+            return;
+        else {
+            System.out.println("Prerequisites: ");
+            for (PreReq prereq : prerequisites) {
+                System.out.print("\t" + prereq.getDepartment());
+                System.out.print(" " + prereq.getCourseNo());
+                System.out.println(" (" + prereq.getCredits() + " credits)");
             }
         }
     }

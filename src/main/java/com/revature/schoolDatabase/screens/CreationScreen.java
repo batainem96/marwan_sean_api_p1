@@ -1,2 +1,4 @@
-package com.revature.schoolDatabase.screens;public class CreationScreen {
+package com.revature.schoolDatabase.screens;
+
+public class CreationScreen {
 }

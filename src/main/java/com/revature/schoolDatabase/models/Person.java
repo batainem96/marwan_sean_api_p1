@@ -15,7 +15,7 @@ public abstract class Person {
     protected String password;
     protected String userType;
     // TODO Add schedule arraylist
-    protected ArrayList<Course> courseList;
+    protected ArrayList<Schedule> schedule = new ArrayList<>();
 
     // Constructors
     public Person() {
@@ -85,6 +85,15 @@ public abstract class Person {
         this.userType = userType;
     }
 
+    public ArrayList<Schedule> getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(ArrayList<Schedule> schedule) {
+        this.schedule = schedule;
+    }
+
+    // Overridden methods
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,7 +107,7 @@ public abstract class Person {
         return Objects.hash(id, firstName, lastName, username, password);
     }
 
-    // Methods
+    // Other Methods
 
 
 }

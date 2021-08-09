@@ -11,7 +11,7 @@ import java.io.BufferedReader;
 
 public class StudentMenu extends Menu {
     // Variables
-    private final Student stud;
+    private Student stud;
     private final UserService userService;
     private final CourseService courseService;
 
@@ -46,7 +46,8 @@ public class StudentMenu extends Menu {
                 break;
             case "4":   // User wants to add a course, check if they gave a course ID, otherwise show usage
                 if (userSelection.length > 1) {
-                    courseService.addCourse(stud, userSelection[1].toUpperCase(), userSelection[2]);
+                    stud = (Student) courseService.addCourse(stud, userSelection[1].toUpperCase(), userSelection[2]);
+                    // Update student
                 }
                 else System.out.println("Usage: 4 <DeptShorthand> <CourseID>\nExample: 4 COSC 101-1");
                 break;

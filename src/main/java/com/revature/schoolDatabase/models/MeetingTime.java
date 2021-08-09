@@ -16,6 +16,13 @@ public class MeetingTime {
 
     public MeetingTime() {}
 
+    public MeetingTime(String day, int startTime, int endTime, String classType) {
+        this.day = day;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.classType = classType;
+    }
+
     public String getDay() {
         return day;
     }
@@ -46,5 +53,15 @@ public class MeetingTime {
 
     public void setClassType(String classType) {
         this.classType = classType;
+    }
+
+    @Override
+    public String toString() {
+        return "MeetingTime{" +
+                "day='" + day + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", classType='" + classType + '\'' +
+                '}';
     }
 }

@@ -1,12 +1,10 @@
 package com.revature.schoolDatabase.services;
 
 import com.mongodb.client.MongoClient;
-import com.revature.schoolDatabase.models.Course;
-import com.revature.schoolDatabase.models.Faculty;
-import com.revature.schoolDatabase.models.Person;
-import com.revature.schoolDatabase.models.Student;
+import com.revature.schoolDatabase.models.*;
 import com.revature.schoolDatabase.repositories.CourseRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseService {
@@ -24,11 +22,6 @@ public class CourseService {
      * Lists all courses in catalog
      */
     public void showCourses() {
-        System.out.println(ANSI_CYAN + "Title: Introduction to Programming\n" + ANSI_RESET +
-                "Department: COSC\n" +
-                "Course ID: 2784\n");
-
-        // TODO List all courses currently stored in database
         List<Course> courseList = courseRepo.retrieveCourses();
         for (Course course : courseList) {
             course.displayCourse();
@@ -43,13 +36,15 @@ public class CourseService {
      *                  -- 'open' = courses with open seats
      *                  -- 'closed' = courses which have no open seats
      *                  -- 'user' = courses currently in a given Person's schedule
-     *                  -- 'schedule' = courses that would fit in schedule
+     *                  -- 'schedule' = courses that would fit in schedule TODO
      *                  -- 'dept' = courses in a given Department
+     *                  -- 'short' = display only pertinent Course information
      */
     public void showCourses(Person user, String... flags) {
-        System.out.println(ANSI_CYAN + "Title: Introduction to Programming\n" + ANSI_RESET +
-                "Department: COSC\n" +
-                "Course ID: 2784\n");
+        List<Course> courseList = courseRepo.retrieveCourses();
+        for (Course course : courseList) {
+            course.displayShortCourse();
+        }
     }
 
     /**
@@ -58,17 +53,26 @@ public class CourseService {
      * @param stud
      * @param courseID
      */
-    public void addCourse(Student stud, String dept, String courseID) {
+    public Person addCourse(Student stud, String dept, String courseID) {
         // TODO -------------------------------
 
         // Find course in database given courseID
         String[] splitID = courseID.split("-");
-        Course newCourse = courseRepo.findById(dept, Integer.parseInt(splitID[0]), Integer.parseInt(splitID[1]));
+        Course newCourse = courseRepo.findByCredentials(dept, Integer.parseInt(splitID[0]), Integer.parseInt(splitID[1]));
+        String newDeptShort = newCourse.getDeptShort();
+        int newCourseNo = newCourse.getCourseNo();
+        int newSectionNo = newCourse.getSectionNo();
+        ArrayList<MeetingTime> newMeetingTimes = newCourse.getMeetingTimes();
 
-        newCourse.displayCourse();
+        Schedule courseData = new Schedule(newDeptShort, newCourseNo, newSectionNo, newMeetingTimes);
+        stud.getSchedule().add(courseData);
+        System.out.println(stud.getSchedule());
+        // Return reference to student to be updated
+        return stud;
+
         // TODO Compare new course info with student (schedule, etc) to ensure the add is valid
 
-        // Add new course to student's schedule
+        // TODO Save updated Student + Schedule to database
 
     }
 
@@ -95,21 +99,24 @@ public class CourseService {
      * @param sectionNo
      * @return
      */
-    public Course findCourseByID(String dept, int courseNo, int sectionNo) {
-        Course foundCourse = courseRepo.findById(dept, courseNo, sectionNo);
-        return foundCourse;
+    public Course findCourseByCredentials(String dept, int courseNo, int sectionNo) {
+        Course course = courseRepo.findByCredentials(dept, courseNo, sectionNo);
+        return course;
+    }
+
+    public Course findCourseByID(String id) {
+        Course course = courseRepo.findById(id);
+        return course;
     }
 
     public void updateCourse(Course course) {
-        boolean result = courseRepo.update(course);
-        System.out.println(result);
+        courseRepo.update(course);
     }
 
     /**
      * Deletes a course from the database
      */
     public void deleteCourse(String dept, int courseNo, int sectionNo) {
-        boolean result = courseRepo.deleteById(dept, courseNo, sectionNo);
-        System.out.println(result);
+        boolean result = courseRepo.deleteByCredentials(dept, courseNo, sectionNo);
     }
 }

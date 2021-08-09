@@ -78,7 +78,7 @@ public class FacultyMenu extends Menu {
                 courseService.createCourse(fac, newCourse);
                 break;
             case "5":       // Edit Course
-                Course editCourse = courseService.findCourseByID(userSelection[1],
+                Course editCourse = courseService.findCourseByCredentials(userSelection[1],
                         Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
                 String[] menuOptions = {"Title", "Department", "Course Number", "Section Number", "Instructor",
                                         "Credits", "Total Number of Seats", "Prerequisites {WIP}", "Meeting Times {WIP}",

@@ -3,12 +3,12 @@
     "title": "Introduction to Programming",
     "department": "Computer Science",
     "deptShort": "COSC",
-    "courseNo": "101",
-    "sectionNo": "001",
+    "courseNo": 101,
+    "sectionNo": 1,
     "instructor": "Singleton, Wezley",
-    "credits": "4",
-    "totalSeats": "5",
-    "openSeats": "5",
+    "credits": 4,
+    "totalSeats": 5,
+    "openSeats": 5,
     "meetingTimes": [
       {
         "day": "Mon",
@@ -41,17 +41,17 @@
     "title": "Advanced Data Structures",
     "department": "Computer Science",
     "deptShort": "COSC",
-    "courseNo": "201",
-    "sectionNo": "001",
+    "courseNo": 201,
+    "sectionNo": 1,
     "instructor": "Singleton, Wezley",
-    "credits": "4",
-    "totalSeats": "5",
-    "openSeats": "5",
+    "credits": 4,
+    "totalSeats": 5,
+    "openSeats": 5,
     "prerequisites": [
       {
         "department": "Computer Science",
-        "courseNo": "101",
-        "credits": "4"
+        "courseNo": 101,
+        "credits": 4
       }
     ],
     "meetingTimes": [
@@ -86,17 +86,17 @@
     "title": "Object Oriented Programming",
     "department": "Computer Science",
     "deptShort": "COSC",
-    "courseNo": "202",
-    "sectionNo": "001",
+    "courseNo": 202,
+    "sectionNo": 1,
     "instructor": "Singleton, Wezley",
-    "credits": "4",
-    "totalSeats": "5",
-    "openSeats": "5",
+    "credits": 4,
+    "totalSeats": 5,
+    "openSeats": 5,
     "prerequisites": [
       {
         "department": "Computer Science",
-        "courseNo": "101",
-        "credits": "4"
+        "courseNo": 101,
+        "credits": 4
       }
     ],
     "meetingTimes": [
@@ -131,12 +131,12 @@
     "title": "Language and Composition",
     "department": "English",
     "deptShort": "ENGL",
-    "courseNo": "101",
-    "sectionNo": "001",
+    "courseNo": 101,
+    "sectionNo": 1,
     "instructor": "Shakespeare, William",
-    "credits": "4",
-    "totalSeats": "5",
-    "openSeats": "5",
+    "credits": 4,
+    "totalSeats": 5,
+    "openSeats": 5,
     "meetingTimes": [
       {
         "day": "Mon",
@@ -163,12 +163,12 @@
     "title": "College Algebra",
     "department": "Mathematics",
     "deptShort": "MATH",
-    "courseNo": "101",
-    "sectionNo": "001",
+    "courseNo": 101,
+    "sectionNo": 1,
     "instructor": "von Neumann, John",
-    "credits": "4",
-    "totalSeats": "5",
-    "openSeats": "5",
+    "credits": 4,
+    "totalSeats": 5,
+    "openSeats": 5,
     "meetingTimes": [
       {
         "day": "Mon",
@@ -195,12 +195,12 @@
     "title": "World History I",
     "department": "History",
     "deptShort": "HIST",
-    "courseNo": "101",
-    "sectionNo": "001",
+    "courseNo": 101,
+    "sectionNo": 1,
     "instructor": "Lincoln, Abraham",
-    "credits": "4",
-    "totalSeats": "5",
-    "openSeats": "5",
+    "credits": 4,
+    "totalSeats": 5,
+    "openSeats": 5,
     "meetingTimes": [
       {
         "day": "Tues",

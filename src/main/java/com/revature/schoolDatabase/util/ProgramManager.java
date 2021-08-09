@@ -1,5 +1,6 @@
 package com.revature.schoolDatabase.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.schoolDatabase.repositories.CourseRepository;
 import com.revature.schoolDatabase.repositories.UserRepository;
 import com.revature.schoolDatabase.screens.LoginScreen;
@@ -25,7 +26,7 @@ public class ProgramManager {
         // Through Dependency Injection, we will use these variables throughout the application
         router = new ScreenRouter();
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
-        UserRepository userRepository = new UserRepository();
+        UserRepository userRepository = new UserRepository(new ObjectMapper());
         UserService userService = new UserService(userRepository);
         CourseRepository courseRepository = new CourseRepository();
         CourseService courseService = new CourseService(courseRepository);
