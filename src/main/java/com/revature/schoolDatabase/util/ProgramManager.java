@@ -28,7 +28,7 @@ public class ProgramManager {
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
         UserRepository userRepository = new UserRepository(new ObjectMapper());
         UserService userService = new UserService(userRepository);
-        CourseRepository courseRepository = new CourseRepository();
+        CourseRepository courseRepository = new CourseRepository(new ObjectMapper());
         CourseService courseService = new CourseService(courseRepository);
 
         // Add a number of screens we will use to the router HashSet

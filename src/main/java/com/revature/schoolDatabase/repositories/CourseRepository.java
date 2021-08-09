@@ -17,7 +17,19 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.eq;
 
 public class CourseRepository implements CrudRepository<Course>{
+    // Variables
+    private final MongoCollection<Document> courseCollection;
+    private final ObjectMapper mapper;
 
+    // Constructors
+    public CourseRepository(ObjectMapper mapper) {
+        this.mapper = mapper;
+        MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+        MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+        this.courseCollection = schoolDatabase.getCollection("courses");
+    }
+
+    // Other Methods
     /**
      * Returns an arrayList of courses from the database
      *
@@ -26,11 +38,6 @@ public class CourseRepository implements CrudRepository<Course>{
     public List<Course> retrieveCourses() {
         List<Course> courseList = new ArrayList<>();
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
-            ObjectMapper mapper = new ObjectMapper();
-            
             // Store all documents into a findIterable object
             MongoCursor<Document> cursor = courseCollection.find().iterator();
             while (cursor.hasNext()) {
@@ -63,9 +70,6 @@ public class CourseRepository implements CrudRepository<Course>{
     public Course findByCredentials(String dept, int courseNo, int sectionNo) {
         try {
             System.out.println("Searching for " + dept + " " + courseNo + "-" + sectionNo + "...");
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
             Document queryDoc = new Document("deptShort", dept).append("courseNo", courseNo)
                                         .append("sectionNo", sectionNo);
             Document authCourseDoc = courseCollection.find(queryDoc).first();
@@ -73,7 +77,6 @@ public class CourseRepository implements CrudRepository<Course>{
             if (authCourseDoc == null)
                 return null;
 
-            ObjectMapper mapper = new ObjectMapper();
             Course newCourse = mapper.readValue(authCourseDoc.toJson(), Course.class);
             newCourse.setId(authCourseDoc.get("_id").toString());
 
@@ -90,9 +93,6 @@ public class CourseRepository implements CrudRepository<Course>{
 
     public boolean deleteByCredentials(String dept, int courseNo, int sectionNo) {
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
             Document queryDoc = new Document("deptShort", dept)
                                         .append("courseNo", courseNo)
                                         .append("sectionNo", sectionNo);
@@ -115,17 +115,12 @@ public class CourseRepository implements CrudRepository<Course>{
     @Override
     public Course findById(String id) {
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
             Document queryDoc = new Document("_id", new ObjectId(id));
             Document authCourseDoc = courseCollection.find(queryDoc).first();
 
             if (authCourseDoc == null)
                 return null;
 
-            ObjectMapper mapper = new ObjectMapper();
             Course newCourse = mapper.readValue(authCourseDoc.toJson(), Course.class);
             newCourse.setId(authCourseDoc.get("_id").toString());
 
@@ -140,10 +135,6 @@ public class CourseRepository implements CrudRepository<Course>{
     @Override
     public Course save(Course newCourse) {
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
             Document newCourseDoc = new Document("title", newCourse.getTitle())
                     .append("department", newCourse.getDepartment())
                     .append("courseNo", newCourse.getCourseNo())
@@ -164,12 +155,7 @@ public class CourseRepository implements CrudRepository<Course>{
     @Override
     public boolean update(Course updatedCourse) {
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
-
             // Convert Course to BasicDBObject
-            ObjectMapper mapper = new ObjectMapper();
             String courseJson = mapper.writeValueAsString(updatedCourse);
             Document courseDoc = Document.parse(courseJson);
             courseCollection.findOneAndReplace(eq(("_id"), new ObjectId(updatedCourse.getId())), courseDoc);
@@ -187,9 +173,6 @@ public class CourseRepository implements CrudRepository<Course>{
     @Override
     public boolean deleteById(String id) {
         try {
-            MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-            MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
-            MongoCollection<Document> courseCollection = schoolDatabase.getCollection("courses");
             Document queryDoc = new Document("_id", new ObjectId(id));
 
             // delete course
