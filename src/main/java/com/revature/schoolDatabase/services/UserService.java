@@ -1,5 +1,6 @@
 package com.revature.schoolDatabase.services;
 
+import com.mongodb.client.result.DeleteResult;
 import com.revature.schoolDatabase.models.Course;
 import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Person;
@@ -68,6 +69,19 @@ public class UserService {
 //        if (user.getEmail() == null || user.getEmail().trim().equals("")) return false;
         if (user.getUsername() == null || user.getUsername().trim().equals("")) return false;
         return user.getPassword() != null && !user.getPassword().trim().equals("");
+    }
+
+    /**
+     * Persist updated user information to the database
+     */
+    public void updateUser(Person user) {userRepo.update(user);}
+
+    /**
+     * Remove given user from the database
+     */
+    public boolean deleteUser(Person user) {
+        boolean result = userRepo.deleteById(user.getId());
+        return result;
     }
 
 }

@@ -2,13 +2,12 @@ package com.revature.schoolDatabase.screens.menus;
 
 import com.revature.schoolDatabase.models.Course;
 import com.revature.schoolDatabase.models.Faculty;
-import com.revature.schoolDatabase.models.Student;
+import com.revature.schoolDatabase.util.CourseCreator;
 import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 
 public class FacultyMenu extends Menu {
     // Variables
@@ -20,7 +19,7 @@ public class FacultyMenu extends Menu {
     public FacultyMenu(Faculty fac, BufferedReader consoleReader, ScreenRouter router,
                        UserService userService, CourseService courseService) {
         super("Faculty", "/faculty", consoleReader, router,
-                        new String[] {"View My Courses", "View Available Courses", "View All Courses", "Add Course",
+                        new String[] {"View My Courses", "View Available Courses", "View All Courses", "Create Course",
                         "Edit Course", "Remove Course"});
         this.fac = fac;
         this.userService = userService;
@@ -28,30 +27,6 @@ public class FacultyMenu extends Menu {
     }
 
     // Methods
-
-    /**
-     * Creates a new course for the catalog given course information
-     *
-     * @return
-     * @throws IOException
-     */
-    public Course createCourse() throws IOException {
-        System.out.println("Create a new course!");
-
-        System.out.println("Enter course ID");
-        int id = Integer.parseInt(consoleReader.readLine());
-
-        System.out.println("Enter course title");
-        String title = consoleReader.readLine();
-
-        System.out.println("Enter course department");
-        String dept = consoleReader.readLine();
-
-        Course newCourse = new Course(title, dept, id, id);
-
-        return newCourse;
-    }
-
     @Override
     public void render() throws Exception {
         displayMenu();
@@ -63,19 +38,21 @@ public class FacultyMenu extends Menu {
         // TODO Finish implementations of Faculty functions
         switch (userSelection[0]) {
             case "1":       // View My Courses
-                courseService.showCourses();
+                // TODO fac.generateSchedule()
+                fac.displaySchedule();
                 break;
             case "2":       // View Available Courses
-                courseService.showCourses();
+                courseService.showCourses(fac, "short");
                 break;
             case "3":       // View All Courses
                 courseService.showCourses();
                 break;
             case "4":       // Add Course
                 // Create a new course
-                // Prompt user for course information
-                Course newCourse = createCourse();
-                courseService.createCourse(fac, newCourse);
+                Course newCourse = CourseCreator.createCourse(consoleReader);
+                if (courseService.findCourseByCredentials(newCourse.getDeptShort(), newCourse.getCourseNo(), newCourse.getSectionNo()) != null)
+                    System.out.println("Course already exists");
+                else courseService.createCourse(fac, newCourse);
                 break;
             case "5":       // Edit Course
                 Course editCourse = courseService.findCourseByCredentials(userSelection[1],

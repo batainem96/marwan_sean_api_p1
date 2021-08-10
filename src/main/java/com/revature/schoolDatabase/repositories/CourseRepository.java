@@ -2,6 +2,7 @@ package com.revature.schoolDatabase.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
@@ -40,6 +41,52 @@ public class CourseRepository implements CrudRepository<Course>{
         try {
             // Store all documents into a findIterable object
             MongoCursor<Document> cursor = courseCollection.find().iterator();
+            while (cursor.hasNext()) {
+                Document curCourse = cursor.next();
+                Course newCourse = mapper.readValue((curCourse).toJson(), Course.class);
+                newCourse.setId(curCourse.get("_id").toString());
+                courseList.add(newCourse);
+            }
+            cursor.close();
+
+            return courseList;
+
+        } catch (JsonMappingException jme) {
+            jme.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An exception occurred while mapping the document.", jme);
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
+    }
+
+    /**
+     * Retrieves list of courses from database with given user as the instructor
+     *
+     * @return
+     */
+    public List<Course> retrieveInstructorCourses(String firstName, String lastName) {
+        List<Course> courseList = new ArrayList<>();
+        try {
+            // Run two finds:
+            //  1. All matching courses of type firstname lastname
+            //  2. All matching courses of type lastname, firstname
+            String find1 = firstName.concat(" ").concat(lastName);
+            String find2 = lastName.concat(", ").concat(firstName);
+
+            // Store all documents into a findIterable object
+            Document fields = new Document("$eq", find1);
+            MongoCursor<Document> cursor = courseCollection.find(new Document("instructor", fields)).iterator();
+            while (cursor.hasNext()) {
+                Document curCourse = cursor.next();
+                Course newCourse = mapper.readValue((curCourse).toJson(), Course.class);
+                newCourse.setId(curCourse.get("_id").toString());
+                courseList.add(newCourse);
+            }
+
+            // Store all documents into a findIterable object
+            fields = new Document("$eq", find2);
+            cursor = courseCollection.find(new Document("instructor", fields)).iterator();
             while (cursor.hasNext()) {
                 Document curCourse = cursor.next();
                 Course newCourse = mapper.readValue((curCourse).toJson(), Course.class);
@@ -135,14 +182,10 @@ public class CourseRepository implements CrudRepository<Course>{
     @Override
     public Course save(Course newCourse) {
         try {
-            Document newCourseDoc = new Document("title", newCourse.getTitle())
-                    .append("department", newCourse.getDepartment())
-                    .append("courseNo", newCourse.getCourseNo())
-                    .append("sectionNo", newCourse.getSectionNo())
-                    .append("instructor", newCourse.getInstructor());
-
-            courseCollection.insertOne(newCourseDoc);
-            newCourse.setId(newCourseDoc.get("_id").toString());
+            String courseJson = mapper.writeValueAsString(newCourse);
+            Document courseDoc = Document.parse(courseJson);
+            courseCollection.insertOne(courseDoc);
+            newCourse.setId(courseDoc.get("_id").toString());
 
             return newCourse;
 

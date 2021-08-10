@@ -5,6 +5,7 @@ import com.revature.schoolDatabase.models.*;
 import com.revature.schoolDatabase.repositories.CourseRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CourseService {
@@ -39,11 +40,29 @@ public class CourseService {
      *                  -- 'schedule' = courses that would fit in schedule TODO
      *                  -- 'dept' = courses in a given Department
      *                  -- 'short' = display only pertinent Course information
+     *                  -- 'instructor' = courses taught by given user
      */
     public void showCourses(Person user, String... flags) {
-        List<Course> courseList = courseRepo.retrieveCourses();
-        for (Course course : courseList) {
-            course.displayShortCourse();
+        if (Arrays.asList(flags).contains("instructor")) {
+            List<Course> courseList = courseRepo.retrieveInstructorCourses(user.getFirstName(), user.getLastName());
+            // Add to Faculty schedule if the courses do not exist
+            for (Course course : courseList) {
+                String dept = course.getDeptShort();
+                int courseNo = course.getCourseNo();
+                int sectionNo = course.getSectionNo();
+                ArrayList<MeetingTime> meetingTimes = course.getMeetingTimes();
+                Schedule newSched = new Schedule(dept, courseNo, sectionNo, meetingTimes);
+
+                if (!user.getSchedule().contains(newSched))
+                    user.getSchedule().add(newSched);
+                course.displayShortCourse();
+            }
+        }
+        else {
+            List<Course> courseList = courseRepo.retrieveCourses();
+            for (Course course : courseList) {
+                course.displayShortCourse();
+            }
         }
     }
 
@@ -66,13 +85,10 @@ public class CourseService {
 
         Schedule courseData = new Schedule(newDeptShort, newCourseNo, newSectionNo, newMeetingTimes);
         stud.getSchedule().add(courseData);
-        System.out.println(stud.getSchedule());
         // Return reference to student to be updated
         return stud;
 
         // TODO Compare new course info with student (schedule, etc) to ensure the add is valid
-
-        // TODO Save updated Student + Schedule to database
 
     }
 
@@ -86,10 +102,8 @@ public class CourseService {
         // TODO Auto Increment Course IDs
         // TODO -------------------------------
         // Verify faculty is in database and is qualified to create a course
+        courseRepo.save(newCourse);
 
-        // Verify that the new course does not already exist in the database
-
-        // Store course in database with given faculty as "professor"
     }
 
     /**
@@ -113,10 +127,23 @@ public class CourseService {
         courseRepo.update(course);
     }
 
+    public Person removeCourseFromSchedule(Person user, Schedule course) {
+        for (Schedule existingCourse : user.getSchedule()) {
+            if (existingCourse.equals(course)) {
+                Person updatedUser = user;
+                updatedUser.getSchedule().remove(existingCourse);
+                return updatedUser;
+            }
+        }
+        // If course was not found in schedule, return original user
+        return user;
+    }
+
     /**
      * Deletes a course from the database
      */
-    public void deleteCourse(String dept, int courseNo, int sectionNo) {
+    public boolean deleteCourse(String dept, int courseNo, int sectionNo) {
         boolean result = courseRepo.deleteByCredentials(dept, courseNo, sectionNo);
+        return result;
     }
 }

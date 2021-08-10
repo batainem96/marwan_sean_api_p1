@@ -33,6 +33,7 @@ public class Course {
     // Constructors
     public Course() {}
 
+    // In order to be valid, a Course must at least be given a title, dept, courseNo, and sectionNo
     public Course(String title, String department, int courseNo, int sectionNo) {
         this.title = title;
         this.department = department;
@@ -40,6 +41,24 @@ public class Course {
         this.sectionNo = sectionNo;
         this.deptShort = deptToShort.get(department);
         this.instructor = "None";
+        this.credits = 0;
+    }
+
+    public Course(String title, String department, int courseNo, int sectionNo, ArrayList<PreReq> prerequisites,
+                  String instructor, int credits, int totalSeats, ArrayList<MeetingTime> meetingTimes,
+                  String description) {
+        this(title, department, courseNo, sectionNo);
+        if (prerequisites != null)
+            this.prerequisites = prerequisites;
+        if (instructor != null && !instructor.equals(""))
+            this.instructor = instructor;
+        this.credits = credits;
+        this.totalSeats = totalSeats;
+        this.openSeats = totalSeats;
+        if (meetingTimes != null)
+            this.meetingTimes = meetingTimes;
+        if (description != null && !description.equals(""))
+            this.description = description;
     }
 
     // Getters and Setters
@@ -181,8 +200,8 @@ public class Course {
                 System.out.println(field.getName() + ": " + field.get(this));
             }
             this.displayMeetingTimes();
-            System.out.println();
             this.displayPrerequisites();
+            System.out.println();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -195,6 +214,7 @@ public class Course {
         try {
             System.out.println(ANSI_CYAN + this.title + ANSI_RESET);
             System.out.println(this.deptShort + " " + this.courseNo + "-" + this.sectionNo);
+            System.out.println();
         } catch (Exception e) { // TODO Handle exceptions
             e.printStackTrace();
         }
@@ -204,7 +224,7 @@ public class Course {
      * Displays meeting times of Course if available
      */
     public void displayMeetingTimes() {
-        if (meetingTimes.isEmpty())
+        if (meetingTimes.isEmpty() || meetingTimes == null)
             return;
         else {
             System.out.println("Meeting Times:");
@@ -221,7 +241,7 @@ public class Course {
      * Displays prerequisites of Course if available
      */
     public void displayPrerequisites() {
-        if (prerequisites.isEmpty())
+        if (prerequisites.isEmpty() || prerequisites == null)
             return;
         else {
             System.out.println("Prerequisites: ");
@@ -232,5 +252,7 @@ public class Course {
             }
         }
     }
+
+
 
 }

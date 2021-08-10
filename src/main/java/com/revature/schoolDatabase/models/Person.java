@@ -14,8 +14,11 @@ public abstract class Person {
     protected String username;
     protected String password;
     protected String userType;
-    // TODO Add schedule arraylist
     protected ArrayList<Schedule> schedule = new ArrayList<>();
+
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BRIGHT_BLUE = "\u001B[94m";
 
     // Constructors
     public Person() {
@@ -108,6 +111,26 @@ public abstract class Person {
     }
 
     // Other Methods
+    public void displayUser() {
+        System.out.println(ANSI_YELLOW + "\tUSER: " + this.firstName + " " + this.lastName + " (" + this.getUserType() + ")" + ANSI_RESET);
+        System.out.println("\t\tUsername: " + this.username);
+//        this.displaySchedule();
+    }
+
+    public void displaySchedule() {
+        if (schedule.isEmpty())
+            return;
+        else {
+            System.out.println(ANSI_BRIGHT_BLUE + "Schedule:" + ANSI_RESET);
+            for (Schedule course : schedule) {
+                System.out.print("\t" + course.getCourseDept());
+                System.out.print(" " + course.getCourseNo());
+                System.out.println("-" + course.getSectionNo());
+                System.out.print("\t");
+                course.displayMeetingTimes();
+            }
+        }
+    }
 
 
 }
