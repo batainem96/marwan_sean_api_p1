@@ -7,7 +7,6 @@ import com.revature.schoolDatabase.models.PreReq;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.*;
 
 public class CourseCreator{
@@ -84,26 +83,26 @@ public class CourseCreator{
         // TODO Validate Courses
         ArrayList<PreReq> preReqs = new ArrayList<>();
         String input = "";
-        while (!(input.toLowerCase().equals("q"))) {
+        while (!(input.equalsIgnoreCase("q"))) {
             PreReq newPreReq = new PreReq();
             System.out.println("Enter next prerequisite (Type 'q' to exit:\n");
             System.out.print("Enter department short hand:\n> ");
             input = validateString(consoleReader.readLine());
-            if (input.toLowerCase().equals("q"))
+            if (input.equalsIgnoreCase("q"))
                 break;
             newPreReq.setDepartment(input);
 
             System.out.print("Enter course number:\n> ");
             input = validateString(consoleReader.readLine());
-            if (input.toLowerCase().equals("q"))
+            if (input.equalsIgnoreCase("q"))
                 break;
-            newPreReq.setCourseNo(Integer.parseInt(input));
+            newPreReq.setCourseNo(validateInt(input));
 
             System.out.print("Enter number of credits:\n> ");
             input = validateString(consoleReader.readLine());
-            if (input.toLowerCase().equals("q"))
+            if (input.equalsIgnoreCase("q"))
                 break;
-            newPreReq.setCredits(Integer.parseInt(input));
+            newPreReq.setCredits(validateInt(input));
 
             preReqs.add(newPreReq);
         }
@@ -114,30 +113,30 @@ public class CourseCreator{
         // TODO Validate Meeting Times
         ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
         String input = "";
-        while (!(input.toLowerCase().equals("q"))) {
+        while (!(input.equalsIgnoreCase("q"))) {
             MeetingTime newMeetingTime = new MeetingTime();
             System.out.println("Enter next meeting time (Type 'q' to exit:\n");
             System.out.print("Enter meeting day:\n> ");
             input = validateString(consoleReader.readLine());
-            if (input.toLowerCase().equals("q"))
+            if (input.equalsIgnoreCase("q"))
                 break;
             newMeetingTime.setDay(input);
 
             System.out.print("Enter start time (military time):\n> ");
             input = validateString(consoleReader.readLine());
-            if (input.toLowerCase().equals("q"))
+            if (input.equalsIgnoreCase("q"))
                 break;
-            newMeetingTime.setStartTime(Integer.parseInt(input));
+            newMeetingTime.setStartTime(validateInt(input));
 
             System.out.print("Enter end time (military time):\n> ");
             input = validateString(consoleReader.readLine());
-            if (input.toLowerCase().equals("q"))
+            if (input.equalsIgnoreCase("q"))
                 break;
-            newMeetingTime.setEndTime(Integer.parseInt(input));
+            newMeetingTime.setEndTime(validateInt(input));
 
             System.out.print("Enter class type:\n> ");
             input = validateString(consoleReader.readLine());
-            if (input.toLowerCase().equals("q"))
+            if (input.equalsIgnoreCase("q"))
                 break;
             newMeetingTime.setClassType(input);
 

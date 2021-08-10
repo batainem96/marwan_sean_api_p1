@@ -8,6 +8,9 @@ import com.revature.schoolDatabase.models.Student;
 //import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.repositories.UserRepository;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
+import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
+
+import java.util.List;
 
 public class UserService {
 
@@ -34,9 +37,10 @@ public class UserService {
             throw new InvalidRequestException("Invalid user data provided!");
         }
 
-//        if (userRepo.findUserByUsername(newUser.getUsername()) != null) {
-//            throw new ResourcePersistenceException("Provided username is already taken!");
-//        }
+        if (userRepo.findUserByCredentials(newUser.getUsername()) != null) {
+            // TODO Log to file
+            throw new ResourcePersistenceException("Provided username is already taken!");
+        }
 
         return newUser;
     }
@@ -54,6 +58,24 @@ public class UserService {
             throw new InvalidRequestException("Invalid user credentials provided!");
         }
         return userRepo.findUserByCredentials(username, password);
+    }
+
+    /**
+     * Lists all users in database
+     */
+    public void showUsers() {
+        List<Person> users = userRepo.retrieveUsers();
+        for (Person person : users) {
+            person.displayUser();
+        }
+    }
+
+    /**
+     * Returns all users in database
+     */
+    public List<Person> retrieveUsers() {
+        List<Person> users = userRepo.retrieveUsers();
+        return users;
     }
 
     /**

@@ -2,12 +2,11 @@ package com.revature.schoolDatabase.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Projections;
 import com.mongodb.client.result.DeleteResult;
 import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Person;
@@ -16,6 +15,9 @@ import com.revature.schoolDatabase.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -34,6 +36,34 @@ public class UserRepository implements CrudRepository<Person> {
     }
 
     // Methods
+    /**
+     * Find all users currently stored in database
+     */
+    public List<Person> retrieveUsers() {
+        List<Person> users = new ArrayList<>();
+        try {
+            // Store all documents into a findIterable object
+            MongoCursor<Document> cursor = usersCollection.find().iterator();
+            while (cursor.hasNext()) {
+                Document curUser = cursor.next();
+//                if (curUser.get("userType").toString().equals("faculty") || curUser.get("userType").toString().equals("pendingFaculty"))
+                Person newUser = mapper.readValue((curUser).toJson(), Person.class);
+                newUser.setId(curUser.get("_id").toString());
+                users.add(newUser);
+            }
+            cursor.close();
+
+            return users;
+
+        } catch (JsonMappingException jme) {
+            jme.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An exception occurred while mapping the document.", jme);
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
+    }
+
     /**
      * Find user in database given a username
      *
@@ -146,8 +176,25 @@ public class UserRepository implements CrudRepository<Person> {
     /**
      * Overridden User CRUD operations
      *
-     * @param id = Unique Object ID given by the Mongo Database
+     *  id = Unique Object ID given by the Mongo Database
      */
+    @Override
+    public Person save(Person newPerson) {
+        try {
+            // Convert Person to BasicDBObject
+            String userJson = mapper.writeValueAsString(newPerson);
+            Document userDoc = Document.parse(userJson);
+
+            usersCollection.insertOne(userDoc);
+            newPerson.setId(userDoc.get("_id").toString());
+
+            return newPerson;
+
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
+    }
 
     @Override
     public Person findById(String id) {
@@ -184,25 +231,6 @@ public class UserRepository implements CrudRepository<Person> {
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
 
-    }
-
-    // TODO Fully implement
-    @Override
-    public Person save(Person newPerson) {
-        try {
-            // Convert Person to BasicDBObject
-            String userJson = mapper.writeValueAsString(newPerson);
-            Document userDoc = Document.parse(userJson);
-
-            usersCollection.insertOne(userDoc);
-            newPerson.setId(userDoc.get("_id").toString());
-
-            return newPerson;
-
-        } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
-            throw new DataSourceException("An unexpected exception occurred.", e);
-        }
     }
 
     @Override

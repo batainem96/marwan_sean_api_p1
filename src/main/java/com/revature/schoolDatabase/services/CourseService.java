@@ -3,6 +3,7 @@ package com.revature.schoolDatabase.services;
 import com.mongodb.client.MongoClient;
 import com.revature.schoolDatabase.models.*;
 import com.revature.schoolDatabase.repositories.CourseRepository;
+import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,20 +94,21 @@ public class CourseService {
     }
 
     /**
-     * Creates a new course, given user is a Faculty member
+     * Stores a new course into the database
      *
-     * @param fac
      * @param newCourse
      */
-    public void createCourse(Faculty fac, Course newCourse) {
-        // TODO Auto Increment Course IDs
-        // TODO -------------------------------
-        // Verify faculty is in database and is qualified to create a course
-        courseRepo.save(newCourse);
+    public void createCourse(Course newCourse) {
+        try {
+            courseRepo.save(newCourse);
+        } catch (DataSourceException dse) {
+            throw new DataSourceException("An error occurred while calling CourseRepository.save()", dse);
+        }
 
     }
 
     /**
+     * Find course in database with given credentials
      *
      * @param dept
      * @param courseNo
@@ -144,6 +146,10 @@ public class CourseService {
      */
     public boolean deleteCourse(String dept, int courseNo, int sectionNo) {
         boolean result = courseRepo.deleteByCredentials(dept, courseNo, sectionNo);
+
+
         return result;
+
+        // TODO remove Course reference from applicable schedules
     }
 }
