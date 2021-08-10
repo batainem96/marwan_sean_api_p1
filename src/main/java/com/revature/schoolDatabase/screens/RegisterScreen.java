@@ -30,9 +30,6 @@ public class RegisterScreen extends Screen{
         System.out.print("Last name: ");
         String lastName = consoleReader.readLine();
 
-        System.out.print("Email: ");
-        String email = consoleReader.readLine();
-
         System.out.print("Username: ");
         String username = consoleReader.readLine();
 

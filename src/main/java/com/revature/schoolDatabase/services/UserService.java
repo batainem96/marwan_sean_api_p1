@@ -26,6 +26,20 @@ public class UserService {
     }
 
     /**
+     * Validates given user credentials to ensure fields are not empty, null, invalid, etc.
+     *
+     * @param user
+     * @return true if user is valid, false otherwise
+     */
+    public boolean isUserValid(Person user) {
+        if (user == null) return false;
+        if (user.getFirstName() == null || user.getFirstName().trim().equals("")) return false;
+        if (user.getLastName() == null || user.getLastName().trim().equals("")) return false;
+        if (user.getUsername() == null || user.getUsername().trim().equals("")) return false;
+        return user.getPassword() != null && !user.getPassword().trim().equals("");
+    }
+
+    /**
      * Takes in a non-null Person, validates its fields, and attempts to persist it to the datasource.
      *
      * @param
@@ -33,14 +47,15 @@ public class UserService {
      */
     public Person register(Person newUser) {
 
-        if (!isUserValid(newUser)) {
+        if (!isUserValid(newUser))
             throw new InvalidRequestException("Invalid user data provided!");
-        }
 
         if (userRepo.findUserByCredentials(newUser.getUsername()) != null) {
             // TODO Log to file
             throw new ResourcePersistenceException("Provided username is already taken!");
         }
+
+        newUser = userRepo.save(newUser);
 
         return newUser;
     }
@@ -78,20 +93,6 @@ public class UserService {
         return users;
     }
 
-    /**
-     * Validates given user credentials to ensure fields are not empty, null, invalid, etc.
-     *
-     * @param user
-     * @return true if user is valid, false otherwise
-     */
-    public boolean isUserValid(Person user) {
-        if (user == null) return false;
-        if (user.getFirstName() == null || user.getFirstName().trim().equals("")) return false;
-        if (user.getLastName() == null || user.getLastName().trim().equals("")) return false;
-//        if (user.getEmail() == null || user.getEmail().trim().equals("")) return false;
-        if (user.getUsername() == null || user.getUsername().trim().equals("")) return false;
-        return user.getPassword() != null && !user.getPassword().trim().equals("");
-    }
 
     /**
      * Persist updated user information to the database

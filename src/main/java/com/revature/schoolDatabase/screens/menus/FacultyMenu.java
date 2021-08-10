@@ -95,7 +95,7 @@ public class FacultyMenu extends Menu {
                     e.printStackTrace();
                 }
                 break;
-            default:
+            case "7":
                 System.out.println("Taking you back to main menu...");
 
                 // Remove FacultyMenu from HashSet
@@ -104,6 +104,9 @@ public class FacultyMenu extends Menu {
                 }
 
                 router.navigate("/main");
+                break;
+            default:
+                System.out.println("Invalid selection, please try again.");
                 break;
         }
     }

@@ -15,6 +15,12 @@ public class PreReq {
     public PreReq() {
     }
 
+    public PreReq(String department, int courseNo, int credits) {
+        this.department = department;
+        this.courseNo = courseNo;
+        this.credits = credits;
+    }
+
     public String getDepartment() {
         return department;
     }
