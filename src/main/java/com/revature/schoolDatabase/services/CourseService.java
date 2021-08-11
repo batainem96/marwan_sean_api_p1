@@ -164,8 +164,7 @@ public class CourseService {
      * @return
      */
     public Course findCourseByCredentials(String dept, int courseNo, int sectionNo) {
-        Course course = courseRepo.findByCredentials(dept, courseNo, sectionNo);
-        return course;
+        return courseRepo.findByCredentials(dept, courseNo, sectionNo);
     }
 
     /**
@@ -185,7 +184,9 @@ public class CourseService {
      * @param course
      */
     public void updateCourse(Course course) {
-        courseRepo.update(course);
+        boolean result = courseRepo.update(course);
+        if (!result)
+            throw new ResourcePersistenceException("Failed to update course");
     }
 
     /**
@@ -212,6 +213,8 @@ public class CourseService {
      */
     public boolean deleteCourse(String dept, int courseNo, int sectionNo) {
         boolean result = courseRepo.deleteByCredentials(dept, courseNo, sectionNo);
-        return result;
+        if (!result)
+            throw new ResourcePersistenceException("Failed to delete course");
+        else return result;
     }
 }

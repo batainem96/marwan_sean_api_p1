@@ -6,11 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="fc54228c-a9b7-402c-aae6-646e77152026" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Faculty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Faculty.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/repositories/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/repositories/CourseRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/MeetingTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/MeetingTime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/PreReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/PreReq.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/repositories/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/FacultyMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/FacultyMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/UpdateMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/UpdateMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/CourseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/CourseServiceTestSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/CourseServiceTestSuite.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,7 +57,35 @@
       <recent name="com.revature.schoolDatabase.util" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.CourseServiceTestSuite.addCourse_throwsException_ifNoOpenSeats">
+  <component name="RunManager" selected="JUnit.CourseServiceTestSuite">
+    <configuration name="MainDriver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.MainDriver" />
+      <module name="sean_dunn_p0" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.revature.schoolDatabase.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CourseServiceTestSuite" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sean_dunn_p0" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.revature.schoolDatabase.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.revature.schoolDatabase.services" />
+      <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.CourseServiceTestSuite" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="CourseServiceTestSuite.addCourse_throwsException_ifNoOpenSeats" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="sean_dunn_p0" />
       <extension name="coverage">
@@ -88,38 +118,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CourseServiceTestSuite.isCourseValid_returnsFalse_givenInvalidCourse" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="sean_dunn_p0" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.revature.schoolDatabase.services.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.revature.schoolDatabase.services" />
-      <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.CourseServiceTestSuite" />
-      <option name="METHOD_NAME" value="isCourseValid_returnsFalse_givenInvalidCourse" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CourseServiceTestSuite.isCourseValid_returnsTrue_givenValidCourse" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="sean_dunn_p0" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.revature.schoolDatabase.services.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.revature.schoolDatabase.services" />
-      <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.CourseServiceTestSuite" />
-      <option name="METHOD_NAME" value="isCourseValid_returnsTrue_givenValidCourse" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="CourseServiceTestSuite.showCourses_displaysNothing_withNoError_ifNoCourses" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="sean_dunn_p0" />
       <extension name="coverage">
@@ -138,11 +136,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.MainDriver" />
+        <item itemvalue="JUnit.CourseServiceTestSuite" />
         <item itemvalue="JUnit.CourseServiceTestSuite.addCourse_throwsException_ifNoOpenSeats" />
         <item itemvalue="JUnit.CourseServiceTestSuite.showCourses_displaysNothing_withNoError_ifNoCourses" />
         <item itemvalue="JUnit.CourseServiceTestSuite.createCourse_throwsException_ifDuplicate" />
-        <item itemvalue="JUnit.CourseServiceTestSuite.isCourseValid_returnsFalse_givenInvalidCourse" />
-        <item itemvalue="JUnit.CourseServiceTestSuite.isCourseValid_returnsTrue_givenValidCourse" />
       </list>
     </recent_temporary>
   </component>
@@ -178,5 +176,10 @@
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/sean_dunn_p0$CourseServiceTestSuite.ic" NAME="CourseServiceTestSuite Coverage Results" MODIFIED="1628644210165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.revature.schoolDatabase.services.*</FILTER>
+    </SUITE>
   </component>
 </project>

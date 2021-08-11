@@ -47,8 +47,10 @@ public class UserRepository implements CrudRepository<Person> {
             MongoCursor<Document> cursor = usersCollection.find().iterator();
             while (cursor.hasNext()) {
                 Document curUser = cursor.next();
-//                if (curUser.get("userType").toString().equals("faculty") || curUser.get("userType").toString().equals("pendingFaculty"))
-                Person newUser = mapper.readValue((curUser).toJson(), Person.class);
+                Person newUser;
+                if (curUser.get("userType").toString().equals("faculty") || curUser.get("userType").toString().equals("pendingFaculty"))
+                    newUser = mapper.readValue((curUser).toJson(), Faculty.class);
+                else newUser = mapper.readValue((curUser).toJson(), Student.class);
                 newUser.setId(curUser.get("_id").toString());
                 users.add(newUser);
             }

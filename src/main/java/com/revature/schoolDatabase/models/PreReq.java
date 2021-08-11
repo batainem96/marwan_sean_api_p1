@@ -44,4 +44,13 @@ public class PreReq {
     public void setCredits(int credits) {
         this.credits = credits;
     }
+
+    @Override
+    public String toString() {
+        return "PreReq{" +
+                "department='" + department + '\'' +
+                ", courseNo=" + courseNo +
+                ", credits=" + credits +
+                '}';
+    }
 }

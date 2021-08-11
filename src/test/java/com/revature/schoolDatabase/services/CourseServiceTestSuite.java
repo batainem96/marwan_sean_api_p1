@@ -94,7 +94,7 @@ public class CourseServiceTestSuite {
         boolean actualResult1 = sut.isCourseValid(inValidCourse);
 
         // Assert
-        Assert.assertEquals("Expected user to be considered valid!", expectedResult, actualResult1);
+        Assert.assertNotEquals("Expected user to be considered invalid!", expectedResult, actualResult1);
     }
 
 

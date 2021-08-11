@@ -34,20 +34,22 @@ public class FacultyMenu extends Menu {
     // Methods
     @Override
     public void render() throws Exception {
+        System.out.println();
+        fac.displayUser();
         displayMenu();
 
         // Split user input on whitespace
         String[] userSelection = consoleReader.readLine().split(" ");
+        if (userSelection.length > 1)
+            userSelection[1] = userSelection[1].toUpperCase();
         System.out.println();
 
-        // TODO Finish implementations of Faculty functions
         switch (userSelection[0]) {
             case "1":       // View My Courses
-                // TODO fac.generateSchedule()
                 fac.displaySchedule();
                 break;
             case "2":       // View Available Courses
-                courseService.showCourses(fac, "short");
+                courseService.showCourses(fac, "open");
                 break;
             case "3":       // View All Courses
                 courseService.showCourses();
@@ -56,7 +58,7 @@ public class FacultyMenu extends Menu {
                 // Create a new course
                 Course newCourse = CourseCreator.createCourse(consoleReader);
                 if (courseService.findCourseByCredentials(newCourse.getDeptShort(), newCourse.getCourseNo(), newCourse.getSectionNo()) != null)
-                    System.out.println("Course already exists");
+                    System.out.println(ANSI_RED + "ERROR: Course already exists." + ANSI_RESET);
                 else {
                     try {
                         courseService.createCourse(newCourse);
@@ -68,6 +70,10 @@ public class FacultyMenu extends Menu {
             case "5":       // Edit Course
                 Course editCourse = courseService.findCourseByCredentials(userSelection[1],
                         Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
+                if (editCourse == null) {
+                    System.out.println(ANSI_RED + "ERROR: Could not retrieve course from database" + ANSI_RESET);
+                    break;
+                }
                 String[] menuOptions = {"Title", "Department", "Course Number", "Section Number", "Instructor",
                                         "Credits", "Total Number of Seats", "Prerequisites {WIP}", "Meeting Times {WIP}",
                                         "Description"};
@@ -78,7 +84,7 @@ public class FacultyMenu extends Menu {
                 break;
             case "6":       // Remove Course
                 try {
-                    courseService.deleteCourse(userSelection[1], Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
+                    boolean result = courseService.deleteCourse(userSelection[1], Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
                     // Update Schedules where applicable
                     for (Person user : userService.retrieveUsers()) {
                         Schedule oldSched = new Schedule(userSelection[1], Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
@@ -99,9 +105,8 @@ public class FacultyMenu extends Menu {
                 System.out.println("Taking you back to main menu...");
 
                 // Remove FacultyMenu from HashSet
-                if (router.getScreens().contains(this)) {
+                if (router.getScreens().contains(this))
                     router.removeScreen(this);
-                }
 
                 router.navigate("/main");
                 break;

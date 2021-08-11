@@ -55,9 +55,11 @@ public class RegisterScreen extends Screen{
         }
 
         try {
-            newUser = userService.register(newUser);
-            logger.info("User successfully registered!");
-            System.out.println("User successfully registered!");
+            if (studOrFac == 1) {
+                newUser = userService.register(newUser);
+                logger.info("User successfully registered!");
+                System.out.println("User successfully registered!");
+            }
 
             if (studOrFac == 2)
                 System.out.println("Please note that a faculty account must be admin validated, and you will not be able to access it right away.");

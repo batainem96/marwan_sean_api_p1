@@ -97,14 +97,19 @@ public class UserService {
     /**
      * Persist updated user information to the database
      */
-    public void updateUser(Person user) {userRepo.update(user);}
+    public void updateUser(Person user) {
+        boolean result = userRepo.update(user);
+        if (!result)
+            throw new ResourcePersistenceException("Failed to update user");
+    }
 
     /**
      * Remove given user from the database
      */
-    public boolean deleteUser(Person user) {
+    public void deleteUser(Person user) {
         boolean result = userRepo.deleteById(user.getId());
-        return result;
+        if (!result)
+            throw new ResourcePersistenceException("Failed to delete user");
     }
 
 }
