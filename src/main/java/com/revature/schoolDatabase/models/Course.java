@@ -41,7 +41,7 @@ public class Course {
         this.sectionNo = sectionNo;
         if (deptToShort.containsKey(department))
             this.deptShort = deptToShort.get(department);
-        else if (department != null) this.deptShort = department.substring(0,3);
+        else if (department != null && department.length() > 3) this.deptShort = department.substring(0,4);
         else this.deptShort = null;
         this.instructor = "None";
         this.credits = 0;
@@ -88,6 +88,10 @@ public class Course {
 
     public void setDepartment(String department) {
         this.department = department;
+        if (deptToShort.containsKey(department))
+            this.deptShort = deptToShort.get(department);
+        else if (department != null && department.length() > 3) this.deptShort = department.substring(0,4);
+        else this.deptShort = null;
     }
 
     public String getDeptShort() {

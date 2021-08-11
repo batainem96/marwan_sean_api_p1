@@ -5,6 +5,7 @@ import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
+import com.revature.schoolDatabase.util.exceptions.AuthenticationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -68,6 +69,8 @@ public class RegisterScreen extends Screen{
                 System.out.println("Please note that a faculty account must be admin validated, and you will not be able to access it right away.");
 
             router.navigate("/main");
+        } catch (AuthenticationException ae) {
+
         } catch (Exception e) {
             System.out.println(ANSI_RED + "ERROR: Invalid input. Registration failed." + ANSI_RESET);
             logger.error(e.getMessage());

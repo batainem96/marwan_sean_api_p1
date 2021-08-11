@@ -5,13 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc54228c-a9b7-402c-aae6-646e77152026" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/ConfirmScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/RegisterScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/RegisterScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/FacultyMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/FacultyMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/StudentMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/StudentMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/UpdateMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/UpdateMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/CourseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/CourseServiceTestSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/CourseServiceTestSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +65,7 @@
       <recent name="com.revature.schoolDatabase.util" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.MainDriver">
+  <component name="RunManager" selected="JUnit.UserServiceTestSuite">
     <configuration name="MainDriver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.MainDriver" />
       <module name="sean_dunn_p0" />
@@ -124,7 +126,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CourseServiceTestSuite.updateCourse_throwsException_ifUpdateFailed" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="UserServiceTestSuite" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="sean_dunn_p0" />
       <extension name="coverage">
         <pattern>
@@ -133,20 +135,19 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.revature.schoolDatabase.services" />
-      <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.CourseServiceTestSuite" />
-      <option name="METHOD_NAME" value="updateCourse_throwsException_ifUpdateFailed" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.UserServiceTestSuite" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.UserServiceTestSuite" />
         <item itemvalue="Application.MainDriver" />
         <item itemvalue="JUnit.CourseServiceTestSuite" />
         <item itemvalue="JUnit.CourseServiceTestSuite.deleteCourse_throwsException_ifDeleteFailed" />
         <item itemvalue="JUnit.CourseServiceTestSuite.removeCourseFromSchedule_worksAsImplied" />
-        <item itemvalue="JUnit.CourseServiceTestSuite.updateCourse_throwsException_ifUpdateFailed" />
       </list>
     </recent_temporary>
   </component>
@@ -160,6 +161,9 @@
       <updated>1627757764197</updated>
     </task>
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.log" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

@@ -9,22 +9,25 @@ import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 
 public class FacultyMenu extends Menu {
     // Variables
-    private final Faculty fac;
+    private Faculty fac;
     private final UserService userService;
     private final CourseService courseService;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
+    private final Logger logger = LogManager.getLogger(FacultyMenu.class);
 
     // Constructors
     public FacultyMenu(Faculty fac, BufferedReader consoleReader, ScreenRouter router,
                        UserService userService, CourseService courseService) {
         super("Faculty", "/faculty", consoleReader, router,
-                        new String[] {"View My Courses", "View Available Courses", "View All Courses", "Create Course",
+                        new String[] {"View My Courses", "View Available Courses", "View All Courses", "Display Users", "Create Course",
                         "Edit Course", "Remove Course", "Exit"});
         this.userService = userService;
         this.courseService = courseService;
@@ -46,6 +49,7 @@ public class FacultyMenu extends Menu {
 
         switch (userSelection[0]) {
             case "1":       // View My Courses
+                fac = courseService.generateSchedule(fac);
                 fac.displaySchedule();
                 break;
             case "2":       // View Available Courses
@@ -54,7 +58,10 @@ public class FacultyMenu extends Menu {
             case "3":       // View All Courses
                 courseService.showCourses();
                 break;
-            case "4":       // Add Course
+            case "4":       // Show List of Users
+                userService.showUsers();
+                break;
+            case "5":       // Add Course
                 // Create a new course
                 Course newCourse = CourseCreator.createCourse(consoleReader);
                 if (courseService.findCourseByCredentials(newCourse.getDeptShort(), newCourse.getCourseNo(), newCourse.getSectionNo()) != null)
@@ -67,7 +74,7 @@ public class FacultyMenu extends Menu {
                     }
                 }
                 break;
-            case "5":       // Edit Course
+            case "6":       // Edit Course
                 try {
                     Course editCourse = courseService.findCourseByCredentials(userSelection[1],
                             Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
@@ -88,7 +95,7 @@ public class FacultyMenu extends Menu {
                     System.out.println(ANSI_RED + "ERROR: Failed to update course." + ANSI_RESET);
                 }
                 break;
-            case "6":       // Remove Course
+            case "7":       // Remove Course
                 try {
                     boolean result = courseService.deleteCourse(userSelection[1], Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
                     // Update Schedules where applicable
@@ -110,7 +117,7 @@ public class FacultyMenu extends Menu {
                     e.printStackTrace();
                 }
                 break;
-            case "7":
+            case "8":
                 System.out.println("Taking you back to main menu...");
 
                 // Remove FacultyMenu from HashSet

@@ -6,6 +6,7 @@ import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
+import com.revature.schoolDatabase.util.exceptions.SchedulingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,8 +59,13 @@ public class UpdateMenu<T> extends Menu{
                         }
                         course.setTitle(change);
                         break;
-                    case "2":   // Change Dept // TODO Auto change deptShort as well
+                    case "2":   // Change Dept
                         // Parsing to allow spacing in field
+                        if (userSelection.length <= 1) {
+                            logger.debug("ERROR: Not enough criteria!");
+                            System.out.println(ANSI_RED + "ERROR: Not enough criteria!" + ANSI_RESET);
+                            break;
+                        }
                         for (int i = 1; i < userSelection.length; i++) {
                             change += userSelection[i];
                             if (i < userSelection.length - 1)
@@ -170,24 +176,28 @@ public class UpdateMenu<T> extends Menu{
                             for (Person user : users) {
                                 if (user.getSchedule() != null) {
                                     for (Schedule sched : user.getSchedule()) {
+                                        System.out.println(sched);
                                         switch (splitFlag[0]) {
-                                            case "dept":
+                                            case "dept": // dept changed
                                                 if (sched.getCourseDept().equals(oldCourse.getDeptShort()))
                                                     sched.setCourseDept(course.getDeptShort());
                                                 break;
-                                            case "courseNo":
+                                            case "courseNo": // courseNo changed
                                                 if (sched.getCourseNo() == oldCourse.getCourseNo())
                                                     sched.setCourseNo(course.getCourseNo());
                                                 break;
-                                            case "sectionNo":
+                                            case "sectionNo": // sectionNo changed
                                                 if (sched.getSectionNo() == oldCourse.getSectionNo())
                                                     sched.setSectionNo(course.getSectionNo());
-                                            case "meeting":
-                                                int index = Integer.parseInt(splitFlag[1]);
-                                                if (sched.getMeetingTimes().get(index).equals(oldCourse.getMeetingTimes().get(index))) {
-                                                    sched.getMeetingTimes().remove(index);
-                                                    sched.getMeetingTimes().add(course.getMeetingTimes().get(course.getMeetingTimes().size() - 1));
-                                                }
+                                                break;
+                                            case "meeting": // meeting times changed
+                                                // TODO
+                                                throw new SchedulingException("Meeting Time Update NYI");
+//                                                int index = Integer.parseInt(splitFlag[1]);
+//                                                if (sched.getMeetingTimes().get(index).equals(oldCourse.getMeetingTimes().get(index))) {
+//                                                    sched.getMeetingTimes().remove(index);
+//                                                    sched.getMeetingTimes().add(course.getMeetingTimes().get(course.getMeetingTimes().size() - 1));
+//                                                }
                                         }
                                     }
                                 }

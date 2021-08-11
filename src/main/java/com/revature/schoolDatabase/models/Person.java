@@ -126,6 +126,8 @@ public abstract class Person {
                 System.out.print("\t" + course.getCourseDept());
                 System.out.print(" " + course.getCourseNo());
                 System.out.println("-" + course.getSectionNo());
+                if (course.getMeetingTimes() == null)
+                    continue;
                 System.out.print("\t");
                 course.displayMeetingTimes();
             }

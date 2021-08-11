@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClient;
 import com.revature.schoolDatabase.models.*;
 import com.revature.schoolDatabase.repositories.CourseRepository;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
+import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.util.exceptions.SchedulingException;
 
@@ -193,6 +194,8 @@ public class CourseService {
      * @param course
      */
     public void updateCourse(Course course) {
+        if (!isCourseValid(course))
+            throw new InvalidRequestException("Course is not valid!");
         boolean result = courseRepo.update(course);
         if (!result)
             throw new ResourcePersistenceException("Failed to update course");
