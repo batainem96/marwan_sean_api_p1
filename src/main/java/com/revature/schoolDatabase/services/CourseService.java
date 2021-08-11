@@ -207,6 +207,29 @@ public class CourseService {
     }
 
     /**
+     * Adds given course to a user's schedule.
+     * Different from addCourse in that this adds a Schedule object directly to a Schedule list
+     *
+     * @param user
+     * @param course
+     * @return
+     */
+    public Person addCourseToSchedule(Person user, Schedule course) {
+//        List<Schedule> schedule = user.getSchedule();
+//        for (Schedule existingCourse : schedule) {
+//            if (existingCourse.equals(course)) {
+//                Person updatedUser = user;
+//                updatedUser.getSchedule().remove(existingCourse);
+//                return updatedUser;
+//            }
+//        }
+
+        user.addToSchedule(course);
+
+        return user;
+    }
+
+    /**
      * Removes given course from given user's schedule
      *
      * @param user
@@ -214,13 +237,17 @@ public class CourseService {
      * @return
      */
     public Person removeCourseFromSchedule(Person user, Schedule course) {
-        for (Schedule existingCourse : user.getSchedule()) {
-            if (existingCourse.equals(course)) {
-                Person updatedUser = user;
-                updatedUser.getSchedule().remove(existingCourse);
-                return updatedUser;
-            }
-        }
+//        List<Schedule> schedule = user.getSchedule();
+//        for (Schedule existingCourse : schedule) {
+//            if (existingCourse.equals(course)) {
+//                Person updatedUser = user;
+//                updatedUser.getSchedule().remove(existingCourse);
+//                return updatedUser;
+//            }
+//        }
+
+        boolean result = user.removeFromSchedule(course);
+
         // If course was not found in schedule, return original user
         return user;
     }

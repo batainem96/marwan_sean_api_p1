@@ -124,12 +124,24 @@ public abstract class Person {
                 System.out.print("\t" + course.getCourseDept());
                 System.out.print(" " + course.getCourseNo());
                 System.out.println("-" + course.getSectionNo());
-                if (course.getMeetingTimes() == null)
+                if (course.getMeetingTimes() == null || course.getMeetingTimes().isEmpty())
                     continue;
                 System.out.print("\t");
                 course.displayMeetingTimes();
             }
         }
+    }
+
+    public void addToSchedule(Schedule schedule) {
+        this.schedule.add(schedule);
+    }
+
+    public boolean removeFromSchedule(Schedule schedule) {
+        if (this.schedule.contains(schedule)) {
+            this.schedule.remove(schedule);
+            return true;
+        }
+        return false;
     }
 
 

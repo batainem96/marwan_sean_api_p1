@@ -36,7 +36,7 @@ public class UpdateMenu<T> extends Menu{
         // Display Object Info
         if (object.getClass().equals(Course.class)) {
             Course course = (Course) object;
-            Course oldCourse = course;  // Used for updating user schedules
+            Course oldCourse = new Course(course.getTitle(), course.getDepartment(), course.getCourseNo(), course.getSectionNo());  // Used for updating user schedules
             String flag = "";
             System.out.println();
             course.displayCourse();
@@ -164,39 +164,22 @@ public class UpdateMenu<T> extends Menu{
 
                 try {
                     courseService.updateCourse(course);
-                    courseService.findCourseByID(course.getId()).displayCourse();
+                    course = courseService.findCourseByID(course.getId());
+                    course.displayCourse();
 
                     // Update users who were affected by changes
                     // First determine if core info changed
                     if (!flag.isEmpty()) {
-                        String[] splitFlag = flag.split(" ");
+                        Schedule newSchedule = new Schedule(course.getDeptShort(), course.getCourseNo(), course.getSectionNo());
                         try {
                             List<Person> users = userService.retrieveUsers();
                             for (Person user : users) {
                                 if (user.getSchedule() != null) {
-                                    for (Schedule sched : user.getSchedule()) {
-                                        System.out.println(sched);
-                                        switch (splitFlag[0]) {
-                                            case "dept": // dept changed
-                                                if (sched.getCourseDept().equals(oldCourse.getDeptShort()))
-                                                    sched.setCourseDept(course.getDeptShort());
-                                                break;
-                                            case "courseNo": // courseNo changed
-                                                if (sched.getCourseNo() == oldCourse.getCourseNo())
-                                                    sched.setCourseNo(course.getCourseNo());
-                                                break;
-                                            case "sectionNo": // sectionNo changed
-                                                if (sched.getSectionNo() == oldCourse.getSectionNo())
-                                                    sched.setSectionNo(course.getSectionNo());
-                                                break;
-                                            case "meeting": // meeting times changed
-                                                // TODO
-                                                throw new SchedulingException("Meeting Time Update NYI");
-//                                                int index = Integer.parseInt(splitFlag[1]);
-//                                                if (sched.getMeetingTimes().get(index).equals(oldCourse.getMeetingTimes().get(index))) {
-//                                                    sched.getMeetingTimes().remove(index);
-//                                                    sched.getMeetingTimes().add(course.getMeetingTimes().get(course.getMeetingTimes().size() - 1));
-//                                                }
+                                    List<Schedule> schedule = user.getSchedule();
+                                    for (Schedule sched : schedule) {
+                                        if ((sched.getCourseDept().equals(oldCourse.getDeptShort())) && (sched.getCourseNo() == oldCourse.getCourseNo()) && (sched.getSectionNo() == oldCourse.getSectionNo())) {
+                                            user.removeFromSchedule(sched);
+                                            user.addToSchedule(newSchedule);
                                         }
                                     }
                                 }

@@ -108,6 +108,7 @@ public class FacultyMenu extends Menu {
                             if (sched.equals(oldSched)) {
                                 user = courseService.removeCourseFromSchedule(user, sched);
                                 userService.updateUser(user);
+                                break;
                             }
                         }
                     }
