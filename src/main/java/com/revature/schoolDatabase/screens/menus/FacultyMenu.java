@@ -14,6 +14,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 
+import static com.revature.schoolDatabase.util.ProgramManager.*;
+
 public class FacultyMenu extends Menu {
     // Variables
     private Faculty fac;
@@ -38,6 +40,7 @@ public class FacultyMenu extends Menu {
     @Override
     public void render() throws Exception {
         System.out.println();
+        System.out.println(ANSI_YELLOW + "\tCURRENT USER" + ANSI_RESET);
         fac.displayUser();
         displayMenu();
 

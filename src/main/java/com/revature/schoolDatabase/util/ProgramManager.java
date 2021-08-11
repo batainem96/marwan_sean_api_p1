@@ -19,6 +19,12 @@ public class ProgramManager {
     private static boolean programRunning;
     private final ScreenRouter router;
 
+    // Text colors
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BRIGHT_BLUE = "\u001B[94m";
+
     // Constructors
     public ProgramManager() {
         programRunning = true;

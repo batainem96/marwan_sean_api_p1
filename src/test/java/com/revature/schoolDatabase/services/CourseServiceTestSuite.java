@@ -221,4 +221,20 @@ public class CourseServiceTestSuite {
 
         // Assert
     }
+
+    @Test
+    public void generateSchedule_doesNotThrowException() {
+        // Arrange
+        Faculty user = new Faculty();
+        Faculty user1 = new Faculty("Test", "Test", "Test", "Test");
+        List<Course> courseList = new ArrayList<>();
+        when(mockCourseRepo.retrieveInstructorCourses(any(), any())).thenReturn(courseList);
+
+        // Act
+        sut.generateSchedule(user);
+        sut.generateSchedule(user1);
+
+        // Assert
+
+    }
 }

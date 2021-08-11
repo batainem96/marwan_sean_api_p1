@@ -6,14 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="fc54228c-a9b7-402c-aae6-646e77152026" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Person.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/RegisterScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/RegisterScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/FacultyMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/FacultyMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/StudentMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/StudentMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/UpdateMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/UpdateMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/CourseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/util/ProgramManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/util/ProgramManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/CourseServiceTestSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/CourseServiceTestSuite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/UserServiceTestSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/UserServiceTestSuite.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +66,7 @@
       <recent name="com.revature.schoolDatabase.util" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.UserServiceTestSuite">
+  <component name="RunManager" selected="Application.MainDriver">
     <configuration name="MainDriver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.MainDriver" />
       <module name="sean_dunn_p0" />
@@ -94,7 +95,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CourseServiceTestSuite.deleteCourse_throwsException_ifDeleteFailed" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CourseServiceTestSuite.generateSchedule_doesNotThrowException" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="sean_dunn_p0" />
       <extension name="coverage">
         <pattern>
@@ -104,23 +105,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.revature.schoolDatabase.services" />
       <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.CourseServiceTestSuite" />
-      <option name="METHOD_NAME" value="deleteCourse_throwsException_ifDeleteFailed" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CourseServiceTestSuite.removeCourseFromSchedule_worksAsImplied" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="sean_dunn_p0" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.revature.schoolDatabase.services.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.revature.schoolDatabase.services" />
-      <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.CourseServiceTestSuite" />
-      <option name="METHOD_NAME" value="removeCourseFromSchedule_worksAsImplied" />
+      <option name="METHOD_NAME" value="generateSchedule_doesNotThrowException" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -141,13 +126,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="UserServiceTestSuite.showUsers_returnsWithNoInput_ifNoUsers" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="sean_dunn_p0" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.revature.schoolDatabase.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.revature.schoolDatabase.services" />
+      <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.UserServiceTestSuite" />
+      <option name="METHOD_NAME" value="showUsers_returnsWithNoInput_ifNoUsers" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.UserServiceTestSuite" />
         <item itemvalue="Application.MainDriver" />
+        <item itemvalue="JUnit.CourseServiceTestSuite.generateSchedule_doesNotThrowException" />
         <item itemvalue="JUnit.CourseServiceTestSuite" />
-        <item itemvalue="JUnit.CourseServiceTestSuite.deleteCourse_throwsException_ifDeleteFailed" />
-        <item itemvalue="JUnit.CourseServiceTestSuite.removeCourseFromSchedule_worksAsImplied" />
+        <item itemvalue="JUnit.UserServiceTestSuite" />
+        <item itemvalue="JUnit.UserServiceTestSuite.showUsers_returnsWithNoInput_ifNoUsers" />
       </list>
     </recent_temporary>
   </component>
@@ -188,7 +189,10 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/sean_dunn_p0$CourseServiceTestSuite.ic" NAME="CourseServiceTestSuite Coverage Results" MODIFIED="1628682017599" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/sean_dunn_p0$UserServiceTestSuite.ic" NAME="UserServiceTestSuite Coverage Results" MODIFIED="1628691417679" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.revature.schoolDatabase.services.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/sean_dunn_p0$CourseServiceTestSuite.ic" NAME="CourseServiceTestSuite Coverage Results" MODIFIED="1628691476570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.revature.schoolDatabase.services.*</FILTER>
     </SUITE>
   </component>

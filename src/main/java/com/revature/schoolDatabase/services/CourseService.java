@@ -7,6 +7,8 @@ import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.util.exceptions.SchedulingException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +20,7 @@ public class CourseService {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
+    private final Logger logger = LogManager.getLogger(CourseService.class);
 
     public CourseService(CourseRepository courseRepo) {
         this.courseRepo = courseRepo;
@@ -42,6 +45,8 @@ public class CourseService {
     }
 
     public Faculty generateSchedule(Faculty fac) {
+        if (fac == null) return fac;
+
         List<Course> courseList = courseRepo.retrieveInstructorCourses(fac.getFirstName(), fac.getLastName());
         if (courseList == null)
             return fac;

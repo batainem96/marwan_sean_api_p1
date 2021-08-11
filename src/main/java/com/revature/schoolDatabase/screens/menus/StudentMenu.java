@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 
+import static com.revature.schoolDatabase.util.ProgramManager.*;
+
 public class StudentMenu extends Menu {
     // Variables
     private Student stud;
@@ -22,9 +24,6 @@ public class StudentMenu extends Menu {
             "Add Course <CourseID>", "Remove Course", "Cancel Registration", "Log Out and Return to Main Menu"};
 
     private final Logger logger = LogManager.getLogger(StudentMenu.class);
-
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
 
     // Constructors
     public StudentMenu(Student stud, BufferedReader consoleReader, ScreenRouter router, UserService userService, CourseService courseService) {
@@ -40,6 +39,7 @@ public class StudentMenu extends Menu {
     @Override
     public void render() throws Exception {
         System.out.println();
+        System.out.println(ANSI_YELLOW + "\tCURRENT USER" + ANSI_RESET);
         stud.displayUser();
         displayMenu();
 

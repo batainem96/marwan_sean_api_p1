@@ -10,14 +10,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
+import static com.revature.schoolDatabase.util.ProgramManager.*;
 
 public class RegisterScreen extends Screen{
 
     private final Logger logger = LogManager.getLogger(RegisterScreen.class);
     private final UserService userService;
-
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
 
     public RegisterScreen(BufferedReader consoleReader, ScreenRouter router, UserService userService) {
         super("RegisterScreen", "/register", consoleReader, router);

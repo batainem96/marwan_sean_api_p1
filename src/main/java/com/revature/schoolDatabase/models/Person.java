@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static com.revature.schoolDatabase.util.ProgramManager.*;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Person {
     // Variables
@@ -15,10 +17,6 @@ public abstract class Person {
     protected String password;
     protected String userType;
     protected ArrayList<Schedule> schedule = new ArrayList<>();
-
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BRIGHT_BLUE = "\u001B[94m";
 
     // Constructors
     public Person() {

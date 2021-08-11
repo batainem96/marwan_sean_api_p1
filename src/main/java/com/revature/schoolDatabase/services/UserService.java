@@ -7,8 +7,11 @@ import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
 //import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.repositories.UserRepository;
+import com.revature.schoolDatabase.screens.RegisterScreen;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class UserService {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
+    private final Logger logger = LogManager.getLogger(UserService.class);
 
     public UserService(UserRepository userRepo) {
         this.userRepo = userRepo;
@@ -47,11 +51,13 @@ public class UserService {
      */
     public Person register(Person newUser) {
 
-        if (!isUserValid(newUser))
+        if (!isUserValid(newUser)) {
+            logger.error("Invalid user data provided!");
             throw new InvalidRequestException("Invalid user data provided!");
+        }
 
         if (userRepo.findUserByCredentials(newUser.getUsername()) != null) {
-            // TODO Log to file
+            logger.error("Provided username is already taken!");
             throw new ResourcePersistenceException("Provided username is already taken!");
         }
 
@@ -99,8 +105,10 @@ public class UserService {
      */
     public void updateUser(Person user) {
         boolean result = userRepo.update(user);
-        if (!result)
+        if (!result) {
+            logger.error("Failed to update user");
             throw new ResourcePersistenceException("Failed to update user");
+        }
     }
 
     /**
@@ -108,8 +116,10 @@ public class UserService {
      */
     public void deleteUser(Person user) {
         boolean result = userRepo.deleteById(user.getId());
-        if (!result)
+        if (!result) {
+            logger.error("Failed to delete user");
             throw new ResourcePersistenceException("Failed to delete user");
+        }
     }
 
 }

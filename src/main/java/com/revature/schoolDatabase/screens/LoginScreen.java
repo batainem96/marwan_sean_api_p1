@@ -13,14 +13,12 @@ import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import java.io.BufferedReader;
+import static com.revature.schoolDatabase.util.ProgramManager.*;
 
 public class LoginScreen extends Screen {
 
     private final UserService userService;
     private final CourseService courseService;
-
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
 
     public LoginScreen(BufferedReader consoleReader, ScreenRouter router, UserService userService, CourseService courseService) {
         super("LoginScreen", "/login", consoleReader, router);

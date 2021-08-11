@@ -13,15 +13,14 @@ import org.apache.logging.log4j.Logger;
 import java.io.BufferedReader;
 import java.util.List;
 
+import static com.revature.schoolDatabase.util.ProgramManager.*;
+
 public class UpdateMenu<T> extends Menu{
     // Variables
     private T object;
     private final UserService userService;
     private final CourseService courseService;
     private final Logger logger = LogManager.getLogger(UpdateMenu.class);
-
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
 
     // Constructors
     public UpdateMenu(T object, String name, String route, BufferedReader consoleReader, ScreenRouter router,

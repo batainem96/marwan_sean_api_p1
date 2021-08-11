@@ -10,6 +10,9 @@ import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -135,14 +138,14 @@ public class UserServiceTestSuite {
         // Arrange
         Person existingUser = new Student("original", "last", "duplicate", "original");
         Person duplicate = new Student("first", "last", "duplicate", "password");
-        when(mockUserRepo.findUserByCredentials(duplicate.getUsername(), duplicate.getPassword())).thenReturn(existingUser);
+        when(mockUserRepo.findUserByCredentials(duplicate.getUsername())).thenReturn(existingUser);
 
         // Act
         try {
             sut.register(duplicate);
         } finally {
             // Assert
-            verify(mockUserRepo, times(1)).findUserByCredentials(duplicate.getUsername(), duplicate.getPassword());
+            verify(mockUserRepo, times(1)).findUserByCredentials(duplicate.getUsername());
             verify(mockUserRepo, times(0)).save(duplicate);
         };
     }
@@ -165,5 +168,43 @@ public class UserServiceTestSuite {
         // Assert
         Assert.assertEquals("User not found in database.", expectedResult1, actualResult1);
         Assert.assertEquals("Username or password is incorrect.", expectedResult2, actualResult2);
+    }
+
+    @Test
+    public void showUsers_returnsWithNoInput_ifNoUsers() {
+        // Arrange
+        List<Person> users = new ArrayList<>();
+        // Return empty list
+        when(mockUserRepo.retrieveUsers()).thenReturn(users);
+
+        // Act
+        sut.showUsers();
+
+        // Assert
+        verify(mockUserRepo, times(1)).retrieveUsers();
+    }
+
+    @Test(expected = ResourcePersistenceException.class)
+    public void updateUser_throwsException_ifUpdateUnacknowledged() {
+        // Arrange
+        when(mockUserRepo.update(any())).thenReturn(false);
+
+        // Act
+        sut.updateUser(new Student());
+
+        // Assert
+        verify(mockUserRepo, times(1)).update(any());
+    }
+
+    @Test(expected = ResourcePersistenceException.class)
+    public void deleteUser_throwsException_ifDeleteUnacknowledged() {
+        // Arrange
+        when(mockUserRepo.deleteById(any())).thenReturn(false);
+
+        // Act
+        sut.deleteUser(new Student());
+
+        // Assert
+        verify(mockUserRepo, times(1)).deleteById(any());
     }
 }
