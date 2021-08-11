@@ -25,7 +25,7 @@ public class FacultyMenu extends Menu {
                        UserService userService, CourseService courseService) {
         super("Faculty", "/faculty", consoleReader, router,
                         new String[] {"View My Courses", "View Available Courses", "View All Courses", "Create Course",
-                        "Edit Course", "Remove Course"});
+                        "Edit Course", "Remove Course", "Exit"});
         this.userService = userService;
         this.courseService = courseService;
         this.fac = courseService.generateSchedule(fac);
@@ -68,19 +68,25 @@ public class FacultyMenu extends Menu {
                 }
                 break;
             case "5":       // Edit Course
-                Course editCourse = courseService.findCourseByCredentials(userSelection[1],
-                        Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
-                if (editCourse == null) {
-                    System.out.println(ANSI_RED + "ERROR: Could not retrieve course from database" + ANSI_RESET);
-                    break;
+                try {
+                    Course editCourse = courseService.findCourseByCredentials(userSelection[1],
+                            Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
+                    if (editCourse == null) {
+                        System.out.println(ANSI_RED + "ERROR: Could not retrieve course from database" + ANSI_RESET);
+                        break;
+                    }
+                    String[] menuOptions = {"Title", "Department", "Course Number", "Section Number", "Instructor",
+                            "Credits", "Total Number of Seats", "Prerequisites {WIP}", "Meeting Times {WIP}",
+                            "Description", "Exit"};
+                    UpdateMenu updateMenu = new UpdateMenu<Course>(editCourse, "Edit Course", "/update",
+                            consoleReader, router, userService, courseService, menuOptions);
+                    router.addScreen(updateMenu);
+                    router.navigate("/update");
+                } catch (ArrayIndexOutOfBoundsException aie) {
+                    System.out.println(ANSI_RED + "ERROR: Incorrect criteria, try again." + ANSI_RESET);
+                } catch (Exception e) {
+                    System.out.println(ANSI_RED + "ERROR: Failed to update course." + ANSI_RESET);
                 }
-                String[] menuOptions = {"Title", "Department", "Course Number", "Section Number", "Instructor",
-                                        "Credits", "Total Number of Seats", "Prerequisites {WIP}", "Meeting Times {WIP}",
-                                        "Description"};
-                UpdateMenu updateMenu = new UpdateMenu<Course>(editCourse, "Edit Course", "/update",
-                        consoleReader, router, userService, courseService, menuOptions);
-                router.addScreen(updateMenu);
-                router.navigate("/update");
                 break;
             case "6":       // Remove Course
                 try {
@@ -95,7 +101,10 @@ public class FacultyMenu extends Menu {
                             }
                         }
                     }
-                } catch (Exception e) {
+                } catch (ArrayIndexOutOfBoundsException aie) {
+                    System.out.println(ANSI_RED + "ERROR: Incorrect criteria, try again." + ANSI_RESET);
+                }
+                catch (Exception e) {
                     System.out.println(ANSI_RED + "ERROR: Failed to delete course." + ANSI_RESET);
                     // TODO Log to file
                     e.printStackTrace();

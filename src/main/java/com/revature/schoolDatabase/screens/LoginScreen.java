@@ -8,6 +8,9 @@ import com.revature.schoolDatabase.screens.menus.StudentMenu;
 import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
+import com.revature.schoolDatabase.util.exceptions.AuthenticationException;
+import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
+import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import java.io.BufferedReader;
 
@@ -15,6 +18,9 @@ public class LoginScreen extends Screen {
 
     private final UserService userService;
     private final CourseService courseService;
+
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
 
     public LoginScreen(BufferedReader consoleReader, ScreenRouter router, UserService userService, CourseService courseService) {
         super("LoginScreen", "/login", consoleReader, router);
@@ -34,7 +40,15 @@ public class LoginScreen extends Screen {
         String password = consoleReader.readLine();
 
         // TODO follow to UserService -> expand later
-        Person newPerson = userService.login(username, password);
+        Person newPerson;
+        try {
+            newPerson = userService.login(username, password);
+        } catch (InvalidRequestException | AuthenticationException ae) {
+            System.out.println(ANSI_RED + "ERROR: Invalid credentials" + ANSI_RESET);
+            System.out.println("Taking you back to main menu...");
+            router.navigate("/main");
+            return;
+        }
         if (newPerson == null) {
             System.out.println("No user found, taking you back to main menu...");
             router.navigate("/main");

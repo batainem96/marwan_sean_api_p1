@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 
 public class ProgramManager {
     // Variables
-    private boolean programRunning;
+    private static boolean programRunning;
     private final ScreenRouter router;
 
     // Constructors
@@ -58,6 +58,10 @@ public class ProgramManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void shutdown() {
+        programRunning = false;
     }
 
 }

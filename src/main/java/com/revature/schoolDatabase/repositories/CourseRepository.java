@@ -106,6 +106,32 @@ public class CourseRepository implements CrudRepository<Course>{
         }
     }
 
+    public List<Course> retrieveOpenCourses() {
+        List<Course> courseList = new ArrayList<>();
+        try {
+            // Store all documents into a findIterable object
+            Document fields = new Document("$gt", 0);
+            MongoCursor<Document> cursor = courseCollection.find(new Document("openSeats", fields)).iterator();
+
+            while (cursor.hasNext()) {
+                Document curCourse = cursor.next();
+                Course newCourse = mapper.readValue((curCourse).toJson(), Course.class);
+                newCourse.setId(curCourse.get("_id").toString());
+                courseList.add(newCourse);
+            }
+            cursor.close();
+
+            return courseList;
+
+        } catch (JsonMappingException jme) {
+            jme.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An exception occurred while mapping the document.", jme);
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO log this to a file
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
+    }
+
     /**
      * Finds course in database according to given credentials
      *

@@ -1,5 +1,6 @@
 package com.revature.schoolDatabase.screens.menus;
 
+import com.revature.schoolDatabase.util.ProgramManager;
 import com.revature.schoolDatabase.util.ScreenRouter;
 
 import java.io.BufferedReader;
@@ -7,7 +8,7 @@ import java.io.BufferedReader;
 public class MainMenu extends Menu {
 
     public MainMenu(BufferedReader consoleReader, ScreenRouter router) {
-        super("Main Menu", "/main", consoleReader, router, new String[] {"Login", "Register"});
+        super("Main Menu", "/main", consoleReader, router, new String[] {"Login", "Register", "Exit"});
     }
 
     @Override
@@ -27,9 +28,8 @@ public class MainMenu extends Menu {
                 break;
             case "3":
                 System.out.println("Exiting application...");
-                // figure a way to make the app shutdown
-                // TODO this is ugly and bad practice, we will fix it later
-                System.exit(0);
+                ProgramManager.shutdown();
+                break;
             default:
                 System.out.println("You provided an invalid value, please try again.");
 

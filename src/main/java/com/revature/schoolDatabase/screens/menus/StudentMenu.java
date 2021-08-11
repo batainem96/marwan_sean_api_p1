@@ -67,7 +67,6 @@ public class StudentMenu extends Menu {
                 break;
             case "6":   // Cancel Registration // TODO Confirm Screen
                 userService.deleteUser(stud);
-                break;
             case "7":   // Log Out and Return to Main Menu
                 System.out.println("Taking you back to main menu...");
 

@@ -15,6 +15,9 @@ public class RegisterScreen extends Screen{
     private final Logger logger = LogManager.getLogger(RegisterScreen.class);
     private final UserService userService;
 
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+
     public RegisterScreen(BufferedReader consoleReader, ScreenRouter router, UserService userService) {
         super("RegisterScreen", "/register", consoleReader, router);
         this.userService = userService;
@@ -61,12 +64,13 @@ public class RegisterScreen extends Screen{
                 System.out.println("User successfully registered!");
             }
 
-            if (studOrFac == 2)
+            if (studOrFac == 2) // TODO Faculty validation
                 System.out.println("Please note that a faculty account must be admin validated, and you will not be able to access it right away.");
 
             router.navigate("/main");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            System.out.println(ANSI_RED + "ERROR: Invalid input. Registration failed." + ANSI_RESET);
+//            logger.error(e.getMessage());
             logger.debug("User not registered!");
             router.navigate("/main");
         }

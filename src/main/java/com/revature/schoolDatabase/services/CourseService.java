@@ -55,7 +55,7 @@ public class CourseService {
 
             if (!fac.getSchedule().contains(newSched))
                 fac.getSchedule().add(newSched);
-            course.displayShortCourse();
+//            course.displayShortCourse();
         }
 
         return fac;
@@ -101,9 +101,18 @@ public class CourseService {
      *                  -- 'short' = display only pertinent Course information
      *                  -- 'instructor' = courses taught by given user
      */
-    public void showCourses(Person user, String... flags) {
-        if (Arrays.asList(flags).contains("instructor")) {
+    public void showCourses(Person user, String flag) {
+        if (flag.equals("instructor")) {
             List<Course> courseList = courseRepo.retrieveInstructorCourses(user.getFirstName(), user.getLastName());
+            if (courseList == null)
+                return;
+
+            for (Course course : courseList) {
+                course.displayShortCourse();
+            }
+        }
+        else if (flag.equals("open")) {
+            List<Course> courseList = courseRepo.retrieveOpenCourses();
             if (courseList == null)
                 return;
 
