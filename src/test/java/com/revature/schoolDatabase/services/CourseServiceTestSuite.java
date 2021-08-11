@@ -34,7 +34,6 @@ public class CourseServiceTestSuite {
             - @Ignore
      */
 
-    // TODO spoof database access
     @BeforeClass // runs before all test cases; runs only once
     public static void setUpSuite() {
 
@@ -172,7 +171,7 @@ public class CourseServiceTestSuite {
 
         // Act
         try {
-            sut.addCourse(stud, "Test", "101-1");
+            sut.addCourse(stud, "Test", 101, 1);
         } finally {
             // Assert
             assertEquals(course.getOpenSeats(), 0);

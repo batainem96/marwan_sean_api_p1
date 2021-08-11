@@ -58,7 +58,7 @@ public class RegisterScreen extends Screen{
 
         try {
             if (studOrFac == 1) {
-                newUser = userService.register(newUser);
+                userService.register(newUser);
                 logger.info("User successfully registered!");
                 System.out.println("User successfully registered!");
             }
@@ -68,7 +68,7 @@ public class RegisterScreen extends Screen{
 
             router.navigate("/main");
         } catch (AuthenticationException ae) {
-
+            logger.error(ae.getMessage());
         } catch (Exception e) {
             System.out.println(ANSI_RED + "ERROR: Invalid input. Registration failed." + ANSI_RESET);
             logger.error(e.getMessage());

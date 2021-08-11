@@ -17,9 +17,6 @@ import java.util.List;
 public class CourseService {
     // Variables
     private final CourseRepository courseRepo;
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
     private final Logger logger = LogManager.getLogger(CourseService.class);
 
     public CourseService(CourseRepository courseRepo) {
@@ -100,12 +97,11 @@ public class CourseService {
      * @param flag -- used to specify which courses to display
      *             List of flags:
      *                  -- 'open' = courses with open seats
-     *                  -- 'closed' = courses which have no open seats
-     *                  -- 'user' = courses currently in a given Person's schedule
+     *                  -- 'closed' = courses which have no open seats TODO
+     *                  -- 'user' = courses currently in a given Person's schedule TODO
      *                  -- 'schedule' = courses that would fit in schedule TODO
-     *                  -- 'dept' = courses in a given Department
-     *                  -- 'short' = display only pertinent Course information
-     *                  -- 'instructor' = courses taught by given user
+     *                  -- 'dept' = courses in a given Department TODO
+     *                  -- 'short' = display only pertinent Course information TODO
      */
     public void showCourses(Person user, String flag) {
         if (flag.equals("instructor")) {
@@ -138,14 +134,12 @@ public class CourseService {
      * Adds a new course to a Student's schedule
      *
      * @param stud
-     * @param courseID
+     * @param dept, courseNo, sectionNo
      */
-    public Person addCourse(Student stud, String dept, String courseID) {
-        // TODO -------------------------------
+    public Person addCourse(Student stud, String dept, int courseNo, int sectionNo) {
 
         // Find course in database given courseID
-        String[] splitID = courseID.split("-");
-        Course newCourse = courseRepo.findByCredentials(dept, Integer.parseInt(splitID[0]), Integer.parseInt(splitID[1]));
+        Course newCourse = courseRepo.findByCredentials(dept, courseNo, sectionNo);
 
         // Check if course has open seats
         if ((newCourse.getOpenSeats() == 0))

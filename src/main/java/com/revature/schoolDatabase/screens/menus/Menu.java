@@ -2,15 +2,18 @@ package com.revature.schoolDatabase.screens.menus;
 
 import com.revature.schoolDatabase.screens.Screen;
 import com.revature.schoolDatabase.util.ScreenRouter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
+
+import static com.revature.schoolDatabase.util.ProgramManager.*;
 
 public abstract class Menu extends Screen {
     // Variables
     protected String name;
     protected String[] menuOptions = {"This menu is empty!"};
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
+    private final Logger logger = LogManager.getLogger(Menu.class);
 
 
     // Constructors
@@ -31,14 +34,6 @@ public abstract class Menu extends Screen {
     @Override
     public void render() throws Exception {
         displayMenu();
-
-        String choice = consoleReader.readLine();
-
-        try {
-            System.out.println("No exception");
-        } catch (Exception e) {
-            System.out.println("Exception");
-        }
     }
 
 

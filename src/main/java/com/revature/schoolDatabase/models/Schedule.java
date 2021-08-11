@@ -26,15 +26,16 @@ public class Schedule {
         this.courseDept = courseDept;
         this.courseNo = courseNo;
         this.sectionNo = sectionNo;
+        meetingTimes = null;
     }
 
     // Schedule is created with ID as one String
-    public Schedule(String courseDept, String courseID) {
-        String[] splitID = courseID.split("-");
-        this.courseDept = courseDept;
-        this.courseNo = Integer.parseInt(splitID[0]);
-        this.sectionNo = Integer.parseInt(splitID[1]);
-    }
+//    public Schedule(String courseDept, String courseID) {
+////        String[] splitID = courseID.split("-");
+//        this.courseDept = courseDept;
+//        this.courseNo = Integer.parseInt(splitID[0]);
+//        this.sectionNo = Integer.parseInt(splitID[1]);
+//    }
 
     public Schedule(String courseDept, int courseNo, int sectionNo, ArrayList<MeetingTime> meetingTimes) {
         this(courseDept, courseNo, sectionNo);

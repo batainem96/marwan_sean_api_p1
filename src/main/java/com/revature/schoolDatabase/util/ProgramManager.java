@@ -5,9 +5,7 @@ import com.revature.schoolDatabase.repositories.CourseRepository;
 import com.revature.schoolDatabase.repositories.UserRepository;
 import com.revature.schoolDatabase.screens.LoginScreen;
 import com.revature.schoolDatabase.screens.RegisterScreen;
-import com.revature.schoolDatabase.screens.menus.FacultyMenu;
 import com.revature.schoolDatabase.screens.menus.MainMenu;
-import com.revature.schoolDatabase.screens.menus.StudentMenu;
 import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 
@@ -24,6 +22,9 @@ public class ProgramManager {
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_BRIGHT_BLUE = "\u001B[94m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_BRIGHT_GREEN = "\u001B[92m";
 
     // Constructors
     public ProgramManager() {
@@ -50,11 +51,9 @@ public class ProgramManager {
      * initialized at the main menu, then is continuously re-rendered until an exception is
      * thrown or programRunning is set to false;
      *
-     * @param none
-     * @return none
      */
     public void start() {
-        System.out.println("Welcome to Revature University!");
+        System.out.println(ANSI_BRIGHT_GREEN + "\nWelcome to Revature University!" + ANSI_RESET);
         router.navigate("/main");
 
         while (programRunning) {

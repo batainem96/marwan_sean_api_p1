@@ -24,7 +24,7 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
-// TODO Handle Exceptions
+// TODO Handle exceptions more extensively
 public class UserRepository implements CrudRepository<Person> {
     // Variables
     private final MongoCollection<Document> usersCollection;

@@ -3,6 +3,9 @@ package com.revature.schoolDatabase.util;
 import com.revature.schoolDatabase.models.Course;
 import com.revature.schoolDatabase.models.MeetingTime;
 import com.revature.schoolDatabase.models.PreReq;
+import com.revature.schoolDatabase.services.CourseService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +13,8 @@ import java.util.ArrayList;
 import java.util.regex.*;
 
 public class CourseCreator{
+    private static final Logger logger = LogManager.getLogger(CourseCreator.class);
+
     /**
      * Creates a new course for the catalog given course information
      *
@@ -80,7 +85,7 @@ public class CourseCreator{
     }
 
     public static ArrayList<PreReq> createPreReqs(BufferedReader consoleReader) throws IOException {
-        // TODO Validate Courses
+        // TODO Validate PreReqs more extensively
         ArrayList<PreReq> preReqs = new ArrayList<>();
         String input = "";
         while (!(input.equalsIgnoreCase("q"))) {
@@ -110,7 +115,7 @@ public class CourseCreator{
     }
 
     public static ArrayList<MeetingTime> createMeetingTimes(BufferedReader consoleReader) throws IOException {
-        // TODO Validate Meeting Times
+        // TODO Validate Meeting Times more extensively
         ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
         String input = "";
         while (!(input.equalsIgnoreCase("q"))) {
@@ -167,7 +172,7 @@ public class CourseCreator{
             int result = Integer.parseInt(str);
             return result;
         } catch (Exception e) {
-            // TODO log to file
+            logger.error(e.getMessage());
             return 0;
         }
     }

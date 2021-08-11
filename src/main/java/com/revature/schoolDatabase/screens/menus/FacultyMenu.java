@@ -21,8 +21,7 @@ public class FacultyMenu extends Menu {
     private Faculty fac;
     private final UserService userService;
     private final CourseService courseService;
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
+
     private final Logger logger = LogManager.getLogger(FacultyMenu.class);
 
     // Constructors
@@ -30,7 +29,7 @@ public class FacultyMenu extends Menu {
                        UserService userService, CourseService courseService) {
         super("Faculty", "/faculty", consoleReader, router,
                         new String[] {"View My Courses", "View Available Courses", "View All Courses", "Display Users", "Create Course",
-                        "Edit Course", "Remove Course", "Exit"});
+                        "Edit Course", "Remove Course", "Log Out and Return to Main Menu"});
         this.userService = userService;
         this.courseService = courseService;
         this.fac = courseService.generateSchedule(fac);
@@ -44,8 +43,8 @@ public class FacultyMenu extends Menu {
         fac.displayUser();
         displayMenu();
 
-        // Split user input on whitespace
-        String[] userSelection = consoleReader.readLine().split(" ");
+        // Split user input on whitespace or dash
+        String[] userSelection = consoleReader.readLine().split("[ -]+");
         if (userSelection.length > 1)
             userSelection[1] = userSelection[1].toUpperCase();
         System.out.println();
@@ -113,12 +112,12 @@ public class FacultyMenu extends Menu {
                         }
                     }
                 } catch (ArrayIndexOutOfBoundsException aie) {
+                    logger.error(aie.getMessage());
                     System.out.println(ANSI_RED + "ERROR: Incorrect criteria, try again." + ANSI_RESET);
                 }
                 catch (Exception e) {
+                    logger.error(e.getMessage());
                     System.out.println(ANSI_RED + "ERROR: Failed to delete course." + ANSI_RESET);
-                    // TODO Log to file
-                    e.printStackTrace();
                 }
                 break;
             case "8":

@@ -37,7 +37,6 @@ public class LoginScreen extends Screen {
         System.out.print("Password: ");
         String password = consoleReader.readLine();
 
-        // TODO follow to UserService -> expand later
         Person newPerson;
         try {
             newPerson = userService.login(username, password);

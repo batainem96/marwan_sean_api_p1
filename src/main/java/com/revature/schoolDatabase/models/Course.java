@@ -2,11 +2,15 @@ package com.revature.schoolDatabase.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.revature.schoolDatabase.services.CourseService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
 import static com.revature.schoolDatabase.models.DeptShorthand.deptToShort;
+import static com.revature.schoolDatabase.util.ProgramManager.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Course {
@@ -27,8 +31,7 @@ public class Course {
     private ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
     private String description;
 
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_RESET = "\u001B[0m";
+    private final Logger logger = LogManager.getLogger(CourseService.class);
 
     // Constructors
     public Course() {}
@@ -223,8 +226,8 @@ public class Course {
             System.out.println(ANSI_CYAN + this.title + ANSI_RESET);
             System.out.println(this.deptShort + " " + this.courseNo + "-" + this.sectionNo);
             System.out.println();
-        } catch (Exception e) { // TODO Handle exceptions
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
         }
     }
 

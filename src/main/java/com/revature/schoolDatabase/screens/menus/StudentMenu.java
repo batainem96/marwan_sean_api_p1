@@ -34,17 +34,15 @@ public class StudentMenu extends Menu {
     }
 
     // Methods
-
-
     @Override
-    public void render() throws Exception {
+    public void render() throws Exception {     // TODO Abstract methods and condense code
         System.out.println();
         System.out.println(ANSI_YELLOW + "\tCURRENT USER" + ANSI_RESET);
         stud.displayUser();
         displayMenu();
 
-        // Split user input on whitespace
-        String[] userSelection = consoleReader.readLine().split(" ");
+        // Split user input on whitespace or dash
+        String[] userSelection = consoleReader.readLine().split("[ -]+");
         System.out.println();
 
         try {
@@ -61,7 +59,7 @@ public class StudentMenu extends Menu {
                 case "4":   // User wants to add a course, check if they gave a course ID, otherwise show usage
                     if (userSelection.length > 1) {
                         try {
-                            stud = (Student) courseService.addCourse(stud, userSelection[1].toUpperCase(), userSelection[2]);
+                            stud = (Student) courseService.addCourse(stud, userSelection[1].toUpperCase(), Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
                             // Update student
                             userService.updateUser(stud);
                         } catch (SchedulingException se) {
@@ -69,14 +67,20 @@ public class StudentMenu extends Menu {
                             logger.debug("ERROR: Class has no open seats!");
                             System.out.println(ANSI_RED + "ERROR: Class has no open seats!" + ANSI_RESET);
                         }
-                    } else System.out.println("Usage: 4 <DeptShorthand> <CourseID>\nExample: 4 COSC 101-1");
+                    } else {
+                        System.out.println(ANSI_RED + "ERROR: Invalid criteria!" + ANSI_RESET);
+                        System.out.println("Usage: 4 <DeptShorthand> <CourseID>\nExample: 4 COSC 101-1");
+                    }
                     break;
                 case "5":   // Remove Course
                     if (userSelection.length > 1) {
-                        stud = (Student) courseService.removeCourseFromSchedule(stud, new Schedule(userSelection[1].toUpperCase(), userSelection[2]));
+                        stud = (Student) courseService.removeCourseFromSchedule(stud, new Schedule(userSelection[1].toUpperCase(), Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3])));
                         // Update student
                         userService.updateUser(stud);
-                    } else System.out.println("Usage: 5 <DeptShorthand> <CourseID>\nExample: 5 COSC 101-1");
+                    } else {
+                        System.out.println(ANSI_RED + "ERROR: Invalid criteria!" + ANSI_RESET);
+                        System.out.println("Usage: 5 <DeptShorthand> <CourseID>\nExample: 5 COSC 101-1");
+                    }
                     break;
                 case "6":   // Cancel Registration // TODO Confirm Screen
                     userService.deleteUser(stud);
@@ -96,7 +100,7 @@ public class StudentMenu extends Menu {
         } catch (ArrayIndexOutOfBoundsException aie) {
             logger.error(aie.getMessage());
             logger.debug("ERROR: Invalid criteria, try again.");
-            System.out.println(ANSI_RED + "ERROR: Invalid criteria, try again." + ANSI_RESET);
+            System.out.println(ANSI_RED + "ERROR: Failed to execute function, try again." + ANSI_RESET);
         }
 
 
