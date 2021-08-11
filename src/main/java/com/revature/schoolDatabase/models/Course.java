@@ -41,7 +41,8 @@ public class Course {
         this.sectionNo = sectionNo;
         if (deptToShort.containsKey(department))
             this.deptShort = deptToShort.get(department);
-        else this.deptShort = department.substring(0,3);
+        else if (department != null) this.deptShort = department.substring(0,3);
+        else this.deptShort = null;
         this.instructor = "None";
         this.credits = 0;
         this.openSeats = 0;

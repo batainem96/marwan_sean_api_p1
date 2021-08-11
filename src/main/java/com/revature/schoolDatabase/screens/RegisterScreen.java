@@ -70,7 +70,7 @@ public class RegisterScreen extends Screen{
             router.navigate("/main");
         } catch (Exception e) {
             System.out.println(ANSI_RED + "ERROR: Invalid input. Registration failed." + ANSI_RESET);
-//            logger.error(e.getMessage());
+            logger.error(e.getMessage());
             logger.debug("User not registered!");
             router.navigate("/main");
         }

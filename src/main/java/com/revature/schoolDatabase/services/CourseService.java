@@ -91,7 +91,7 @@ public class CourseService {
     /**
      * Lists courses in catalog according to flags
      *
-     * @param flags -- used to specify which courses to display
+     * @param flag -- used to specify which courses to display
      *             List of flags:
      *                  -- 'open' = courses with open seats
      *                  -- 'closed' = courses which have no open seats

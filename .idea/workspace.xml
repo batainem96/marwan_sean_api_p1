@@ -5,16 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc54228c-a9b7-402c-aae6-646e77152026" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/repositories/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/repositories/CourseRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/LoginScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/RegisterScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/RegisterScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/FacultyMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/FacultyMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/StudentMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/StudentMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/models/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/ConfirmScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/UpdateMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/screens/menus/UpdateMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/CourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/services/CourseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/util/ProgramManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/revature/schoolDatabase/util/ProgramManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/revature/schoolDatabase/util/ProgramManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/revature/schoolDatabase/util/ProgramManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/CourseServiceTestSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/revature/schoolDatabase/services/CourseServiceTestSuite.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +27,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="1w5oMXfFrV9zgo0px7WE1nN2hI9" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -58,7 +63,7 @@
       <recent name="com.revature.schoolDatabase.util" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.CourseServiceTestSuite">
+  <component name="RunManager" selected="Application.MainDriver">
     <configuration name="MainDriver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.MainDriver" />
       <module name="sean_dunn_p0" />
@@ -87,7 +92,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CourseServiceTestSuite.addCourse_throwsException_ifNoOpenSeats" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CourseServiceTestSuite.deleteCourse_throwsException_ifDeleteFailed" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="sean_dunn_p0" />
       <extension name="coverage">
         <pattern>
@@ -97,13 +102,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.revature.schoolDatabase.services" />
       <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.CourseServiceTestSuite" />
-      <option name="METHOD_NAME" value="addCourse_throwsException_ifNoOpenSeats" />
+      <option name="METHOD_NAME" value="deleteCourse_throwsException_ifDeleteFailed" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CourseServiceTestSuite.createCourse_throwsException_ifDuplicate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CourseServiceTestSuite.removeCourseFromSchedule_worksAsImplied" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="sean_dunn_p0" />
       <extension name="coverage">
         <pattern>
@@ -113,13 +118,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.revature.schoolDatabase.services" />
       <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.CourseServiceTestSuite" />
-      <option name="METHOD_NAME" value="createCourse_throwsException_ifDuplicate" />
+      <option name="METHOD_NAME" value="removeCourseFromSchedule_worksAsImplied" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CourseServiceTestSuite.showCourses_displaysNothing_withNoError_ifNoCourses" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CourseServiceTestSuite.updateCourse_throwsException_ifUpdateFailed" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="sean_dunn_p0" />
       <extension name="coverage">
         <pattern>
@@ -129,7 +134,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.revature.schoolDatabase.services" />
       <option name="MAIN_CLASS_NAME" value="com.revature.schoolDatabase.services.CourseServiceTestSuite" />
-      <option name="METHOD_NAME" value="showCourses_displaysNothing_withNoError_ifNoCourses" />
+      <option name="METHOD_NAME" value="updateCourse_throwsException_ifUpdateFailed" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -139,9 +144,9 @@
       <list>
         <item itemvalue="Application.MainDriver" />
         <item itemvalue="JUnit.CourseServiceTestSuite" />
-        <item itemvalue="JUnit.CourseServiceTestSuite.addCourse_throwsException_ifNoOpenSeats" />
-        <item itemvalue="JUnit.CourseServiceTestSuite.showCourses_displaysNothing_withNoError_ifNoCourses" />
-        <item itemvalue="JUnit.CourseServiceTestSuite.createCourse_throwsException_ifDuplicate" />
+        <item itemvalue="JUnit.CourseServiceTestSuite.deleteCourse_throwsException_ifDeleteFailed" />
+        <item itemvalue="JUnit.CourseServiceTestSuite.removeCourseFromSchedule_worksAsImplied" />
+        <item itemvalue="JUnit.CourseServiceTestSuite.updateCourse_throwsException_ifUpdateFailed" />
       </list>
     </recent_temporary>
   </component>
@@ -179,7 +184,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/sean_dunn_p0$CourseServiceTestSuite.ic" NAME="CourseServiceTestSuite Coverage Results" MODIFIED="1628644210165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/sean_dunn_p0$CourseServiceTestSuite.ic" NAME="CourseServiceTestSuite Coverage Results" MODIFIED="1628682017599" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.revature.schoolDatabase.services.*</FILTER>
     </SUITE>
   </component>

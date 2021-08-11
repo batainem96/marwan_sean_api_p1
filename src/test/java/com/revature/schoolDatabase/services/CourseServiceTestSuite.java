@@ -13,6 +13,7 @@ import org.mockito.Mockito.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -94,7 +95,7 @@ public class CourseServiceTestSuite {
         boolean actualResult1 = sut.isCourseValid(inValidCourse);
 
         // Assert
-        Assert.assertNotEquals("Expected user to be considered invalid!", expectedResult, actualResult1);
+        Assert.assertEquals("Expected user to be considered invalid!", expectedResult, actualResult1);
     }
 
 
@@ -178,11 +179,14 @@ public class CourseServiceTestSuite {
         }
     }
 
-    @Test
+    @Test(expected = ResourcePersistenceException.class )
     public void updateCourse_throwsException_ifUpdateFailed() {
         // Arrange
+        Course course = new Course("Test", "Test", 101, 1);
+        when(mockCourseRepo.update(course)).thenReturn(false);
 
         // Act
+        sut.updateCourse(course);
 
         // Assert
     }
@@ -190,17 +194,30 @@ public class CourseServiceTestSuite {
     @Test
     public void removeCourseFromSchedule_worksAsImplied() {
         // Arrange
+        Person user = new Student("Test", "Test", "Test", "Test");
+        ArrayList<Schedule> newSched = new ArrayList<Schedule>();
+        Schedule course = new Schedule("TEST", 101, 1);
+        newSched.add(course);
+        user.setSchedule(newSched);
 
         // Act
+        Person updatedUser = sut.removeCourseFromSchedule(user, course);
 
         // Assert
+//        assertNotEquals(user, updatedUser); Person.equals does not compare Schedules
+        assertFalse(updatedUser.getSchedule().contains(course));
     }
 
-    @Test
+    @Test(expected = ResourcePersistenceException.class)
     public void deleteCourse_throwsException_ifDeleteFailed() {
         // Arrange
+        String dept = "Test";
+        int courseNo = 101;
+        int sectionNo = 1;
+        when(mockCourseRepo.deleteByCredentials(dept, courseNo, sectionNo)).thenReturn(false);
 
         // Act
+        boolean result = sut.deleteCourse(dept, courseNo, sectionNo);
 
         // Assert
     }

@@ -1,10 +1,13 @@
 package com.revature.schoolDatabase.screens.menus;
 
 import com.revature.schoolDatabase.models.*;
+import com.revature.schoolDatabase.screens.RegisterScreen;
 import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.util.List;
@@ -14,6 +17,7 @@ public class UpdateMenu<T> extends Menu{
     private T object;
     private final UserService userService;
     private final CourseService courseService;
+    private final Logger logger = LogManager.getLogger(UpdateMenu.class);
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -86,6 +90,8 @@ public class UpdateMenu<T> extends Menu{
                         break;
                     case "7":   // Change Total Number of Seats
                         course.setTotalSeats(Integer.parseInt(userSelection[1]));
+                        if (course.getOpenSeats() > course.getTotalSeats())
+                            course.setOpenSeats(course.getOpenSeats());
                         break;
                     case "8":   // Change Prerequisites
                         if (course.getPrerequisites() != null) {
@@ -101,6 +107,8 @@ public class UpdateMenu<T> extends Menu{
                                 PreReq newPreReq = new PreReq(updatePreReqs[1], Integer.parseInt(updatePreReqs[2]), Integer.parseInt(updatePreReqs[3]));
                                 course.getPrerequisites().add(newPreReq);
                             } catch (Exception e) {
+                                logger.error(e.getMessage());
+                                logger.debug("ERROR: Prerequisites not updated.");
                                 System.out.println(ANSI_RED + "ERROR: Prerequisites not updated." + ANSI_RESET);
                             }
                         }
@@ -121,6 +129,8 @@ public class UpdateMenu<T> extends Menu{
                                 course.getMeetingTimes().add(newMeet);
                                 flag = "meeting " + updateMeets[0];
                             } catch (Exception e) {
+                                logger.error(e.getMessage());
+                                logger.debug("ERROR: Meeting Times not updated.");
                                 System.out.println(ANSI_RED + "ERROR: Meeting Times not updated." + ANSI_RESET);
                             }
                         }
@@ -185,14 +195,19 @@ public class UpdateMenu<T> extends Menu{
                                 userService.updateUser(user);
                             }
                         } catch (Exception e) {
+                            logger.error(e.getMessage());
+                            logger.debug("ERROR: Users not updated.");
                             System.out.println(ANSI_RED + "ERROR: Users not updated." + ANSI_RESET);
                         }
                     }
-
                 } catch (Exception e) {
+                    logger.error(e.getMessage());
+                    logger.debug("ERROR: Field not updated.");
                     System.out.println(ANSI_RED + "ERROR: Field not updated." + ANSI_RESET);
                 }
             } catch (ArrayIndexOutOfBoundsException aie) {
+                logger.error(aie.getMessage());
+                logger.debug("ERROR: Incorrect criteria, try again.");
                 System.out.println(ANSI_RED + "ERROR: Incorrect criteria, try again." + ANSI_RESET);
             }
         }
