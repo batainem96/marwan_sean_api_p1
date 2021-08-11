@@ -7,8 +7,11 @@ import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.revature.schoolDatabase.models.Course;
+import com.revature.schoolDatabase.screens.RegisterScreen;
 import com.revature.schoolDatabase.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -21,6 +24,7 @@ public class CourseRepository implements CrudRepository<Course>{
     // Variables
     private final MongoCollection<Document> courseCollection;
     private final ObjectMapper mapper;
+    private final Logger logger = LogManager.getLogger(CourseRepository.class);
 
     // Constructors
     public CourseRepository(ObjectMapper mapper) {
@@ -52,10 +56,10 @@ public class CourseRepository implements CrudRepository<Course>{
             return courseList;
 
         } catch (JsonMappingException jme) {
-            jme.printStackTrace(); // TODO log this to a file
+            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -98,10 +102,10 @@ public class CourseRepository implements CrudRepository<Course>{
             return courseList;
 
         } catch (JsonMappingException jme) {
-            jme.printStackTrace(); // TODO log this to a file
+            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -124,10 +128,10 @@ public class CourseRepository implements CrudRepository<Course>{
             return courseList;
 
         } catch (JsonMappingException jme) {
-            jme.printStackTrace(); // TODO log this to a file
+            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -156,10 +160,10 @@ public class CourseRepository implements CrudRepository<Course>{
             return newCourse;
 
         } catch (JsonMappingException jme) {
-            jme.printStackTrace(); // TODO log this to a file
+            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -174,7 +178,7 @@ public class CourseRepository implements CrudRepository<Course>{
             DeleteResult result = courseCollection.deleteOne(queryDoc);
             return result.wasAcknowledged();
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -200,7 +204,7 @@ public class CourseRepository implements CrudRepository<Course>{
             return newCourse;
 
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -216,7 +220,7 @@ public class CourseRepository implements CrudRepository<Course>{
             return newCourse;
 
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -232,9 +236,11 @@ public class CourseRepository implements CrudRepository<Course>{
             return result.wasAcknowledged();
 
         } catch (JsonMappingException jme) {
-            jme.printStackTrace();
+            logger.error(jme.getMessage());
+//            throw new DataSourceException("An error occurred while mapping the object.", jme);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
+
         }
         return false;
     }
@@ -248,7 +254,7 @@ public class CourseRepository implements CrudRepository<Course>{
             DeleteResult result = courseCollection.deleteOne(queryDoc);
             return result.wasAcknowledged();
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }

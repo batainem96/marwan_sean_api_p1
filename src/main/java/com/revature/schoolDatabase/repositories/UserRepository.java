@@ -14,6 +14,8 @@ import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
 import com.revature.schoolDatabase.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -27,6 +29,7 @@ public class UserRepository implements CrudRepository<Person> {
     // Variables
     private final MongoCollection<Document> usersCollection;
     private final ObjectMapper mapper;
+    private final Logger logger = LogManager.getLogger(UserRepository.class);
 
     // Constructor
     public UserRepository(ObjectMapper mapper) {
@@ -59,10 +62,10 @@ public class UserRepository implements CrudRepository<Person> {
             return users;
 
         } catch (JsonMappingException jme) {
-            jme.printStackTrace(); // TODO log this to a file
+            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -100,10 +103,10 @@ public class UserRepository implements CrudRepository<Person> {
             return authUser;
 
         } catch (JsonMappingException jme) {
-            jme.printStackTrace(); // TODO log this to a file
+            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
 
@@ -143,10 +146,10 @@ public class UserRepository implements CrudRepository<Person> {
             return authUser;
 
         } catch (JsonMappingException jme) {
-            jme.printStackTrace(); // TODO log this to a file
+            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
 
@@ -171,7 +174,7 @@ public class UserRepository implements CrudRepository<Person> {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -194,7 +197,7 @@ public class UserRepository implements CrudRepository<Person> {
             return newPerson;
 
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -227,10 +230,10 @@ public class UserRepository implements CrudRepository<Person> {
             return authUser;
 
         } catch (JsonMappingException jme) {
-            jme.printStackTrace(); // TODO log this to a file
+            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
 
@@ -263,7 +266,7 @@ public class UserRepository implements CrudRepository<Person> {
             DeleteResult result = usersCollection.deleteOne(queryDoc);
             return result.wasAcknowledged();
         } catch (Exception e) {
-            e.printStackTrace(); // TODO log this to a file
+            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
