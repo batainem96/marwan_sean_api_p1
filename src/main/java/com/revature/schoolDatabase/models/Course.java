@@ -22,7 +22,7 @@ public class Course {
     private String instructor;
     private int credits;
     private int totalSeats;
-    private int openSeats;
+    private int openSeats = 0;
     @JsonProperty("meetingTimes")
     private ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
     private String description;
@@ -39,9 +39,12 @@ public class Course {
         this.department = department;
         this.courseNo = courseNo;
         this.sectionNo = sectionNo;
-        this.deptShort = deptToShort.get(department);
+        if (deptToShort.containsKey(department))
+            this.deptShort = deptToShort.get(department);
+        else this.deptShort = department.substring(0,3);
         this.instructor = "None";
         this.credits = 0;
+        this.openSeats = 0;
     }
 
     public Course(String title, String department, int courseNo, int sectionNo, ArrayList<PreReq> prerequisites,

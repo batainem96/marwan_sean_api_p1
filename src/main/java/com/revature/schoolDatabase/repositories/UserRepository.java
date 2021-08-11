@@ -8,6 +8,7 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
@@ -239,9 +240,9 @@ public class UserRepository implements CrudRepository<Person> {
             // Convert Person to BasicDBObject
             String userJson = mapper.writeValueAsString(updatedPerson);
             Document userDoc = Document.parse(userJson);
-            usersCollection.findOneAndReplace(eq(("_id"), new ObjectId(updatedPerson.getId())), userDoc);
+            UpdateResult result = usersCollection.replaceOne(eq(("_id"), new ObjectId(updatedPerson.getId())), userDoc);
 
-            return true;
+            return result.wasAcknowledged();
 
         } catch (JsonMappingException jme) {
             jme.printStackTrace();

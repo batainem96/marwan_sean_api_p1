@@ -201,9 +201,9 @@ public class CourseRepository implements CrudRepository<Course>{
             // Convert Course to BasicDBObject
             String courseJson = mapper.writeValueAsString(updatedCourse);
             Document courseDoc = Document.parse(courseJson);
-            courseCollection.findOneAndReplace(eq(("_id"), new ObjectId(updatedCourse.getId())), courseDoc);
+            UpdateResult result = courseCollection.replaceOne(eq(("_id"), new ObjectId(updatedCourse.getId())), courseDoc);
 
-            return true;
+            return result.wasAcknowledged();
 
         } catch (JsonMappingException jme) {
             jme.printStackTrace();

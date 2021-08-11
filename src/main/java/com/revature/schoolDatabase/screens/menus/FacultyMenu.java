@@ -26,9 +26,9 @@ public class FacultyMenu extends Menu {
         super("Faculty", "/faculty", consoleReader, router,
                         new String[] {"View My Courses", "View Available Courses", "View All Courses", "Create Course",
                         "Edit Course", "Remove Course"});
-        this.fac = fac;
         this.userService = userService;
         this.courseService = courseService;
+        this.fac = courseService.generateSchedule(fac);
     }
 
     // Methods
@@ -84,7 +84,7 @@ public class FacultyMenu extends Menu {
                         Schedule oldSched = new Schedule(userSelection[1], Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
                         for (Schedule sched : user.getSchedule()) {
                             if (sched.equals(oldSched)) {
-                                user.getSchedule().remove(sched);
+                                user = courseService.removeCourseFromSchedule(user, sched);
                                 userService.updateUser(user);
                             }
                         }

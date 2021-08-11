@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClient;
 import com.revature.schoolDatabase.models.*;
 import com.revature.schoolDatabase.repositories.CourseRepository;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
+import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.util.exceptions.SchedulingException;
 
 import java.util.ArrayList;
@@ -39,6 +40,27 @@ public class CourseService {
         return true;
     }
 
+    public Faculty generateSchedule(Faculty fac) {
+        List<Course> courseList = courseRepo.retrieveInstructorCourses(fac.getFirstName(), fac.getLastName());
+        if (courseList == null)
+            return fac;
+
+        // Add to Faculty schedule if the courses do not exist
+        for (Course course : courseList) {
+            String dept = course.getDeptShort();
+            int courseNo = course.getCourseNo();
+            int sectionNo = course.getSectionNo();
+            ArrayList<MeetingTime> meetingTimes = course.getMeetingTimes();
+            Schedule newSched = new Schedule(dept, courseNo, sectionNo, meetingTimes);
+
+            if (!fac.getSchedule().contains(newSched))
+                fac.getSchedule().add(newSched);
+            course.displayShortCourse();
+        }
+
+        return fac;
+    }
+
 
     /**
      * Stores a new course into the database
@@ -49,7 +71,7 @@ public class CourseService {
         try {
             courseRepo.save(newCourse);
         } catch (DataSourceException dse) {
-            throw new DataSourceException("An error occurred while calling CourseRepository.save()", dse);
+            throw new ResourcePersistenceException("An error occurred while calling CourseRepository.save()");
         }
 
     }
@@ -59,6 +81,8 @@ public class CourseService {
      */
     public void showCourses() {
         List<Course> courseList = courseRepo.retrieveCourses();
+        if (courseList == null)
+            return;
         for (Course course : courseList) {
             course.displayCourse();
         }
@@ -80,16 +104,10 @@ public class CourseService {
     public void showCourses(Person user, String... flags) {
         if (Arrays.asList(flags).contains("instructor")) {
             List<Course> courseList = courseRepo.retrieveInstructorCourses(user.getFirstName(), user.getLastName());
-            // Add to Faculty schedule if the courses do not exist
-            for (Course course : courseList) {
-                String dept = course.getDeptShort();
-                int courseNo = course.getCourseNo();
-                int sectionNo = course.getSectionNo();
-                ArrayList<MeetingTime> meetingTimes = course.getMeetingTimes();
-                Schedule newSched = new Schedule(dept, courseNo, sectionNo, meetingTimes);
+            if (courseList == null)
+                return;
 
-                if (!user.getSchedule().contains(newSched))
-                    user.getSchedule().add(newSched);
+            for (Course course : courseList) {
                 course.displayShortCourse();
             }
         }
@@ -115,7 +133,7 @@ public class CourseService {
         Course newCourse = courseRepo.findByCredentials(dept, Integer.parseInt(splitID[0]), Integer.parseInt(splitID[1]));
 
         // Check if course has open seats
-        if ((newCourse.getOpenSeats() > 0))
+        if ((newCourse.getOpenSeats() == 0))
             throw new SchedulingException("Class has no open seats!");
 
         String newDeptShort = newCourse.getDeptShort();

@@ -3,14 +3,19 @@ package com.revature.schoolDatabase.services;
 import com.revature.schoolDatabase.models.*;
 import com.revature.schoolDatabase.repositories.CourseRepository;
 import com.revature.schoolDatabase.repositories.UserRepository;
+import com.revature.schoolDatabase.util.exceptions.DataSourceException;
+import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
+import com.revature.schoolDatabase.util.exceptions.SchedulingException;
 import org.junit.*;
 import org.mockito.Mockito;
+import org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class CourseServiceTestSuite {
     CourseService sut; // SUT = System Under Test (the thing being tested)
@@ -101,7 +106,6 @@ public class CourseServiceTestSuite {
     public void displayCourse_ignoresMissingInformation_exceptTitleAndCourseID() {
         // Arrange
         Course newCourse = new Course("TestTitle", "TestDepartment", 101, 1);
-        // TODO Test copy of newCourse with additional info
         PrintStream oldOut = System.out;
         // Create new System output stream
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -117,5 +121,87 @@ public class CourseServiceTestSuite {
         assertTrue(output.contains("TEST"));
         assertTrue(output.contains("101-1"));
         newCourse.displayCourse();
+    }
+
+    @Test(expected = ResourcePersistenceException.class)
+    public void createCourse_throwsException_ifDuplicate() {
+        // Arrange
+        Course dupCourse = new Course("Duplicate", "Test", 101, 1);
+        when(mockCourseRepo.save(dupCourse)).thenThrow(new DataSourceException("Test", new Throwable()));
+
+        // Act
+        try {
+            sut.createCourse(dupCourse);
+        } catch (DataSourceException dse) {
+            // Assert
+            verify(mockCourseRepo, times(1)).save(dupCourse);
+        }
+    }
+
+    @Test
+    public void showCourses_displaysNothing_withNoError_ifNoCourses() {
+        // Arrange
+        when(mockCourseRepo.retrieveCourses()).thenReturn(null);
+        when(mockCourseRepo.retrieveInstructorCourses("Test","Test")).thenReturn(null);
+        Faculty user = new Faculty("Test", "Test", "Test", "Test");
+
+        PrintStream oldOut = System.out;
+        // Create new System output stream
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(baos));
+
+        // Act
+        sut.showCourses();
+        sut.showCourses(user, "instructor");
+        String output = new String(baos.toByteArray());
+        System.setOut(oldOut);
+
+        // Assert
+        verify(mockCourseRepo, times(1)).retrieveCourses();
+        verify(mockCourseRepo, times(1)).retrieveInstructorCourses("Test", "Test");
+        assertFalse(output.contains("null"));
+    }
+
+    @Test(expected = SchedulingException.class)
+    public void addCourse_throwsException_ifNoOpenSeats() {
+        // Arrange
+        Course course = new Course("Test", "Test", 101, 1);
+        when(mockCourseRepo.findByCredentials("Test", 101, 1)).thenReturn(course);
+        Student stud = new Student("Test", "Test", "Test", "Test");
+
+        // Act
+        try {
+            sut.addCourse(stud, "Test", "101-1");
+        } finally {
+            // Assert
+            assertEquals(course.getOpenSeats(), 0);
+        }
+    }
+
+    @Test
+    public void updateCourse_throwsException_ifUpdateFailed() {
+        // Arrange
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    public void removeCourseFromSchedule_worksAsImplied() {
+        // Arrange
+
+        // Act
+
+        // Assert
+    }
+
+    @Test
+    public void deleteCourse_throwsException_ifDeleteFailed() {
+        // Arrange
+
+        // Act
+
+        // Assert
     }
 }
