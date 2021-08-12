@@ -2,12 +2,10 @@ package com.revature.schoolDatabase.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.revature.schoolDatabase.models.Course;
-import com.revature.schoolDatabase.screens.RegisterScreen;
 import com.revature.schoolDatabase.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import org.apache.logging.log4j.LogManager;
