@@ -1,9 +1,7 @@
 package com.revature.schoolDatabase.screens.menus;
 
-import com.revature.schoolDatabase.models.Course;
-import com.revature.schoolDatabase.models.Schedule;
+import com.revature.schoolDatabase.models.CourseHeader;
 import com.revature.schoolDatabase.models.Student;
-import com.revature.schoolDatabase.screens.Screen;
 import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
@@ -74,7 +72,7 @@ public class StudentMenu extends Menu {
                     break;
                 case "5":   // Remove Course
                     if (userSelection.length > 1) {
-                        stud = (Student) courseService.removeCourseFromSchedule(stud, new Schedule(userSelection[1].toUpperCase(), Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3])));
+                        stud = (Student) courseService.removeCourseFromSchedule(stud, new CourseHeader(userSelection[1].toUpperCase(), Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3])));
                         // Update student
                         userService.updateUser(stud);
                     } else {
