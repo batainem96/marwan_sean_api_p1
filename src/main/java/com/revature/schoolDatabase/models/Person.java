@@ -16,7 +16,7 @@ public abstract class Person {
     protected String username;
     protected String password;
     protected String userType;
-    protected ArrayList<CourseHeader> schedule = new ArrayList<>();
+    protected ArrayList<Schedule> schedule = new ArrayList<>();
 
     // Constructors
     public Person() {
@@ -86,11 +86,11 @@ public abstract class Person {
         this.userType = userType;
     }
 
-    public ArrayList<CourseHeader> getSchedule() {
+    public ArrayList<Schedule> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(ArrayList<CourseHeader> schedule) {
+    public void setSchedule(ArrayList<Schedule> schedule) {
         this.schedule = schedule;
     }
 
@@ -120,7 +120,7 @@ public abstract class Person {
             return;
         else {
             System.out.println(ANSI_BRIGHT_BLUE + "Schedule:" + ANSI_RESET);
-            for (CourseHeader course : schedule) {
+            for (Schedule course : schedule) {
                 System.out.print("\t" + course.getCourseDept());
                 System.out.print(" " + course.getCourseNo());
                 System.out.println("-" + course.getSectionNo());
@@ -132,13 +132,13 @@ public abstract class Person {
         }
     }
 
-    public void addToSchedule(CourseHeader courseHeader) {
-        this.schedule.add(courseHeader);
+    public void addToSchedule(Schedule schedule) {
+        this.schedule.add(schedule);
     }
 
-    public boolean removeFromSchedule(CourseHeader courseHeader) {
-        if (this.schedule.contains(courseHeader)) {
-            this.schedule.remove(courseHeader);
+    public boolean removeFromSchedule(Schedule schedule) {
+        if (this.schedule.contains(schedule)) {
+            this.schedule.remove(schedule);
             return true;
         }
         return false;

@@ -1,9 +1,12 @@
 package com.revature.schoolDatabase.screens.menus;
 
 import com.revature.schoolDatabase.models.*;
+import com.revature.schoolDatabase.screens.RegisterScreen;
 import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.ScreenRouter;
+import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
+import com.revature.schoolDatabase.util.exceptions.SchedulingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -167,13 +170,13 @@ public class UpdateMenu<T> extends Menu{
                         // Update users who were affected by changes
                         // First determine if core info changed
                         if (!flag.isEmpty()) {
-                            CourseHeader newSchedule = new CourseHeader(course.getDeptShort(), course.getCourseNo(), course.getSectionNo(), course.getMeetingTimes());
+                            Schedule newSchedule = new Schedule(course.getDeptShort(), course.getCourseNo(), course.getSectionNo(), course.getMeetingTimes());
                             try {
                                 List<Person> users = userService.retrieveUsers();
                                 for (Person user : users) {
                                     if (user.getSchedule() != null) {
-                                        List<CourseHeader> schedule = user.getSchedule();
-                                        for (CourseHeader sched : schedule) {
+                                        List<Schedule> schedule = user.getSchedule();
+                                        for (Schedule sched : schedule) {
                                             if ((sched.getCourseDept().equals(oldCourse.getDeptShort())) && (sched.getCourseNo() == oldCourse.getCourseNo()) && (sched.getSectionNo() == oldCourse.getSectionNo())) {
                                                 user.removeFromSchedule(sched);
                                                 user.addToSchedule(newSchedule);

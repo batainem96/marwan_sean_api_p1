@@ -3,7 +3,7 @@ package com.revature.schoolDatabase.screens.menus;
 import com.revature.schoolDatabase.models.Course;
 import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Person;
-import com.revature.schoolDatabase.models.CourseHeader;
+import com.revature.schoolDatabase.models.Schedule;
 import com.revature.schoolDatabase.util.CourseCreator;
 import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
@@ -102,10 +102,10 @@ public class FacultyMenu extends Menu {
                     boolean result = courseService.deleteCourse(userSelection[1], Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
                     // Update Schedules where applicable
                     for (Person user : userService.retrieveUsers()) {
-                        CourseHeader oldCourse = new CourseHeader(userSelection[1], Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
-                        for (CourseHeader courseHeader : user.getSchedule()) {
-                            if (courseHeader.equals(oldCourse)) {
-                                user = courseService.removeCourseFromSchedule(user, courseHeader);
+                        Schedule oldSched = new Schedule(userSelection[1], Integer.parseInt(userSelection[2]), Integer.parseInt(userSelection[3]));
+                        for (Schedule sched : user.getSchedule()) {
+                            if (sched.equals(oldSched)) {
+                                user = courseService.removeCourseFromSchedule(user, sched);
                                 userService.updateUser(user);
                                 break;
                             }
