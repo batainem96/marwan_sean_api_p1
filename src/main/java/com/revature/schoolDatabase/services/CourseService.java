@@ -1,6 +1,5 @@
 package com.revature.schoolDatabase.services;
 
-import com.mongodb.client.MongoClient;
 import com.revature.schoolDatabase.models.*;
 import com.revature.schoolDatabase.repositories.CourseRepository;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
@@ -11,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CourseService {
@@ -54,7 +52,7 @@ public class CourseService {
             int courseNo = course.getCourseNo();
             int sectionNo = course.getSectionNo();
             ArrayList<MeetingTime> meetingTimes = course.getMeetingTimes();
-            Schedule newSched = new Schedule(dept, courseNo, sectionNo, meetingTimes);
+            CourseHeader newSched = new CourseHeader(dept, courseNo, sectionNo, meetingTimes);
 
             if (!fac.getSchedule().contains(newSched))
                 fac.getSchedule().add(newSched);
@@ -150,7 +148,7 @@ public class CourseService {
         int newSectionNo = newCourse.getSectionNo();
         ArrayList<MeetingTime> newMeetingTimes = newCourse.getMeetingTimes();
 
-        Schedule courseData = new Schedule(newDeptShort, newCourseNo, newSectionNo, newMeetingTimes);
+        CourseHeader courseData = new CourseHeader(newDeptShort, newCourseNo, newSectionNo, newMeetingTimes);
         try {
             stud.getSchedule().add(courseData);
             newCourse.setOpenSeats(newCourse.getOpenSeats() - 1);
@@ -208,7 +206,7 @@ public class CourseService {
      * @param course
      * @return
      */
-    public Person addCourseToSchedule(Person user, Schedule course) {
+    public Person addCourseToSchedule(Person user, CourseHeader course) {
 //        List<Schedule> schedule = user.getSchedule();
 //        for (Schedule existingCourse : schedule) {
 //            if (existingCourse.equals(course)) {
@@ -230,7 +228,7 @@ public class CourseService {
      * @param course
      * @return
      */
-    public Person removeCourseFromSchedule(Person user, Schedule course) {
+    public Person removeCourseFromSchedule(Person user, CourseHeader course) {
 //        List<Schedule> schedule = user.getSchedule();
 //        for (Schedule existingCourse : schedule) {
 //            if (existingCourse.equals(course)) {

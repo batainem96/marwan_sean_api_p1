@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Schedule {
+public class CourseHeader {
     @JsonProperty("courseDept")
     private String courseDept;
     @JsonProperty("courseNo")
@@ -18,11 +18,11 @@ public class Schedule {
     private ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
 
     // Constructors
-    public Schedule() {
+    public CourseHeader() {
 
     }
 
-    public Schedule (String courseDept, int courseNo, int sectionNo) {
+    public CourseHeader(String courseDept, int courseNo, int sectionNo) {
         this.courseDept = courseDept;
         this.courseNo = courseNo;
         this.sectionNo = sectionNo;
@@ -37,7 +37,7 @@ public class Schedule {
 //        this.sectionNo = Integer.parseInt(splitID[1]);
 //    }
 
-    public Schedule(String courseDept, int courseNo, int sectionNo, ArrayList<MeetingTime> meetingTimes) {
+    public CourseHeader(String courseDept, int courseNo, int sectionNo, ArrayList<MeetingTime> meetingTimes) {
         this(courseDept, courseNo, sectionNo);
         this.meetingTimes = meetingTimes;
     }
@@ -79,8 +79,8 @@ public class Schedule {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Schedule schedule = (Schedule) o;
-        return courseNo == schedule.courseNo && sectionNo == schedule.sectionNo && courseDept.equals(schedule.courseDept);
+        CourseHeader courseHeader = (CourseHeader) o;
+        return courseNo == courseHeader.courseNo && sectionNo == courseHeader.sectionNo && courseDept.equals(courseHeader.courseDept);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class Schedule {
 
     @Override
     public String toString() {
-        return "Schedule{" +
+        return "CourseHeader{" +
                 "courseDept='" + courseDept + '\'' +
                 ", courseNo=" + courseNo +
                 ", sectionNo=" + sectionNo +
@@ -103,7 +103,7 @@ public class Schedule {
      * Displays meeting times of Course if available
      */
     public void displayMeetingTimes() {
-        if (meetingTimes.isEmpty())
+        if (meetingTimes == null || meetingTimes.isEmpty())
             return;
         else {
             System.out.println("Meeting Times:");
