@@ -1,4 +1,4 @@
-package com.revature.schoolDatabase.models;
+package com.revature.schoolDatabase.datasource.models;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,11 +1,10 @@
-package com.revature.schoolDatabase.util;
+package com.revature.schoolDatabase.datasource.util;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

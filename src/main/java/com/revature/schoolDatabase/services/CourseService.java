@@ -1,7 +1,7 @@
 package com.revature.schoolDatabase.services;
 
-import com.revature.schoolDatabase.models.*;
-import com.revature.schoolDatabase.repositories.CourseRepository;
+import com.revature.schoolDatabase.datasource.models.*;
+import com.revature.schoolDatabase.datasource.repositories.CourseRepository;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;

@@ -1,8 +1,8 @@
 package com.revature.schoolDatabase.services;
 
-import com.revature.schoolDatabase.models.Person;
-import com.revature.schoolDatabase.models.Student;
-import com.revature.schoolDatabase.repositories.UserRepository;
+import com.revature.schoolDatabase.datasource.models.Person;
+import com.revature.schoolDatabase.datasource.models.Student;
+import com.revature.schoolDatabase.datasource.repositories.UserRepository;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import org.apache.logging.log4j.LogManager;

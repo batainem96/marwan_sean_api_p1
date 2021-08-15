@@ -1,9 +1,8 @@
 package com.revature.schoolDatabase.util;
 
-import com.revature.schoolDatabase.models.Course;
-import com.revature.schoolDatabase.models.MeetingTime;
-import com.revature.schoolDatabase.models.PreReq;
-import com.revature.schoolDatabase.services.CourseService;
+import com.revature.schoolDatabase.datasource.models.Course;
+import com.revature.schoolDatabase.datasource.models.MeetingTime;
+import com.revature.schoolDatabase.datasource.models.PreReq;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

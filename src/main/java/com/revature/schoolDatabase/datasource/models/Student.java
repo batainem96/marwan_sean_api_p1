@@ -1,4 +1,4 @@
-package com.revature.schoolDatabase.models;
+package com.revature.schoolDatabase.datasource.models;
 
 public class Student extends Person {
     public Student() {

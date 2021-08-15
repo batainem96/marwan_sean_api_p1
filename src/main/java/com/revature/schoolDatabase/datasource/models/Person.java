@@ -1,11 +1,11 @@
-package com.revature.schoolDatabase.models;
+package com.revature.schoolDatabase.datasource.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.revature.schoolDatabase.util.ProgramManager.*;
+import static com.revature.schoolDatabase.util.ServerManager.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Person {

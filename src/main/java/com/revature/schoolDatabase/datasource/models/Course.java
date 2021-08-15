@@ -1,4 +1,4 @@
-package com.revature.schoolDatabase.models;
+package com.revature.schoolDatabase.datasource.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import static com.revature.schoolDatabase.models.DeptShorthand.deptToShort;
-import static com.revature.schoolDatabase.util.ProgramManager.*;
+import static com.revature.schoolDatabase.datasource.models.DeptShorthand.deptToShort;
+import static com.revature.schoolDatabase.util.ServerManager.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Course {

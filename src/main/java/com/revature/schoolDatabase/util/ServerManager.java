@@ -1,15 +1,12 @@
 package com.revature.schoolDatabase.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.schoolDatabase.repositories.CourseRepository;
-import com.revature.schoolDatabase.repositories.UserRepository;
+import com.revature.schoolDatabase.datasource.repositories.CourseRepository;
+import com.revature.schoolDatabase.datasource.repositories.UserRepository;
 import com.revature.schoolDatabase.services.CourseService;
 import com.revature.schoolDatabase.services.UserService;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-public class ProgramManager {
+public class ServerManager {
 
     // Text colors
     public static final String ANSI_RESET = "\u001B[0m";
@@ -20,7 +17,7 @@ public class ProgramManager {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_BRIGHT_GREEN = "\u001B[92m";
 
-    public ProgramManager() {
+    public ServerManager() {
 
         // Through Dependency Injection, we will use these variables throughout the application
         UserRepository userRepository = new UserRepository(new ObjectMapper());

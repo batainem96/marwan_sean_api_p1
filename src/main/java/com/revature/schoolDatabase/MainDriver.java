@@ -1,12 +1,12 @@
 package com.revature.schoolDatabase;
 
-import com.revature.schoolDatabase.util.ProgramManager;
+import com.revature.schoolDatabase.util.ServerManager;
 
 public class MainDriver {
 
     public static void main(String[] args) {
 
-        ProgramManager app = new ProgramManager();
+        ServerManager app = new ServerManager();
         app.start();
 
     }
