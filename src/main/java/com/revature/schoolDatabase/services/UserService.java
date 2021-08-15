@@ -1,13 +1,8 @@
 package com.revature.schoolDatabase.services;
 
-import com.mongodb.client.result.DeleteResult;
-import com.revature.schoolDatabase.models.Course;
-import com.revature.schoolDatabase.models.Faculty;
 import com.revature.schoolDatabase.models.Person;
 import com.revature.schoolDatabase.models.Student;
-//import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.repositories.UserRepository;
-import com.revature.schoolDatabase.screens.RegisterScreen;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import org.apache.logging.log4j.LogManager;

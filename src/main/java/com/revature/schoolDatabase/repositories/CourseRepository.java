@@ -18,7 +18,7 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
-public class CourseRepository implements CrudRepository<Course>{
+public class CourseRepository {
     // Variables
     private final MongoCollection<Document> courseCollection;
     private final ObjectMapper mapper;
@@ -187,7 +187,6 @@ public class CourseRepository implements CrudRepository<Course>{
      * @param id = Unique Object ID given by the Mongo Database
      */
 
-    @Override
     public Course findById(String id) {
         try {
             Document queryDoc = new Document("_id", new ObjectId(id));
@@ -207,7 +206,6 @@ public class CourseRepository implements CrudRepository<Course>{
         }
     }
 
-    @Override
     public Course save(Course newCourse) {
         try {
             String courseJson = mapper.writeValueAsString(newCourse);
@@ -223,7 +221,6 @@ public class CourseRepository implements CrudRepository<Course>{
         }
     }
 
-    @Override
     public boolean update(Course updatedCourse) {
         try {
             // Convert Course to BasicDBObject
@@ -243,7 +240,6 @@ public class CourseRepository implements CrudRepository<Course>{
         return false;
     }
 
-    @Override
     public boolean deleteById(String id) {
         try {
             Document queryDoc = new Document("_id", new ObjectId(id));

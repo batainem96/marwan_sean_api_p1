@@ -25,7 +25,7 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.eq;
 
 // TODO Handle exceptions more extensively
-public class UserRepository implements CrudRepository<Person> {
+public class UserRepository {
     // Variables
     private final MongoCollection<Document> usersCollection;
     private final ObjectMapper mapper;
@@ -180,11 +180,8 @@ public class UserRepository implements CrudRepository<Person> {
     }
 
     /**
-     * Overridden User CRUD operations
-     *
      *  id = Unique Object ID given by the Mongo Database
      */
-    @Override
     public Person save(Person newPerson) {
         try {
             // Convert Person to BasicDBObject
@@ -202,7 +199,6 @@ public class UserRepository implements CrudRepository<Person> {
         }
     }
 
-    @Override
     public Person findById(String id) {
         try {
             Document queryDoc = new Document("_id", new ObjectId(id));
@@ -239,7 +235,6 @@ public class UserRepository implements CrudRepository<Person> {
 
     }
 
-    @Override
     public boolean update(Person updatedPerson) {
         try {
             // Convert Person to BasicDBObject
@@ -257,7 +252,6 @@ public class UserRepository implements CrudRepository<Person> {
         return false;
     }
 
-    @Override
     public boolean deleteById(String id) {
         try {
             Document queryDoc = new Document("_id", new ObjectId(id));
