@@ -6,8 +6,6 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,7 +17,6 @@ public class MongoClientFactory {
 
     private MongoClient mongoClient;
     private static final MongoClientFactory mongoClientFactory = new MongoClientFactory();
-    private final Logger logger = LogManager.getLogger(MongoClientFactory.class);
 
     /**
      * Singleton Factory used to abstract a database connection, and to ensure only one instance is created.
@@ -46,10 +43,8 @@ public class MongoClientFactory {
             this.mongoClient = MongoClients.create(settings);
 
         } catch (FileNotFoundException fnfe) {
-            logger.error(fnfe.getMessage());
             throw new DataSourceException("Unable to load database properties file.", fnfe);
         } catch(Exception e){
-            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }

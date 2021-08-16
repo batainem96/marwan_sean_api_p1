@@ -14,8 +14,6 @@ import com.revature.schoolDatabase.datasource.models.Person;
 import com.revature.schoolDatabase.datasource.models.Student;
 import com.revature.schoolDatabase.datasource.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -29,7 +27,6 @@ public class UserRepository {
     // Variables
     private final MongoCollection<Document> usersCollection;
     private final ObjectMapper mapper;
-    private final Logger logger = LogManager.getLogger(UserRepository.class);
 
     // Constructor
     public UserRepository(ObjectMapper mapper) {
@@ -62,10 +59,8 @@ public class UserRepository {
             return users;
 
         } catch (JsonMappingException jme) {
-            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -103,10 +98,8 @@ public class UserRepository {
             return authUser;
 
         } catch (JsonMappingException jme) {
-            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
 
@@ -146,10 +139,8 @@ public class UserRepository {
             return authUser;
 
         } catch (JsonMappingException jme) {
-            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
 
@@ -174,7 +165,6 @@ public class UserRepository {
             return true;
 
         } catch (Exception e) {
-            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -194,7 +184,6 @@ public class UserRepository {
             return newPerson;
 
         } catch (Exception e) {
-            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
@@ -226,10 +215,8 @@ public class UserRepository {
             return authUser;
 
         } catch (JsonMappingException jme) {
-            logger.error(jme.getMessage());
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
         } catch (Exception e) {
-            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
 
@@ -260,7 +247,6 @@ public class UserRepository {
             DeleteResult result = usersCollection.deleteOne(queryDoc);
             return result.wasAcknowledged();
         } catch (Exception e) {
-            logger.error(e.getMessage());
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }

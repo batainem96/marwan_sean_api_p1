@@ -3,14 +3,11 @@ package com.revature.schoolDatabase.datasource.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.revature.schoolDatabase.services.CourseService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
 import static com.revature.schoolDatabase.datasource.models.DeptShorthand.deptToShort;
-import static com.revature.schoolDatabase.util.ServerManager.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Course {
@@ -31,7 +28,7 @@ public class Course {
     private ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
     private String description;
 
-    private final Logger logger = LogManager.getLogger(CourseService.class);
+//    private final Logger logger = LogManager.getLogger(CourseService.class);
 
     // Constructors
     public Course() {}
@@ -196,7 +193,7 @@ public class Course {
      */
     public void displayCourse() {
         try {
-            System.out.println(ANSI_CYAN + this.title + ANSI_RESET);
+            System.out.println(this.title);
             System.out.println(this.deptShort + " " + this.courseNo + "-" + this.sectionNo);
             for (Field field : this.getClass().getDeclaredFields()) {
                 if (field.getName().equals("id") ||
@@ -223,11 +220,11 @@ public class Course {
      */
     public void displayShortCourse() {
         try {
-            System.out.println(ANSI_CYAN + this.title + ANSI_RESET);
+            System.out.println(this.title);
             System.out.println(this.deptShort + " " + this.courseNo + "-" + this.sectionNo);
             System.out.println();
         } catch (Exception e) {
-            logger.error(e.getMessage());
+//            logger.error(e.getMessage());
         }
     }
 

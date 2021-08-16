@@ -6,8 +6,7 @@ import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.util.exceptions.SchedulingException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 public class CourseService {
     // Variables
     private final CourseRepository courseRepo;
-    private final Logger logger = LogManager.getLogger(CourseService.class);
 
     public CourseService(CourseRepository courseRepo) {
         this.courseRepo = courseRepo;
