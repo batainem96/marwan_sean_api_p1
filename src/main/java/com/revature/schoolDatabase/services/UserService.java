@@ -1,17 +1,13 @@
 package com.revature.schoolDatabase.services;
 
-import com.mongodb.client.result.DeleteResult;
-import com.revature.schoolDatabase.models.Course;
-import com.revature.schoolDatabase.models.Faculty;
-import com.revature.schoolDatabase.models.Person;
-import com.revature.schoolDatabase.models.Student;
-//import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
-import com.revature.schoolDatabase.repositories.UserRepository;
-import com.revature.schoolDatabase.screens.RegisterScreen;
+import com.revature.schoolDatabase.datasource.models.Person;
+import com.revature.schoolDatabase.datasource.models.Student;
+import com.revature.schoolDatabase.datasource.repositories.UserRepository;
+import com.revature.schoolDatabase.util.exceptions.AuthenticationException;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.revature.schoolDatabase.web.dtos.Principal;
+
 
 import java.util.List;
 
@@ -23,7 +19,6 @@ public class UserService {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
-    private final Logger logger = LogManager.getLogger(UserService.class);
 
     public UserService(UserRepository userRepo) {
         this.userRepo = userRepo;
@@ -52,12 +47,10 @@ public class UserService {
     public Person register(Person newUser) {
 
         if (!isUserValid(newUser)) {
-            logger.error("Invalid user data provided!");
             throw new InvalidRequestException("Invalid user data provided!");
         }
 
         if (userRepo.findUserByCredentials(newUser.getUsername()) != null) {
-            logger.error("Provided username is already taken!");
             throw new ResourcePersistenceException("Provided username is already taken!");
         }
 
@@ -74,11 +67,18 @@ public class UserService {
      * @param username
      * @param password
      */
-    public Person login(String username, String password) {
+    public Principal login(String username, String password) {
         if (username == null || username.trim().equals("") || password == null || password.trim().equals("")) {
             throw new InvalidRequestException("Invalid user credentials provided!");
         }
-        return userRepo.findUserByCredentials(username, password);
+
+        Person authUser = userRepo.findUserByCredentials(username, password);
+
+        if (authUser == null) {
+            throw new AuthenticationException("Invalid credentials provided!");
+        }
+
+        return new Principal(authUser);
     }
 
     /**
@@ -106,7 +106,6 @@ public class UserService {
     public void updateUser(Person user) {
         boolean result = userRepo.update(user);
         if (!result) {
-            logger.error("Failed to update user");
             throw new ResourcePersistenceException("Failed to update user");
         }
     }
@@ -117,7 +116,6 @@ public class UserService {
     public void deleteUser(Person user) {
         boolean result = userRepo.deleteById(user.getId());
         if (!result) {
-            logger.error("Failed to delete user");
             throw new ResourcePersistenceException("Failed to delete user");
         }
     }
