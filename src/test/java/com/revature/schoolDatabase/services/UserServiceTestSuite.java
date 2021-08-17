@@ -1,9 +1,10 @@
 package com.revature.schoolDatabase.services;
 
-import com.revature.schoolDatabase.models.Faculty;
-import com.revature.schoolDatabase.models.Person;
-import com.revature.schoolDatabase.models.Student;
-import com.revature.schoolDatabase.repositories.UserRepository;
+import com.revature.schoolDatabase.datasource.models.Faculty;
+import com.revature.schoolDatabase.datasource.models.Person;
+import com.revature.schoolDatabase.datasource.models.Student;
+import com.revature.schoolDatabase.datasource.repositories.UserRepository;
+import com.revature.schoolDatabase.web.dtos.Principal;
 import org.junit.*;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
@@ -154,15 +155,15 @@ public class UserServiceTestSuite {
         // Arrange
         String newUsername = "blankblank";
         String newPassword = "password";
-        Person expectedResult1 = null;
+        Principal expectedResult1 = null;
 
         String existingUsername = "sdunn";
         String wrongPassword = "wrongpassword";
-        Person expectedResult2 = null;
+        Principal expectedResult2 = null;
 
         // Act
-        Person actualResult1 = sut.login(newUsername, newPassword);
-        Person actualResult2 = sut.login(existingUsername, wrongPassword);
+        Principal actualResult1 = sut.login(newUsername, newPassword);
+        Principal actualResult2 = sut.login(existingUsername, wrongPassword);
 
         // Assert
         Assert.assertEquals("User not found in database.", expectedResult1, actualResult1);

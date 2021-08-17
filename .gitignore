@@ -26,8 +26,5 @@ hs_err_pid*
 .idea/
 *.iml
 
-# Build folder
-target/
-
 # Properties files
 *.properties
