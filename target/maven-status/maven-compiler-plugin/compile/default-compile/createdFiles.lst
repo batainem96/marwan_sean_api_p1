@@ -1,0 +1,6 @@
+com/revature/schoolDatabase/web/dtos/Credentials.class
+com/revature/schoolDatabase/web/servlets/AuthServlet.class
+com/revature/schoolDatabase/web/servlets/TestServlet.class
+com/revature/schoolDatabase/web/dtos/ErrorResponse.class
+com/revature/schoolDatabase/web/util/ContextLoaderListener.class
+com/revature/schoolDatabase/web/dtos/Principal.class
