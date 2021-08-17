@@ -24,7 +24,7 @@ public class ContextLoaderListener implements ServletContextListener {
 
         System.out.println("marwan-sean_api_p1 Context Initialized.");
 
-//        MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
+        MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
 //        System.out.println("DB Connection Established.");
 //        PasswordUtils passwordUtils = new PasswordUtils();
         ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
@@ -47,6 +47,7 @@ public class ContextLoaderListener implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         System.out.println("marwan-sean_api_p1 Context Destroyed.");
+        System.out.println("Goodbye, cruel world!!!");
         MongoClientFactory.getInstance().cleanUp();
     }
 
@@ -67,5 +68,4 @@ public class ContextLoaderListener implements ServletContextListener {
         }
 
     }
-
 }

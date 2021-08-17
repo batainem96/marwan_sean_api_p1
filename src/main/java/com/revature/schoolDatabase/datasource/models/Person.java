@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static com.revature.schoolDatabase.util.ServerManager.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Person {
@@ -110,7 +109,7 @@ public abstract class Person {
 
     // Other Methods
     public void displayUser() {
-        System.out.println(ANSI_YELLOW + "\tUSER: " + this.firstName + " " + this.lastName + " (" + this.getUserType() + ")" + ANSI_RESET);
+        System.out.println("\tUSER: " + this.firstName + " " + this.lastName + " (" + this.getUserType() + ")");
         System.out.println("\t\tUsername: " + this.username);
 //        this.displaySchedule();
     }
@@ -119,7 +118,7 @@ public abstract class Person {
         if (schedule.isEmpty())
             return;
         else {
-            System.out.println(ANSI_BRIGHT_BLUE + "Schedule:" + ANSI_RESET);
+            System.out.println("Schedule:");
             for (CourseHeader course : schedule) {
                 System.out.print("\t" + course.getCourseDept());
                 System.out.print(" " + course.getCourseNo());

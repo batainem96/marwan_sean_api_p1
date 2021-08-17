@@ -17,6 +17,7 @@ public class MongoClientFactory {
 
     private MongoClient mongoClient;
     private static final MongoClientFactory mongoClientFactory = new MongoClientFactory();
+//    private final Logger logger = LogManager.getLogger(MongoClientFactory.class);
 
     /**
      * Singleton Factory used to abstract a database connection, and to ensure only one instance is created.
@@ -25,7 +26,8 @@ public class MongoClientFactory {
         Properties appProperties = new Properties();
 
         try {
-            appProperties.load(new FileReader("src/main/resources/application.properties"));
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            appProperties.load(loader.getResourceAsStream("application.properties"));
 
             String ipAddress = appProperties.getProperty("ipAddress");
             int port = Integer.parseInt(appProperties.getProperty("port"));
@@ -45,7 +47,8 @@ public class MongoClientFactory {
         } catch (FileNotFoundException fnfe) {
             throw new DataSourceException("Unable to load database properties file.", fnfe);
         } catch(Exception e){
-            throw new DataSourceException("An unexpected exception occurred.", e);
+//            logger.error(fnfe.getMessage());
+            throw new DataSourceException("Unable to load database properties file.", e);
         }
     }
 

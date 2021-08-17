@@ -90,7 +90,7 @@ public class CourseHeader {
 
     @Override
     public String toString() {
-        return "CourseHeader{" +
+        return "Schedule{" +
                 "courseDept='" + courseDept + '\'' +
                 ", courseNo=" + courseNo +
                 ", sectionNo=" + sectionNo +
@@ -103,7 +103,7 @@ public class CourseHeader {
      * Displays meeting times of Course if available
      */
     public void displayMeetingTimes() {
-        if (meetingTimes == null || meetingTimes.isEmpty())
+        if (meetingTimes.isEmpty())
             return;
         else {
             System.out.println("Meeting Times:");
