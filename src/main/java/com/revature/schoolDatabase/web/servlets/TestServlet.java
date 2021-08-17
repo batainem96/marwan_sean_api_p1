@@ -16,6 +16,5 @@ public class TestServlet extends HttpServlet {
         resp.setContentType("text/html");
         String payload = "<h1>/test works!</h1>";
         respWriter.write(payload);
-
     }
 }
