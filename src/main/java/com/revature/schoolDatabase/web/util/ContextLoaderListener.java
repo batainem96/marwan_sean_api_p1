@@ -25,13 +25,14 @@ public class ContextLoaderListener implements ServletContextListener {
         System.out.println("marwan-sean_api_p1 Context Initialized.");
 
         MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-//        System.out.println("DB Connection Established.");
+        System.out.println("DB Connection Established!");
 //        PasswordUtils passwordUtils = new PasswordUtils();
         ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
-//        System.out.println("mapper Created");
+        System.out.println("mapper Created!");
 
-//        UserRepository userRepo = new UserRepository(mapper);
-//        UserService userService = new UserService(userRepo);
+        UserRepository userRepo = new UserRepository(mapper);
+        UserService userService = new UserService(userRepo);
+        System.out.println("Services Created!");
 
         TestServlet testServlet = new TestServlet();
 
@@ -39,7 +40,7 @@ public class ContextLoaderListener implements ServletContextListener {
         ServletContext servletContext = sce.getServletContext();
 //        servletContext.addServlet("AuthServlet", authServlet).addMapping("/auth");
         servletContext.addServlet("TestServlet", testServlet).addMapping("/test");
-        System.out.println("TestServlet Context Added.");
+        System.out.println("TestServlet Context Added!");
 
         configureLogback(servletContext);
     }
