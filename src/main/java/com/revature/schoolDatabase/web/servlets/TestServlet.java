@@ -14,7 +14,7 @@ public class TestServlet extends HttpServlet {
 
         PrintWriter respWriter = resp.getWriter();
         resp.setContentType("text/html");
-        String payload = "<h1>/test works!</h1>";
+        String payload = "<h1>/test works! Meow.</h1>";
         respWriter.write(payload);
     }
 }
