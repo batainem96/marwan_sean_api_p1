@@ -17,7 +17,7 @@ phases:
       - mkdir artifact
       - unzip target/marwan-sean_p1_api-1.0-SNAPSHOT.war -d artifact/
       - pwd
-      - ls -al
+      - ls -al artifact
 artifacts:
   files:
     - artifact/**/*
