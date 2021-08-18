@@ -14,11 +14,9 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - mkdir artifact
-      - unzip target/marwan-sean_p1_api-1.0-SNAPSHOT.war -d artifact/
       - pwd
-      - ls -al artifact
+      - ls -al
 artifacts:
   files:
-    - artifact/**/*
+    - target/marwan-sean_p1_api-1.0-SNAPSHOT.war
   name: artifact
