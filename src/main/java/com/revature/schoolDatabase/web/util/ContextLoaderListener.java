@@ -9,6 +9,7 @@ import com.revature.schoolDatabase.datasource.repositories.UserRepository;
 import com.revature.schoolDatabase.datasource.util.MongoClientFactory;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.web.servlets.AuthServlet;
+import com.revature.schoolDatabase.web.servlets.HealthCheckServlet;
 import com.revature.schoolDatabase.web.servlets.TestServlet;
 import org.slf4j.LoggerFactory;
 
@@ -28,17 +29,18 @@ public class ContextLoaderListener implements ServletContextListener {
         System.out.println("DB Connection Established!");
 //        PasswordUtils passwordUtils = new PasswordUtils();
         ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
-        System.out.println("mapper Created!");
 
         UserRepository userRepo = new UserRepository(mapper);
         UserService userService = new UserService(userRepo);
         System.out.println("Services Created!");
 
+        HealthCheckServlet healthCheckServlet = new HealthCheckServlet();
         TestServlet testServlet = new TestServlet();
 
 
         ServletContext servletContext = sce.getServletContext();
 //        servletContext.addServlet("AuthServlet", authServlet).addMapping("/auth");
+        servletContext.addServlet("HealthServlet", healthCheckServlet).addMapping("/health");
         servletContext.addServlet("TestServlet", testServlet).addMapping("/test");
         System.out.println("TestServlet Context Added!");
 
