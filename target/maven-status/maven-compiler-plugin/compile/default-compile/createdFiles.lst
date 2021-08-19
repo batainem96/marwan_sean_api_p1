@@ -2,7 +2,6 @@ com/revature/schoolDatabase/services/CourseService.class
 com/revature/schoolDatabase/datasource/models/Course.class
 com/revature/schoolDatabase/web/dtos/Credentials.class
 com/revature/schoolDatabase/util/exceptions/AuthenticationException.class
-com/revature/schoolDatabase/web/servlets/AuthServlet.class
 com/revature/schoolDatabase/web/servlets/TestServlet.class
 com/revature/schoolDatabase/web/servlets/HealthCheckServlet.class
 com/revature/schoolDatabase/util/exceptions/DataSourceException.class
@@ -22,5 +21,6 @@ com/revature/schoolDatabase/util/exceptions/InvalidRequestException.class
 com/revature/schoolDatabase/datasource/repositories/CourseRepository.class
 com/revature/schoolDatabase/util/exceptions/ResourcePersistenceException.class
 com/revature/schoolDatabase/datasource/models/CourseHeader.class
+com/revature/schoolDatabase/web/servlets/LoginServlet.class
 com/revature/schoolDatabase/datasource/models/MeetingTime.class
 com/revature/schoolDatabase/datasource/models/DeptShorthand$1.class
