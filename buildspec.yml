@@ -6,17 +6,19 @@ phases:
       java: corretto8
   pre_build:
     commands:
-      - echo Nothing to do in the pre_build phase...
+      - aws s3 cp s3://marwan-sean-school-api-files/application.properties ./src/main/resources/application.properties
   build:
     commands:
       - echo Build started on `date`
-      - mvn install
+      - mvn package
+      - mv target/*.war ./school.war
   post_build:
     commands:
       - echo Build completed on `date`
+      - unzip school.war -d artifact/
       - pwd
       - ls -al
 artifacts:
   files:
-    - target/marwan-sean_p1_api-1.0-SNAPSHOT.war
+    - WEB-INF/**/*
   name: artifact
