@@ -15,12 +15,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class AuthServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 
     private final UserService userService;
     private final ObjectMapper mapper;
 
-    public AuthServlet(UserService userService, ObjectMapper mapper) {
+    public LoginServlet(UserService userService, ObjectMapper mapper) {
         this.userService = userService;
         this.mapper = mapper;
     }
@@ -28,13 +28,13 @@ public class AuthServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        System.out.println(req.getAttribute("filtered"));
         PrintWriter respWriter = resp.getWriter();
         resp.setContentType("application/json");
 
         try {
 
             Credentials creds = mapper.readValue(req.getInputStream(), Credentials.class);
+            System.out.println(creds);
             Principal principal = userService.login(creds.getUsername(), creds.getPassword());
             String payload = mapper.writeValueAsString(principal);
             respWriter.write(payload);

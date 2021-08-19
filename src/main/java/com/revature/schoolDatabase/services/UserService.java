@@ -72,6 +72,8 @@ public class UserService {
             throw new InvalidRequestException("Invalid user credentials provided!");
         }
 
+        System.out.println("UserService.login(Username: " + username + " Password: " + password + ")");
+
         Person authUser = userRepo.findUserByCredentials(username, password);
 
         if (authUser == null) {
