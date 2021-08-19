@@ -16,6 +16,7 @@ phases:
     commands:
       - echo Build completed on `date`
       - unzip school.war -d artifact/
+      - mv artifact/WEB-INF WEB-INF
       - pwd
       - ls -al
 artifacts:
