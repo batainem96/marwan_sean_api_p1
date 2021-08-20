@@ -5,11 +5,15 @@ import com.revature.schoolDatabase.datasource.models.Student;
 import com.revature.schoolDatabase.datasource.repositories.UserRepository;
 import com.revature.schoolDatabase.util.exceptions.AuthenticationException;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
+import com.revature.schoolDatabase.util.exceptions.ResourceNotFoundException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
+import com.revature.schoolDatabase.web.dtos.PersonDTO;
 import com.revature.schoolDatabase.web.dtos.Principal;
 
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserService {
 
@@ -94,11 +98,36 @@ public class UserService {
     }
 
     /**
+     * Finds and retrieves user from database with given id.
+     * The user is converted into a DTO.
+     *
+     * @param id
+     * @return
+     */
+    public PersonDTO findUserById(String id) {
+
+        if (id == null || id.trim().isEmpty()) {
+            throw new InvalidRequestException("Invalid id provided");
+        }
+
+        Person user = userRepo.findById(id);
+
+        if (user == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        return new PersonDTO(user);
+
+    }
+
+    /**
      * Returns all users in database
      */
-    public List<Person> retrieveUsers() {
-        List<Person> users = userRepo.retrieveUsers();
-        return users;
+    public List<PersonDTO> retrieveUsers() {
+        return userRepo.retrieveUsers()
+                        .stream()
+                        .map(PersonDTO::new)
+                        .collect(Collectors.toList());
     }
 
 

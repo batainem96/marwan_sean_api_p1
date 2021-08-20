@@ -2,13 +2,14 @@ package com.revature.schoolDatabase.web.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.revature.schoolDatabase.datasource.models.CourseHeader;
+import com.revature.schoolDatabase.datasource.models.Person;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class PersonDTO {
+public class PersonDTO {
     // Variables
     protected String id;
     protected String firstName;
@@ -22,17 +23,13 @@ public abstract class PersonDTO {
         super();
     }
 
-    public PersonDTO(String firstName, String lastName, String username, String userType) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.userType = userType;
-    }
-
-    // Overloaded constructor with id passed
-    public PersonDTO(String id, String firstName, String lastName, String username, String userType) {
-        this(firstName, lastName, username, userType);
-        this.id = id;
+    public PersonDTO(Person person) {
+        this.id = person.getId();
+        this.firstName = person.getFirstName();
+        this.lastName = person.getLastName();
+        this.username = person.getUsername();
+        this.userType = person.getUserType();
+        this.schedule = person.getSchedule();
     }
 
     // Getters and Setters
