@@ -4,15 +4,16 @@ com/revature/schoolDatabase/web/dtos/Credentials.class
 com/revature/schoolDatabase/util/exceptions/AuthenticationException.class
 com/revature/schoolDatabase/web/servlets/TestServlet.class
 com/revature/schoolDatabase/web/servlets/HealthCheckServlet.class
+com/revature/schoolDatabase/web/dtos/CourseHeader.class
 com/revature/schoolDatabase/util/exceptions/DataSourceException.class
 com/revature/schoolDatabase/datasource/models/PreReq.class
 com/revature/schoolDatabase/datasource/models/Faculty.class
+com/revature/schoolDatabase/web/servlets/AddCourseServlet.class
 com/revature/schoolDatabase/datasource/util/MongoClientFactory.class
 com/revature/schoolDatabase/datasource/models/DeptShorthand.class
 com/revature/schoolDatabase/web/dtos/ErrorResponse.class
 com/revature/schoolDatabase/util/exceptions/SchedulingException.class
 com/revature/schoolDatabase/datasource/repositories/UserRepository.class
-com/revature/schoolDatabase/datasource/models/Person.class
 com/revature/schoolDatabase/datasource/models/Student.class
 com/revature/schoolDatabase/web/util/ContextLoaderListener.class
 com/revature/schoolDatabase/web/dtos/Principal.class
@@ -20,7 +21,7 @@ com/revature/schoolDatabase/services/UserService.class
 com/revature/schoolDatabase/util/exceptions/InvalidRequestException.class
 com/revature/schoolDatabase/datasource/repositories/CourseRepository.class
 com/revature/schoolDatabase/util/exceptions/ResourcePersistenceException.class
-com/revature/schoolDatabase/datasource/models/CourseHeader.class
+com/revature/schoolDatabase/datasource/models/User.class
 com/revature/schoolDatabase/web/servlets/LoginServlet.class
 com/revature/schoolDatabase/datasource/models/MeetingTime.class
 com/revature/schoolDatabase/datasource/models/DeptShorthand$1.class
