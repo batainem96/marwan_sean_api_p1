@@ -17,6 +17,9 @@ import java.io.PrintWriter;
 
 /**
  * The LoginServlet HttpServlet class processes login requests from the web application.
+ *
+ * Date: 19 August 2021
+ * Last Modified: 19 August 2021
  */
 public class LoginServlet extends HttpServlet {
 
