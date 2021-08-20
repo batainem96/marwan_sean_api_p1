@@ -8,9 +8,9 @@ import com.mongodb.client.MongoClient;
 import com.revature.schoolDatabase.datasource.repositories.UserRepository;
 import com.revature.schoolDatabase.datasource.util.MongoClientFactory;
 import com.revature.schoolDatabase.services.UserService;
-import com.revature.schoolDatabase.web.servlets.AuthServlet;
 import com.revature.schoolDatabase.web.servlets.HealthCheckServlet;
 import com.revature.schoolDatabase.web.servlets.RegisterServlet;
+import com.revature.schoolDatabase.web.servlets.LoginServlet;
 import com.revature.schoolDatabase.web.servlets.TestServlet;
 import org.slf4j.LoggerFactory;
 
@@ -35,13 +35,14 @@ public class ContextLoaderListener implements ServletContextListener {
         UserService userService = new UserService(userRepo);
         System.out.println("Services Created!");
 
+        LoginServlet loginServlet = new LoginServlet(userService, mapper);
         HealthCheckServlet healthCheckServlet = new HealthCheckServlet();
         TestServlet testServlet = new TestServlet();
         RegisterServlet registerServlet = new RegisterServlet(userService, mapper);
 
 
         ServletContext servletContext = sce.getServletContext();
-//        servletContext.addServlet("AuthServlet", authServlet).addMapping("/auth");
+        servletContext.addServlet("LoginServlet", loginServlet).addMapping("/login");
         servletContext.addServlet("HealthServlet", healthCheckServlet).addMapping("/health");
         servletContext.addServlet("TestServlet", testServlet).addMapping("/test");
         servletContext.addServlet("RegisterServlet", registerServlet).addMapping("/register");
