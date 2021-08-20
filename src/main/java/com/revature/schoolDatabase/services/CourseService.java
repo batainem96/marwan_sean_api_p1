@@ -99,7 +99,7 @@ public class CourseService {
      *                  -- 'dept' = courses in a given Department TODO
      *                  -- 'short' = display only pertinent Course information TODO
      */
-    public void showCourses(Person user, String flag) {
+    public void showCourses(User user, String flag) {
         if (flag.equals("instructor")) {
             List<Course> courseList = courseRepo.retrieveInstructorCourses(user.getFirstName(), user.getLastName());
             if (courseList == null)
@@ -132,7 +132,7 @@ public class CourseService {
      * @param stud
      * @param dept, courseNo, sectionNo
      */
-    public Person addCourse(Student stud, String dept, int courseNo, int sectionNo) {
+    public User addCourse(Student stud, String dept, int courseNo, int sectionNo) {
 
         // Find course in database given courseID
         Course newCourse = courseRepo.findByCredentials(dept, courseNo, sectionNo);
@@ -204,7 +204,7 @@ public class CourseService {
      * @param course
      * @return
      */
-    public Person addCourseToSchedule(Person user, CourseHeader course) {
+    public User addCourseToSchedule(User user, CourseHeader course) {
 //        List<Schedule> schedule = user.getSchedule();
 //        for (Schedule existingCourse : schedule) {
 //            if (existingCourse.equals(course)) {
@@ -226,7 +226,7 @@ public class CourseService {
      * @param course
      * @return
      */
-    public Person removeCourseFromSchedule(Person user, CourseHeader course) {
+    public User removeCourseFromSchedule(User user, CourseHeader course) {
 //        List<Schedule> schedule = user.getSchedule();
 //        for (Schedule existingCourse : schedule) {
 //            if (existingCourse.equals(course)) {

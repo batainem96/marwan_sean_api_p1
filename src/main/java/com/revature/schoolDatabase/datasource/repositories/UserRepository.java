@@ -10,7 +10,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.revature.schoolDatabase.datasource.models.Faculty;
-import com.revature.schoolDatabase.datasource.models.Person;
+import com.revature.schoolDatabase.datasource.models.User;
 import com.revature.schoolDatabase.datasource.models.Student;
 import com.revature.schoolDatabase.datasource.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
@@ -40,14 +40,14 @@ public class UserRepository {
     /**
      * Find all users currently stored in database
      */
-    public List<Person> retrieveUsers() {
-        List<Person> users = new ArrayList<>();
+    public List<User> retrieveUsers() {
+        List<User> users = new ArrayList<>();
         try {
             // Store all documents into a findIterable object
             MongoCursor<Document> cursor = usersCollection.find().iterator();
             while (cursor.hasNext()) {
                 Document curUser = cursor.next();
-                Person newUser;
+                User newUser;
                 if (curUser.get("userType").toString().equals("faculty") || curUser.get("userType").toString().equals("pendingFaculty"))
                     newUser = mapper.readValue((curUser).toJson(), Faculty.class);
                 else newUser = mapper.readValue((curUser).toJson(), Student.class);
@@ -71,7 +71,7 @@ public class UserRepository {
      * @param username
      * @return
      */
-    public Person findUserByCredentials(String username) {
+    public User findUserByCredentials(String username) {
         try {
             Document queryDoc = new Document("username", username);
             Document authUserDoc = usersCollection.find(queryDoc).first();
@@ -79,7 +79,7 @@ public class UserRepository {
             if (authUserDoc == null)
                 return null;
 
-            Person authUser;
+            User authUser;
             // Retrieves the value of the userType field in the database
             String userType = authUserDoc.get("userType").toString();
             switch (userType) {
@@ -112,7 +112,7 @@ public class UserRepository {
      * @param password
      * @return
      */
-    public Person findUserByCredentials(String username, String password) {
+    public User findUserByCredentials(String username, String password) {
         try {
             Document queryDoc = new Document("username", username).append("password", password);
             Document authUserDoc = usersCollection.find(queryDoc).first();
@@ -120,7 +120,7 @@ public class UserRepository {
             if (authUserDoc == null)
                 return null;
 
-            Person authUser;
+            User authUser;
             // Retrieves the value of the userType field in the database
             String userType = authUserDoc.get("userType").toString();
             switch (userType) {
@@ -172,23 +172,23 @@ public class UserRepository {
     /**
      *  id = Unique Object ID given by the Mongo Database
      */
-    public Person save(Person newPerson) {
+    public User save(User newUser) {
         try {
             // Convert Person to BasicDBObject
-            String userJson = mapper.writeValueAsString(newPerson);
+            String userJson = mapper.writeValueAsString(newUser);
             Document userDoc = Document.parse(userJson);
 
             usersCollection.insertOne(userDoc);
-            newPerson.setId(userDoc.get("_id").toString());
+            newUser.setId(userDoc.get("_id").toString());
 
-            return newPerson;
+            return newUser;
 
         } catch (Exception e) {
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
     }
 
-    public Person findById(String id) {
+    public User findById(String id) {
         try {
             Document queryDoc = new Document("_id", new ObjectId(id));
             Document authUserDoc = usersCollection.find(queryDoc).first();
@@ -196,7 +196,7 @@ public class UserRepository {
             if (authUserDoc == null)
                 return null;
 
-            Person authUser;
+            User authUser;
             // Retrieves the value of the userType field in the database
             String userType = authUserDoc.get("userType").toString();
             switch (userType) {
@@ -222,12 +222,12 @@ public class UserRepository {
 
     }
 
-    public boolean update(Person updatedPerson) {
+    public boolean update(User updatedUser) {
         try {
             // Convert Person to BasicDBObject
-            String userJson = mapper.writeValueAsString(updatedPerson);
+            String userJson = mapper.writeValueAsString(updatedUser);
             Document userDoc = Document.parse(userJson);
-            UpdateResult result = usersCollection.replaceOne(eq(("_id"), new ObjectId(updatedPerson.getId())), userDoc);
+            UpdateResult result = usersCollection.replaceOne(eq(("_id"), new ObjectId(updatedUser.getId())), userDoc);
 
             return result.wasAcknowledged();
 

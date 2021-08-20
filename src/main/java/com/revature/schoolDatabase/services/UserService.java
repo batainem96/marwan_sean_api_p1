@@ -1,7 +1,6 @@
 package com.revature.schoolDatabase.services;
 
-import com.revature.schoolDatabase.datasource.models.Person;
-import com.revature.schoolDatabase.datasource.models.Student;
+import com.revature.schoolDatabase.datasource.models.User;
 import com.revature.schoolDatabase.datasource.repositories.UserRepository;
 import com.revature.schoolDatabase.util.exceptions.AuthenticationException;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
@@ -45,7 +44,7 @@ public class UserService {
      * @return - Returns true if user fields passed validity checks; false if one or more user fields did not pass
      *  validity checks.
      */
-    public boolean isUserValid(Person user) {
+    public boolean isUserValid(User user) {
         if (user == null) return false;
         if (user.getFirstName() == null || user.getFirstName().trim().equals("")) return false;
         if (user.getLastName() == null || user.getLastName().trim().equals("")) return false;
@@ -60,7 +59,7 @@ public class UserService {
      * @param newUser - The User object containing user information that should be saved to the database.
      * @return - Returns the returned User object from save method if no exception was thrown.
      */
-    public Person register(Person newUser) {
+    public User register(User newUser) {
 
         if (!isUserValid(newUser)) {
             throw new InvalidRequestException("Invalid user data provided!");
@@ -92,7 +91,7 @@ public class UserService {
             throw new InvalidRequestException("Invalid user credentials provided!");
         }
 
-        Person authUser = userRepo.findUserByCredentials(username, password);
+        User authUser = userRepo.findUserByCredentials(username, password);
 
         if (authUser == null) {
             throw new AuthenticationException("Invalid credentials provided!");
@@ -105,7 +104,7 @@ public class UserService {
      * The retrieveUsers method receives a list of all users from the database access layer and returns it.
      * @return - Returns a list of all users in the database.
      */
-    public List<Person> retrieveUsers() {
+    public List<User> retrieveUsers() {
         return userRepo.retrieveUsers();
     }
 
@@ -116,7 +115,7 @@ public class UserService {
      * ResourcePersistenceException will be thrown (assuming an exception from the database access layer is not thrown
      * first).
      */
-    public void updateUser(Person user) {
+    public void updateUser(User user) {
         if (!userRepo.update(user)) {
             throw new ResourcePersistenceException("Failed to update user");
         }
@@ -128,7 +127,7 @@ public class UserService {
      * ResourcePersistenceException will be thrown (assuming an exception from the database access layer is not thrown
      * first).
      */
-    public void deleteUser(Person user) {
+    public void deleteUser(User user) {
         boolean result = userRepo.deleteById(user.getId());
         if (!result) {
             throw new ResourcePersistenceException("Failed to delete user");
