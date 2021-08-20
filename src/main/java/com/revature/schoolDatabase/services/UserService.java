@@ -4,14 +4,13 @@ import com.revature.schoolDatabase.datasource.models.User;
 import com.revature.schoolDatabase.datasource.repositories.UserRepository;
 import com.revature.schoolDatabase.util.exceptions.AuthenticationException;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
-import com.revature.schoolDatabase.util.exceptions.ResourceNotFoundException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.web.dtos.UserDTO;
+
 import com.revature.schoolDatabase.web.dtos.Principal;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The UserService class provides a service abstraction layer between the application layer and database connection
@@ -103,8 +102,6 @@ public class UserService {
         return new Principal(authUser);
     }
 
-
-
     /**
      * Finds and retrieves user from database with given id.
      * The user is converted into a DTO.
@@ -138,6 +135,7 @@ public class UserService {
                         .map(UserDTO::new)
                         .collect(Collectors.toList());
     }
+
 
     /**
      * The updateUser method accepts a User object from the application layer and passes it to the database access layer
