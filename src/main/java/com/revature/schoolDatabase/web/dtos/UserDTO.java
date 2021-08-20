@@ -2,14 +2,14 @@ package com.revature.schoolDatabase.web.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.revature.schoolDatabase.datasource.models.CourseHeader;
-import com.revature.schoolDatabase.datasource.models.Person;
+import com.revature.schoolDatabase.datasource.models.User;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PersonDTO {
+public class UserDTO {
     // Variables
     protected String id;
     protected String firstName;
@@ -19,17 +19,17 @@ public class PersonDTO {
     protected ArrayList<CourseHeader> schedule = new ArrayList<>();
 
     // Constructors
-    public PersonDTO() {
+    public UserDTO() {
         super();
     }
 
-    public PersonDTO(Person person) {
-        this.id = person.getId();
-        this.firstName = person.getFirstName();
-        this.lastName = person.getLastName();
-        this.username = person.getUsername();
-        this.userType = person.getUserType();
-        this.schedule = person.getSchedule();
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.username = user.getUsername();
+        this.userType = user.getUserType();
+        this.schedule = user.getSchedule();
     }
 
     // Getters and Setters
@@ -86,8 +86,8 @@ public class PersonDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PersonDTO personDTO = (PersonDTO) o;
-        return Objects.equals(id, personDTO.id) && Objects.equals(firstName, personDTO.firstName) && Objects.equals(lastName, personDTO.lastName) && Objects.equals(username, personDTO.username) && Objects.equals(userType, personDTO.userType) && Objects.equals(schedule, personDTO.schedule);
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(id, userDTO.id) && Objects.equals(firstName, userDTO.firstName) && Objects.equals(lastName, userDTO.lastName) && Objects.equals(username, userDTO.username) && Objects.equals(userType, userDTO.userType) && Objects.equals(schedule, userDTO.schedule);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class PersonDTO {
 
     @Override
     public String toString() {
-        return "PersonDTO{" +
+        return "UserDTO{" +
                 "id='" + id + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
