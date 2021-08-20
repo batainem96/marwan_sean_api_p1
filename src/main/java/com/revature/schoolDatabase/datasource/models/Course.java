@@ -2,7 +2,6 @@ package com.revature.schoolDatabase.datasource.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.revature.schoolDatabase.services.CourseService;
 
 import java.lang.reflect.Field;
 import java.util.*;

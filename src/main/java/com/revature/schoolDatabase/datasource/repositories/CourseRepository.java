@@ -189,7 +189,8 @@ public class CourseRepository {
             return newCourse;
 
         } catch (Exception e) {
-            throw new DataSourceException("An unexpected exception occurred.", e);
+            e.printStackTrace(); // --- debug
+            throw new DataSourceException("An unexpected exception occurred while trying to find course.", e);
         }
     }
 
@@ -203,7 +204,8 @@ public class CourseRepository {
             return newCourse;
 
         } catch (Exception e) {
-            throw new DataSourceException("An unexpected exception occurred.", e);
+            e.printStackTrace(); // --- debug
+            throw new DataSourceException("An unexpected exception occurred while saving new course.", e);
         }
     }
 

@@ -1,7 +1,8 @@
-package com.revature.schoolDatabase.datasource.models;
+package com.revature.schoolDatabase.web.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.revature.schoolDatabase.datasource.models.MeetingTime;
 
 import java.util.ArrayList;
 import java.util.Objects;
