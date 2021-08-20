@@ -35,6 +35,7 @@ public class LoginServlet extends HttpServlet {
      * for further use in the web application); OR may catch a propagated exception which either indicates faulty
      * credentials (AuthenticationException) and responds with a 401 error code, or some other exception indicating some
      * server issue(s) and responds with a 500 error code.
+     *
      * @param req - HttpServletRequest object.
      * @param resp - HttpServletResponse object.
      * @throws ServletException
