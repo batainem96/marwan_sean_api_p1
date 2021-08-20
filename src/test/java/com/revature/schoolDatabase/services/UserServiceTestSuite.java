@@ -170,20 +170,6 @@ public class UserServiceTestSuite {
         Assert.assertEquals("Username or password is incorrect.", expectedResult2, actualResult2);
     }
 
-    @Test
-    public void showUsers_returnsWithNoInput_ifNoUsers() {
-        // Arrange
-        List<User> users = new ArrayList<>();
-        // Return empty list
-        when(mockUserRepo.retrieveUsers()).thenReturn(users);
-
-        // Act
-        sut.showUsers();
-
-        // Assert
-        verify(mockUserRepo, times(1)).retrieveUsers();
-    }
-
     @Test(expected = ResourcePersistenceException.class)
     public void updateUser_throwsException_ifUpdateUnacknowledged() {
         // Arrange
