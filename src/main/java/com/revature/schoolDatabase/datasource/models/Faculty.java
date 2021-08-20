@@ -1,6 +1,6 @@
 package com.revature.schoolDatabase.datasource.models;
 
-public class Faculty extends Person {
+public class Faculty extends User {
     private String department;
 
     public Faculty() {

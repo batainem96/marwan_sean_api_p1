@@ -1,6 +1,6 @@
 package com.revature.schoolDatabase.web.dtos;
 
-import com.revature.schoolDatabase.datasource.models.Person;
+import com.revature.schoolDatabase.datasource.models.User;
 
 import java.util.Objects;
 
@@ -13,7 +13,7 @@ public class Principal {
         super();
     }
 
-    public Principal(Person subject) {
+    public Principal(User subject) {
         this.id = subject.getId();
         this.username = subject.getUsername();
     }
