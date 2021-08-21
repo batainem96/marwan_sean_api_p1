@@ -120,7 +120,7 @@ public class UserService {
         User user = userRepo.findById(id);
 
         if (user == null) {
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException("User with id=" + id + " not found!");
         }
 
         return new UserDTO(user);
