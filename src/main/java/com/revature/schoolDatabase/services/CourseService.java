@@ -11,6 +11,15 @@ import com.revature.schoolDatabase.util.exceptions.SchedulingException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The CourseService class provides a service abstraction layer between the application layer and database connection
+ * layer for queries on the courses collection. This service layer provides business logic validation and protects
+ * against malicious user input, and facilitates transactions between the application and database layers.
+ *
+ * Authors: Sean Dunn, Marwan Bataineh
+ * Date: 19 August 2021
+ * Last Modified: 19 August 2021
+ */
 public class CourseService {
     // Variables
     private final CourseRepository courseRepo;
@@ -20,23 +29,31 @@ public class CourseService {
     }
 
     /**
-     * Checks fields of given course to ensure the information given is safe to store in database.
+     * The isCourseValid method accepts a Course object and validates its fields. Method checks for: object validity
+     * (not null), title and department fields are not null nor empty, and course and section numbers are not invalid
+     * numbers (zero or negative are not valid).
      *
-     * @param course
-     * @return
+     * @param course - The Course object containing course information whose fields need to be validated.
+     * @return - Returns true if the course fields passed all validity checks; false if one or more validity checks did
+     *  not pass.
      */
     public boolean isCourseValid(Course course) {
         // Ensure course has title, department, courseNo, and sectionNo
         if (course == null) return false;
         if (course.getTitle() == null || course.getTitle().trim().equals("")) return false;
         if (course.getDepartment() == null || course.getDepartment().trim().equals("")) return false;
-        if (course.getCourseNo() == 0) return false;
-        if (course.getSectionNo() == 0) return false;
+        if (course.getCourseNo() < 1) return false;
+        if (course.getSectionNo() < 1) return false;
 
         // TODO Other info is not a priority
         return true;
     }
 
+    /**
+     *
+     * @param fac
+     * @return
+     */
     public Faculty generateSchedule(Faculty fac) {
         if (fac == null) return fac;
 

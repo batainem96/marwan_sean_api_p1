@@ -16,21 +16,16 @@ import java.util.stream.Collectors;
 
 /**
  * The UserService class provides a service abstraction layer between the application layer and database connection
- * layer. This service layer provides business logic validation and protects against malicious user input, and
- * facilitates transactions between the application and database layers.
+ * layer for queries on the users collection. This service layer provides business logic validation and protects against
+ * malicious user input, and facilitates transactions between the application and database layers.
  *
  * Authors: Sean Dunn, Marwan Bataineh
  * Date: 19 August 2021
- * Last Modified: 19 August 2021
+ * Last Modified: 21 August 2021
  */
 public class UserService {
 
     private final UserRepository userRepo;
-
-    /* TODO: Sean - do you want to keep these ANSI values for something else? */
-//    public static final String ANSI_RESET = "\u001B[0m";
-//    public static final String ANSI_PURPLE = "\u001B[35m";
-//    public static final String ANSI_CYAN = "\u001B[36m";
 
     public UserService(UserRepository userRepo) {
         this.userRepo = userRepo;
