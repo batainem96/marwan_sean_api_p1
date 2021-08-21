@@ -4,6 +4,7 @@ import com.revature.schoolDatabase.datasource.models.User;
 import com.revature.schoolDatabase.datasource.repositories.UserRepository;
 import com.revature.schoolDatabase.util.exceptions.AuthenticationException;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
+import com.revature.schoolDatabase.util.exceptions.ResourceNotFoundException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.web.dtos.UserDTO;
 
@@ -11,6 +12,7 @@ import com.revature.schoolDatabase.web.dtos.Principal;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The UserService class provides a service abstraction layer between the application layer and database connection

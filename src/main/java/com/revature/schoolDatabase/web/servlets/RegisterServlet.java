@@ -2,24 +2,27 @@ package com.revature.schoolDatabase.web.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.revature.schoolDatabase.datasource.models.Person;
 import com.revature.schoolDatabase.datasource.models.Student;
+import com.revature.schoolDatabase.datasource.models.User;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourceNotFoundException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.web.dtos.ErrorResponse;
 import com.revature.schoolDatabase.web.dtos.Principal;
+import com.revature.schoolDatabase.web.dtos.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class RegisterServlet extends HttpServlet {
 
@@ -52,23 +55,19 @@ public class RegisterServlet extends HttpServlet {
             ErrorResponse errResp = new ErrorResponse(401, msg);
             respWriter.write(mapper.writeValueAsString(errResp));
             return;
-        } else if (!requestingUser.getUsername().equals("wsingleton")) {
-            String msg = "Unauthorized attempt to access endpoint made by: " + requestingUser.getUsername();
-            logger.info(msg);
-            resp.setStatus(403);
-            ErrorResponse errResp = new ErrorResponse(403, msg);
-            respWriter.write(mapper.writeValueAsString(errResp));
-            return;
         }
 
         String userIDParam = req.getParameter("id");
 
         try {
-            // TODO
             if (userIDParam == null) {
                 // Return a list of all User DTOs
+                List<UserDTO> users = userService.retrieveUsers();
+                respWriter.write(mapper.writeValueAsString(users));
             } else {
                 // Return User DTO corresponding to userIDParam
+                UserDTO currentUser = userService.findUserById(userIDParam);
+                respWriter.write(mapper.writeValueAsString(currentUser));
             }
 
         } catch (ResourceNotFoundException rnfe) {
@@ -100,7 +99,10 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             // TODO Read input as either Student or Faculty
-            Person newUser = mapper.readValue(req.getInputStream(), Student.class);
+            ServletInputStream sis = req.getInputStream();
+            Student newUser = mapper.readValue(sis, Student.class);
+            respWriter.write(newUser.toString());
+//            Student newUser = new Student("username", "password", "username", "password");
             Principal principal = new Principal(userService.register(newUser));
             String payload = mapper.writeValueAsString(principal);
             respWriter.write(payload);
@@ -114,6 +116,10 @@ public class RegisterServlet extends HttpServlet {
             resp.setStatus(409);
             ErrorResponse errResp = new ErrorResponse(409, rpe.getMessage());
             respWriter.write(mapper.writeValueAsString(errResp));
+        } catch (IOException ie) {
+            ie.printStackTrace();
+            respWriter.write("Error reading input stream!");
+            resp.setStatus(501);
         } catch (Exception e) {
             e.printStackTrace();
             resp.setStatus(500);    // server's fault
