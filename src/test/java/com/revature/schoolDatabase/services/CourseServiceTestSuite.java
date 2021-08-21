@@ -5,6 +5,8 @@ import com.revature.schoolDatabase.datasource.repositories.CourseRepository;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.util.exceptions.SchedulingException;
+import com.revature.schoolDatabase.datasource.models.Course;
+import com.revature.schoolDatabase.web.dtos.CourseHeader;
 import org.junit.*;
 import org.mockito.Mockito;
 

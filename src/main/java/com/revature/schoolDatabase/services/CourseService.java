@@ -6,6 +6,8 @@ import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.util.exceptions.SchedulingException;
+import com.revature.schoolDatabase.datasource.models.Course;
+import com.revature.schoolDatabase.web.dtos.CourseHeader;
 
 
 import java.util.ArrayList;
@@ -83,11 +85,16 @@ public class CourseService {
      *
      * @param newCourse
      */
-    public void createCourse(Course newCourse) {
+    public Course createCourse(Course newCourse) {
+
+        if(!isCourseValid(newCourse)) {
+            throw new InvalidRequestException("One or more Course fields are not valid.");
+        }
+
         try {
-            courseRepo.save(newCourse);
+            return courseRepo.save(newCourse);
         } catch (DataSourceException dse) {
-            throw new ResourcePersistenceException("An error occurred while calling CourseRepository.save()");
+            throw new ResourcePersistenceException("An error occurred while calling CourseRepository.save().");
         }
 
     }
