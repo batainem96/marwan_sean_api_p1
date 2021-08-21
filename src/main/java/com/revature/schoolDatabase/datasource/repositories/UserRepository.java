@@ -32,7 +32,7 @@ public class UserRepository {
     public UserRepository(ObjectMapper mapper) {
         this.mapper = mapper;
         MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-        MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+        MongoDatabase schoolDatabase = mongoClient.getDatabase("p1");
         this.usersCollection = schoolDatabase.getCollection("users");
     }
 

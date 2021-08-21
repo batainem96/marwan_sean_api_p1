@@ -9,6 +9,7 @@ import com.revature.schoolDatabase.datasource.repositories.UserRepository;
 import com.revature.schoolDatabase.datasource.util.MongoClientFactory;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.web.servlets.HealthCheckServlet;
+import com.revature.schoolDatabase.web.servlets.RegisterServlet;
 import com.revature.schoolDatabase.web.servlets.LoginServlet;
 import com.revature.schoolDatabase.web.servlets.TestServlet;
 import org.slf4j.LoggerFactory;
@@ -37,12 +38,14 @@ public class ContextLoaderListener implements ServletContextListener {
         LoginServlet loginServlet = new LoginServlet(userService, mapper);
         HealthCheckServlet healthCheckServlet = new HealthCheckServlet();
         TestServlet testServlet = new TestServlet();
+        RegisterServlet registerServlet = new RegisterServlet(userService, mapper);
 
 
         ServletContext servletContext = sce.getServletContext();
         servletContext.addServlet("LoginServlet", loginServlet).addMapping("/login");
         servletContext.addServlet("HealthServlet", healthCheckServlet).addMapping("/health");
         servletContext.addServlet("TestServlet", testServlet).addMapping("/test");
+        servletContext.addServlet("RegisterServlet", registerServlet).addMapping("/register");
         System.out.println("TestServlet Context Added!");
 
         configureLogback(servletContext);

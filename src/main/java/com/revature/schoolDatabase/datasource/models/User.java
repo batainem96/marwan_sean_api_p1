@@ -103,6 +103,18 @@ public abstract class User {
         return Objects.hash(id, firstName, lastName, username, password);
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", userType='" + userType + '\'' +
+                ", schedule=" + schedule +
+                '}';
+    }
+
     public void addToSchedule(CourseHeader courseHeader) {
         this.schedule.add(courseHeader);
     }
