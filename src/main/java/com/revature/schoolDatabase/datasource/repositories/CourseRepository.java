@@ -25,7 +25,7 @@ public class CourseRepository {
     public CourseRepository(ObjectMapper mapper) {
         this.mapper = mapper;
         MongoClient mongoClient = MongoClientFactory.getInstance().getConnection();
-        MongoDatabase schoolDatabase = mongoClient.getDatabase("p0");
+        MongoDatabase schoolDatabase = mongoClient.getDatabase("p1");
         this.courseCollection = schoolDatabase.getCollection("courses");
     }
 

@@ -101,7 +101,7 @@ public class RegisterServlet extends HttpServlet {
             // TODO Read input as either Student or Faculty
             ServletInputStream sis = req.getInputStream();
             Student newUser = mapper.readValue(sis, Student.class);
-            respWriter.write(newUser.toString());
+//            respWriter.write(newUser.toString());
 //            Student newUser = new Student("username", "password", "username", "password");
             Principal principal = new Principal(userService.register(newUser));
             String payload = mapper.writeValueAsString(principal);
@@ -125,4 +125,6 @@ public class RegisterServlet extends HttpServlet {
             resp.setStatus(500);    // server's fault
         }
     }
+
 }
+
