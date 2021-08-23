@@ -15,40 +15,65 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class AuthServlet extends HttpServlet {
+/**
+ * The LoginServlet HttpServlet class processes login requests from the web application.
+ *
+ * Date: 19 August 2021
+ * Last Modified: 19 August 2021
+ */
+public class LoginServlet extends HttpServlet {
 
     private final UserService userService;
     private final ObjectMapper mapper;
 
-    public AuthServlet(UserService userService, ObjectMapper mapper) {
+    public LoginServlet(UserService userService, ObjectMapper mapper) {
         this.userService = userService;
         this.mapper = mapper;
     }
 
+    /**
+     * The doPost method accepts a POST request and forwards the message body contents, which are expected to be
+     * {username: "<username>", password: "<password>"}, to a service class as a java object (DTO) representing the
+     * inputted credentials. This method expects a "principal" java object to be returned (containing user information
+     * for further use in the web application); OR may catch a propagated exception which either indicates faulty
+     * credentials (AuthenticationException) and responds with a 401 error code, or some other exception indicating some
+     * server issue(s) and responds with a 500 error code.
+     *
+     * @param req - HttpServletRequest object.
+     * @param resp - HttpServletResponse object.
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        System.out.println(req.getAttribute("filtered"));
+        // Instantiate response writer object
         PrintWriter respWriter = resp.getWriter();
         resp.setContentType("application/json");
 
         try {
 
+            // Map request message body to a Credentials object
             Credentials creds = mapper.readValue(req.getInputStream(), Credentials.class);
+
+            // On success: instantiate a Principal object with user information from the database
             Principal principal = userService.login(creds.getUsername(), creds.getPassword());
+
+            // Send response: user information as JSON object
             String payload = mapper.writeValueAsString(principal);
             respWriter.write(payload);
 
+            // Establish a session with user
             HttpSession session = req.getSession();
             session.setAttribute("auth-user", principal);
 
         } catch (AuthenticationException ae) {
-            resp.setStatus(401); // server's fault
+            resp.setStatus(401); // Unauthorized client error status
             ErrorResponse errResp = new ErrorResponse(401, ae.getMessage());
             respWriter.write(mapper.writeValueAsString(errResp));
         }  catch (Exception e) {
-            e.printStackTrace();
-            resp.setStatus(500); // server's fault
+            e.printStackTrace(); // --- debug
+            resp.setStatus(500); // Internal server error status
             ErrorResponse errResp = new ErrorResponse(500, "The server experienced an issue, please try again later.");
             respWriter.write(mapper.writeValueAsString(errResp));
         }

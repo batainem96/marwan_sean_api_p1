@@ -6,11 +6,22 @@ import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.util.exceptions.SchedulingException;
+import com.revature.schoolDatabase.datasource.models.Course;
+import com.revature.schoolDatabase.web.dtos.CourseHeader;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The CourseService class provides a service abstraction layer between the application layer and database connection
+ * layer for queries on the courses collection. This service layer provides business logic validation and protects
+ * against malicious user input, and facilitates transactions between the application and database layers.
+ *
+ * Authors: Sean Dunn, Marwan Bataineh
+ * Date: 19 August 2021
+ * Last Modified: 19 August 2021
+ */
 public class CourseService {
     // Variables
     private final CourseRepository courseRepo;
@@ -20,23 +31,31 @@ public class CourseService {
     }
 
     /**
-     * Checks fields of given course to ensure the information given is safe to store in database.
+     * The isCourseValid method accepts a Course object and validates its fields. Method checks for: object validity
+     * (not null), title and department fields are not null nor empty, and course and section numbers are not invalid
+     * numbers (zero or negative are not valid).
      *
-     * @param course
-     * @return
+     * @param course - The Course object containing course information whose fields need to be validated.
+     * @return - Returns true if the course fields passed all validity checks; false if one or more validity checks did
+     *  not pass.
      */
     public boolean isCourseValid(Course course) {
         // Ensure course has title, department, courseNo, and sectionNo
         if (course == null) return false;
         if (course.getTitle() == null || course.getTitle().trim().equals("")) return false;
         if (course.getDepartment() == null || course.getDepartment().trim().equals("")) return false;
-        if (course.getCourseNo() == 0) return false;
-        if (course.getSectionNo() == 0) return false;
+        if (course.getCourseNo() < 1) return false;
+        if (course.getSectionNo() < 1) return false;
 
         // TODO Other info is not a priority
         return true;
     }
 
+    /**
+     *
+     * @param fac
+     * @return
+     */
     public Faculty generateSchedule(Faculty fac) {
         if (fac == null) return fac;
 
@@ -66,11 +85,16 @@ public class CourseService {
      *
      * @param newCourse
      */
-    public void createCourse(Course newCourse) {
+    public Course createCourse(Course newCourse) {
+
+        if(!isCourseValid(newCourse)) {
+            throw new InvalidRequestException("One or more Course fields are not valid.");
+        }
+
         try {
-            courseRepo.save(newCourse);
+            return courseRepo.save(newCourse);
         } catch (DataSourceException dse) {
-            throw new ResourcePersistenceException("An error occurred while calling CourseRepository.save()");
+            throw new ResourcePersistenceException("An error occurred while calling CourseRepository.save().");
         }
 
     }
@@ -99,7 +123,7 @@ public class CourseService {
      *                  -- 'dept' = courses in a given Department TODO
      *                  -- 'short' = display only pertinent Course information TODO
      */
-    public void showCourses(Person user, String flag) {
+    public void showCourses(User user, String flag) {
         if (flag.equals("instructor")) {
             List<Course> courseList = courseRepo.retrieveInstructorCourses(user.getFirstName(), user.getLastName());
             if (courseList == null)
@@ -132,7 +156,7 @@ public class CourseService {
      * @param stud
      * @param dept, courseNo, sectionNo
      */
-    public Person addCourse(Student stud, String dept, int courseNo, int sectionNo) {
+    public User addCourse(Student stud, String dept, int courseNo, int sectionNo) {
 
         // Find course in database given courseID
         Course newCourse = courseRepo.findByCredentials(dept, courseNo, sectionNo);
@@ -204,7 +228,7 @@ public class CourseService {
      * @param course
      * @return
      */
-    public Person addCourseToSchedule(Person user, CourseHeader course) {
+    public User addCourseToSchedule(User user, CourseHeader course) {
 //        List<Schedule> schedule = user.getSchedule();
 //        for (Schedule existingCourse : schedule) {
 //            if (existingCourse.equals(course)) {
@@ -226,7 +250,7 @@ public class CourseService {
      * @param course
      * @return
      */
-    public Person removeCourseFromSchedule(Person user, CourseHeader course) {
+    public User removeCourseFromSchedule(User user, CourseHeader course) {
 //        List<Schedule> schedule = user.getSchedule();
 //        for (Schedule existingCourse : schedule) {
 //            if (existingCourse.equals(course)) {

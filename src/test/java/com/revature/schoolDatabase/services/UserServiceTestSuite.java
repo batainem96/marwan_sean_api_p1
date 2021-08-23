@@ -1,7 +1,7 @@
 package com.revature.schoolDatabase.services;
 
 import com.revature.schoolDatabase.datasource.models.Faculty;
-import com.revature.schoolDatabase.datasource.models.Person;
+import com.revature.schoolDatabase.datasource.models.User;
 import com.revature.schoolDatabase.datasource.models.Student;
 import com.revature.schoolDatabase.datasource.repositories.UserRepository;
 import com.revature.schoolDatabase.web.dtos.Principal;
@@ -61,8 +61,8 @@ public class UserServiceTestSuite {
 
         // Arrange
         boolean expectedResult = true;
-        Person validStudent = new Student("valid", "valid", "valid", "valid");
-        Person validFaculty = new Faculty("valid", "valid", "valid", "valid");
+        User validStudent = new Student("valid", "valid", "valid", "valid");
+        User validFaculty = new Faculty("valid", "valid", "valid", "valid");
 
         // Act
         boolean actualResult1 = sut.isUserValid(validStudent);
@@ -77,13 +77,13 @@ public class UserServiceTestSuite {
     public void isUserValid_returnsFalse_givenUserWithNullOrEmptyFirstName() {
 
         // Arrange
-        Person invalidStudent1 = new Student(null, "valid", "valid", "valid");
-        Person invalidStudent2 = new Student("", "valid", "valid", "valid");
-        Person invalidStudent3 = new Student("        ", "valid", "valid", "valid");
+        User invalidStudent1 = new Student(null, "valid", "valid", "valid");
+        User invalidStudent2 = new Student("", "valid", "valid", "valid");
+        User invalidStudent3 = new Student("        ", "valid", "valid", "valid");
 
-        Person invalidFaculty1 = new Faculty(null, "valid", "valid", "valid");
-        Person invalidFaculty2 = new Faculty("", "valid", "valid", "valid");
-        Person invalidFaculty3 = new Faculty("        ", "valid", "valid", "valid");
+        User invalidFaculty1 = new Faculty(null, "valid", "valid", "valid");
+        User invalidFaculty2 = new Faculty("", "valid", "valid", "valid");
+        User invalidFaculty3 = new Faculty("        ", "valid", "valid", "valid");
 
         // Act
         boolean actualResult1 = sut.isUserValid(invalidStudent1);
@@ -107,12 +107,12 @@ public class UserServiceTestSuite {
     @Test
     public void register_returnsSuccessfully_whenGivenValidUser() {
         // Arrange
-        Person expectedResult = new Student("1", "valid", "valid", "valid", "valid");
-        Person validUser = new Student("valid", "valid", "valid", "valid");
+        User expectedResult = new Student("1", "valid", "valid", "valid", "valid");
+        User validUser = new Student("valid", "valid", "valid", "valid");
         when(mockUserRepo.save(any())).thenReturn(expectedResult);
 
         // Act
-        Person actualResult = sut.register(validUser);
+        User actualResult = sut.register(validUser);
 
         // Assert
         Assert.assertEquals(expectedResult, actualResult);
@@ -122,7 +122,7 @@ public class UserServiceTestSuite {
     @Test(expected = InvalidRequestException.class)
     public void register_throwsException_whenGivenInvalidUser() {
         // Arrange
-        Person invalidUser = new Student(null, "", "", "");
+        User invalidUser = new Student(null, "", "", "");
 
         // Act
         try {
@@ -136,8 +136,8 @@ public class UserServiceTestSuite {
     @Test(expected = ResourcePersistenceException.class)
     public void register_throwsException_whenGivenUserWithDuplicateUsername() {
         // Arrange
-        Person existingUser = new Student("original", "last", "duplicate", "original");
-        Person duplicate = new Student("first", "last", "duplicate", "password");
+        User existingUser = new Student("original", "last", "duplicate", "original");
+        User duplicate = new Student("first", "last", "duplicate", "password");
         when(mockUserRepo.findUserByCredentials(duplicate.getUsername())).thenReturn(existingUser);
 
         // Act
@@ -168,20 +168,6 @@ public class UserServiceTestSuite {
         // Assert
         Assert.assertEquals("User not found in database.", expectedResult1, actualResult1);
         Assert.assertEquals("Username or password is incorrect.", expectedResult2, actualResult2);
-    }
-
-    @Test
-    public void showUsers_returnsWithNoInput_ifNoUsers() {
-        // Arrange
-        List<Person> users = new ArrayList<>();
-        // Return empty list
-        when(mockUserRepo.retrieveUsers()).thenReturn(users);
-
-        // Act
-        sut.showUsers();
-
-        // Assert
-        verify(mockUserRepo, times(1)).retrieveUsers();
     }
 
     @Test(expected = ResourcePersistenceException.class)

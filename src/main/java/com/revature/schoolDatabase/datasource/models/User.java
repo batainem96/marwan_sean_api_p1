@@ -1,13 +1,14 @@
 package com.revature.schoolDatabase.datasource.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.revature.schoolDatabase.web.dtos.CourseHeader;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class Person {
+public abstract class User {
     // Variables
     protected String id;
     protected String firstName;
@@ -17,12 +18,11 @@ public abstract class Person {
     protected String userType;
     protected ArrayList<CourseHeader> schedule = new ArrayList<>();
 
-    // Constructors
-    public Person() {
+    public User() {
         super();
     }
 
-    public Person(String firstName, String lastName, String username, String password, String userType) {
+    public User(String firstName, String lastName, String username, String password, String userType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -30,13 +30,11 @@ public abstract class Person {
         this.userType = userType;
     }
 
-    // Overloaded constructor with id passed
-    public Person(String id, String firstName, String lastName, String username, String password, String userType) {
+    public User(String id, String firstName, String lastName, String username, String password, String userType) {
         this(firstName, lastName, username, password, userType);
         this.id = id;
     }
 
-    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -93,13 +91,12 @@ public abstract class Person {
         this.schedule = schedule;
     }
 
-    // Overridden methods
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return id == person.id && Objects.equals(firstName, person.firstName) && Objects.equals(lastName, person.lastName) && Objects.equals(username, person.username) && Objects.equals(password, person.password);
+        User user = (User) o;
+        return id == user.id && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(username, user.username) && Objects.equals(password, user.password);
     }
 
     @Override
@@ -107,28 +104,16 @@ public abstract class Person {
         return Objects.hash(id, firstName, lastName, username, password);
     }
 
-    // Other Methods
-    public void displayUser() {
-        System.out.println("\tUSER: " + this.firstName + " " + this.lastName + " (" + this.getUserType() + ")");
-        System.out.println("\t\tUsername: " + this.username);
-//        this.displaySchedule();
-    }
-
-    public void displaySchedule() {
-        if (schedule.isEmpty())
-            return;
-        else {
-            System.out.println("Schedule:");
-            for (CourseHeader course : schedule) {
-                System.out.print("\t" + course.getCourseDept());
-                System.out.print(" " + course.getCourseNo());
-                System.out.println("-" + course.getSectionNo());
-                if (course.getMeetingTimes() == null || course.getMeetingTimes().isEmpty())
-                    continue;
-                System.out.print("\t");
-                course.displayMeetingTimes();
-            }
-        }
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", userType='" + userType + '\'' +
+                ", schedule=" + schedule +
+                '}';
     }
 
     public void addToSchedule(CourseHeader courseHeader) {

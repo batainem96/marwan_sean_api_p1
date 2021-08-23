@@ -5,6 +5,8 @@ import com.revature.schoolDatabase.datasource.repositories.CourseRepository;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
 import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.util.exceptions.SchedulingException;
+import com.revature.schoolDatabase.datasource.models.Course;
+import com.revature.schoolDatabase.web.dtos.CourseHeader;
 import org.junit.*;
 import org.mockito.Mockito;
 
@@ -191,14 +193,14 @@ public class CourseServiceTestSuite {
     @Test
     public void removeCourseFromSchedule_worksAsImplied() {
         // Arrange
-        Person user = new Student("Test", "Test", "Test", "Test");
+        User user = new Student("Test", "Test", "Test", "Test");
         ArrayList<CourseHeader> newSched = new ArrayList<CourseHeader>();
         CourseHeader course = new CourseHeader("TEST", 101, 1);
         newSched.add(course);
         user.setSchedule(newSched);
 
         // Act
-        Person updatedUser = sut.removeCourseFromSchedule(user, course);
+        User updatedUser = sut.removeCourseFromSchedule(user, course);
 
         // Assert
 //        assertNotEquals(user, updatedUser); Person.equals does not compare Schedules
