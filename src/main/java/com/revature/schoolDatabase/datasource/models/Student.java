@@ -2,7 +2,7 @@ package com.revature.schoolDatabase.datasource.models;
 
 public class Student extends User {
     public Student() {
-        super();
+        super("student");
     }
 
     public Student(String firstName, String lastName, String email, String username, String password) {
