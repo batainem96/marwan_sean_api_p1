@@ -7,12 +7,12 @@ public class Faculty extends User {
         super();
     }
 
-    public Faculty(String firstName, String lastName, String username, String password) {
-        super(firstName, lastName, username, password, "faculty");
+    public Faculty(String firstName, String lastName, String email, String username, String password) {
+        super(firstName, lastName, email, username, password, "faculty");
     }
 
     // Overloaded constructor with id passed
-    public Faculty(String id, String firstName, String lastName, String username, String password) {
-        super(id, firstName, lastName, username, password, "faculty");
+    public Faculty(String id, String firstName, String lastName, String email, String username, String password) {
+        super(id, firstName, lastName, email, username, password, "faculty");
     }
 }
