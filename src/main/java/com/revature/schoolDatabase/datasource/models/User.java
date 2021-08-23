@@ -23,6 +23,10 @@ public abstract class User {
         super();
     }
 
+    public User(String userType) {
+        this.userType = userType;
+    }
+
     public User(String firstName, String lastName, String email, String username, String password, String userType) {
         this.firstName = firstName;
         this.lastName = lastName;
