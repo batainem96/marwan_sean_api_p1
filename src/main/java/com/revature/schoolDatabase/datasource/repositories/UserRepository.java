@@ -2,6 +2,7 @@ package com.revature.schoolDatabase.datasource.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.DuplicateKeyException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -14,6 +15,7 @@ import com.revature.schoolDatabase.datasource.models.User;
 import com.revature.schoolDatabase.datasource.models.Student;
 import com.revature.schoolDatabase.datasource.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
+import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -182,7 +184,9 @@ public class UserRepository {
             newUser.setId(userDoc.get("_id").toString());
 
             return newUser;
-
+        } catch (DuplicateKeyException dke) {
+            // TODO Discern which keys are invalid
+            throw new InvalidRequestException("User already exists!");
         } catch (Exception e) {
             throw new DataSourceException("An unexpected exception occurred.", e);
         }

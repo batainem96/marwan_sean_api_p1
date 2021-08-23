@@ -68,8 +68,13 @@ public class UserService {
             throw new ResourcePersistenceException("Provided username is already taken!");
         }
 
-        // Return user object from save method call (if it's null, something went wrong)
-        return userRepo.save(newUser);
+        // If user already exists, register will fail and return null
+        try {
+            newUser = userRepo.save(newUser);
+            return newUser;
+        } catch (InvalidRequestException ire) {
+            throw new InvalidRequestException("ERROR: User already exists in database!");
+        }
     }
 
     /**
