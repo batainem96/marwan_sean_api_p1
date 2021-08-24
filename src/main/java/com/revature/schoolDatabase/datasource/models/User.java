@@ -1,6 +1,7 @@
 package com.revature.schoolDatabase.datasource.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.revature.schoolDatabase.web.dtos.CourseHeader;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class User {
     // Variables
+    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert ID to database if non null
     protected String id;
     protected String firstName;
     protected String lastName;
