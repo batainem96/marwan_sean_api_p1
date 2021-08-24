@@ -9,12 +9,12 @@ import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.web.dtos.UserDTO;
 
 import com.revature.schoolDatabase.web.dtos.Principal;
-import com.revature.schoolDatabase.web.servlets.RegisterServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -37,21 +37,47 @@ public class UserService {
 
     /**
      * The isUserValid method accepts a User object and validates its fields. Method checks for: object validity (not
-     * null), first/last name validity (names are not null/empty), username validity (username is not null/empty), and
-     * password validity (password is not null/empty).
-     * TODO: Expand validity checking to include: first/last names do not contain numbers or special characters (i.e.
-     *  $, @, &, *, etc.), username/password does not contain illegal characters (protect against db code injection -
-     *  i.e. some query string [db.users.find()]!), email (currently no email validity checking/protection).
+     * null), first/last name validity (names are not null/empty, do not exceed 24 characters, do not contain illegal
+     * characters), username validity (username is not null/empty, is between 5-20 characters long, does not contain
+     * illegal characters, starts and ends with alphanumeric), and password validity (password is not null/empty).
+     * TODO: mostly complete, but there is the question of how to validate an encrypted password (see below)
      *
      * @param user - The User object containing user information that needs to be validated.
      * @return - Returns true if user fields passed validity checks; false if one or more user fields did not pass
      *  validity checks.
      */
     public boolean isUserValid(User user) {
+
+        /* Ensure User object exists */
         if (user == null) return false;
-        if (user.getFirstName() == null || user.getFirstName().trim().equals("")) return false;
-        if (user.getLastName() == null || user.getLastName().trim().equals("")) return false;
-        if (user.getUsername() == null || user.getUsername().trim().equals("")) return false;
+
+        /* Check first/lase names for: null/empty, no greater than 99 characters (protect against malicious mega dump),
+            numbers, illegal characters */
+        final String VALID_NAME_PATTERN = "^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\\\/<>?:;|=.,0-9]{1,99}$";
+        Pattern pattern = Pattern.compile(VALID_NAME_PATTERN);
+
+        String firstName = user.getFirstName();
+        if (firstName == null ||
+                firstName.trim().equals("") ||
+                !pattern.matcher(firstName).find()) { return false; }
+
+        String lastName = user.getLastName();
+        if (lastName == null ||
+                lastName.trim().equals("") ||
+                !pattern.matcher(lastName).find()) { return false; }
+
+        /* Check username for: null/empty, at least 5 characters long (no greater than 20), starts and ends with an
+            alphanumeric character illegal characters */
+        final String VALID_USERNAME_PATTERN = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$";
+        pattern = Pattern.compile(VALID_USERNAME_PATTERN);
+
+        String username = user.getUsername();
+        if (username == null ||
+                username.trim().equals("") ||
+                !pattern.matcher(username).find()) { return false; }
+
+        /* Check password for: null/empty */
+        // TODO: the password will be encrypted by this point, so how can we validate it?
         return user.getPassword() != null && !user.getPassword().trim().equals("");
     }
 
