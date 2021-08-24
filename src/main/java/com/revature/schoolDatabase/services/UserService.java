@@ -9,6 +9,9 @@ import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.web.dtos.UserDTO;
 
 import com.revature.schoolDatabase.web.dtos.Principal;
+import com.revature.schoolDatabase.web.servlets.RegisterServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.util.List;
@@ -21,11 +24,12 @@ import java.util.stream.Collectors;
  *
  * Authors: Sean Dunn, Marwan Bataineh
  * Date: 19 August 2021
- * Last Modified: 21 August 2021
+ * Last Modified: 23 August 2021
  */
 public class UserService {
 
     private final UserRepository userRepo;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public UserService(UserRepository userRepo) {
         this.userRepo = userRepo;
@@ -60,9 +64,8 @@ public class UserService {
      */
     public User register(User newUser) {
 
-        if (!isUserValid(newUser)) {
+        if (!isUserValid(newUser))
             throw new InvalidRequestException("Invalid user data provided!");
-        }
 
         if (userRepo.findUserByCredentials(newUser.getUsername()) != null)
             throw new ResourcePersistenceException("Provided username is already taken!");
@@ -70,12 +73,19 @@ public class UserService {
         if (userRepo.findUserByEmail(newUser.getEmail()) != null)
             throw new ResourcePersistenceException("Provided email is already taken!");
 
-        // If user already exists, register will fail and return null
+        if (userRepo.findUserByName(newUser.getFirstName(), newUser.getLastName()) != null)
+            throw new ResourcePersistenceException("Provided first and last name is already taken!");
+
         try {
+            // If user already exists, register will fail and return null
             newUser = userRepo.save(newUser);
+            logger.info("userRepo.save() invoked!");
             return newUser;
         } catch (InvalidRequestException ire) {
             throw new ResourcePersistenceException("ERROR: User already exists in database!");
+        } catch (Exception e) {
+            logger.error("An unexpected exception occurred", e);
+            return null;
         }
     }
 
