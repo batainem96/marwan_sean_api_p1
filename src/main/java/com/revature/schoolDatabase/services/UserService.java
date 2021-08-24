@@ -66,6 +66,17 @@ public class UserService {
                 lastName.trim().equals("") ||
                 !pattern.matcher(lastName).find()) { return false; }
 
+        /* Check email for: null/empty, unwanted characters, length, proper domain/domain name fields, username field,
+            etc. */
+        final String VALID_EMAIL_PATTERN = "^[\\\\w!#$%&’*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&’*+/=?`{|}~^-]+)*@(?:" +
+                "[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$";
+        pattern = Pattern.compile(VALID_EMAIL_PATTERN);
+
+        String email = user.getEmail();
+        if(email == null ||
+                email.trim().equals("") ||
+                !pattern.matcher(email).find()) { return false; }
+
         /* Check username for: null/empty, at least 5 characters long (no greater than 20), starts and ends with an
             alphanumeric character illegal characters */
         final String VALID_USERNAME_PATTERN = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$";
