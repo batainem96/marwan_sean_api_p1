@@ -2,7 +2,7 @@
 <configuration debug="true">
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>dev-logs/scoolDatabase/app.log</file>
+        <file>dev-logs/schoolDatabase/app.log</file>
         <encoder>
             <pattern>%date %level [%thread] %logger{10} [%file : %line] %msg%n</pattern>
         </encoder>
