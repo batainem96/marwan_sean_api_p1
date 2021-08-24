@@ -13,6 +13,7 @@ public abstract class User {
     protected String id;
     protected String firstName;
     protected String lastName;
+    protected String email;
     protected String username;
     protected String password;
     protected String userType;
@@ -22,16 +23,21 @@ public abstract class User {
         super();
     }
 
-    public User(String firstName, String lastName, String username, String password, String userType) {
+    public User(String userType) {
+        this.userType = userType;
+    }
+
+    public User(String firstName, String lastName, String email, String username, String password, String userType) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.username = username;
         this.password = password;
         this.userType = userType;
     }
 
-    public User(String id, String firstName, String lastName, String username, String password, String userType) {
-        this(firstName, lastName, username, password, userType);
+    public User(String id, String firstName, String lastName, String email, String username, String password, String userType) {
+        this(firstName, lastName, email, username, password, userType);
         this.id = id;
     }
 
@@ -57,6 +63,14 @@ public abstract class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {

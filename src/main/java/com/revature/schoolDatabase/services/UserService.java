@@ -64,12 +64,19 @@ public class UserService {
             throw new InvalidRequestException("Invalid user data provided!");
         }
 
-        if (userRepo.findUserByCredentials(newUser.getUsername()) != null) {
+        if (userRepo.findUserByCredentials(newUser.getUsername()) != null)
             throw new ResourcePersistenceException("Provided username is already taken!");
-        }
 
-        // Return user object from save method call (if it's null, something went wrong)
-        return userRepo.save(newUser);
+        if (userRepo.findUserByEmail(newUser.getEmail()) != null)
+            throw new ResourcePersistenceException("Provided email is already taken!");
+
+        // If user already exists, register will fail and return null
+        try {
+            newUser = userRepo.save(newUser);
+            return newUser;
+        } catch (InvalidRequestException ire) {
+            throw new ResourcePersistenceException("ERROR: User already exists in database!");
+        }
     }
 
     /**

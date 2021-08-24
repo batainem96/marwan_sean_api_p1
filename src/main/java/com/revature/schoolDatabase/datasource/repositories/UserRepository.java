@@ -2,18 +2,24 @@ package com.revature.schoolDatabase.datasource.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.DuplicateKeyException;
+import com.mongodb.MongoWriteException;
+import com.mongodb.WriteConcern;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.InsertOneOptions;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import com.revature.schoolDatabase.datasource.models.Faculty;
 import com.revature.schoolDatabase.datasource.models.User;
 import com.revature.schoolDatabase.datasource.models.Student;
 import com.revature.schoolDatabase.datasource.util.MongoClientFactory;
 import com.revature.schoolDatabase.util.exceptions.DataSourceException;
+import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -143,7 +149,38 @@ public class UserRepository {
         } catch (Exception e) {
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
+    }
 
+    public User findUserByEmail(String email) {
+        try {
+            Document queryDoc = new Document("email", email);
+            Document authUserDoc = usersCollection.find(queryDoc).first();
+
+            if (authUserDoc == null)
+                return null;
+
+            User authUser;
+            // Retrieves the value of the userType field in the database
+            String userType = authUserDoc.get("userType").toString();
+            switch (userType) {
+                case "student":
+                    authUser = mapper.readValue(authUserDoc.toJson(), Student.class);
+                    break;
+                case "faculty":
+                    authUser = mapper.readValue(authUserDoc.toJson(), Faculty.class);
+                    break;
+                default:
+                    System.out.println("Invalid user type");
+                    return null;
+            }
+
+            authUser.setId(authUserDoc.get("_id").toString());
+            return authUser;
+        } catch (JsonMappingException jme) {
+            throw new DataSourceException("An exception occurred while mapping the document.", jme);
+        } catch (Exception e) {
+            throw new DataSourceException("An unexpected exception occurred.", e);
+        }
     }
 
     /**
@@ -178,11 +215,17 @@ public class UserRepository {
             String userJson = mapper.writeValueAsString(newUser);
             Document userDoc = Document.parse(userJson);
 
-            usersCollection.insertOne(userDoc);
+            // Address write concern
+            InsertOneResult insertOneResult = usersCollection.insertOne(userDoc);
             newUser.setId(userDoc.get("_id").toString());
 
-            return newUser;
+            if (insertOneResult.wasAcknowledged())
+                return newUser;
+            else throw new InvalidRequestException("User already exists!");
 
+        } catch (MongoWriteException we) {
+            // TODO Discern which keys are invalid
+            throw new InvalidRequestException("User already exists!");
         } catch (Exception e) {
             throw new DataSourceException("An unexpected exception occurred.", e);
         }

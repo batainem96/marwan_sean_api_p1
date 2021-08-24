@@ -1,7 +1,6 @@
 package com.revature.schoolDatabase.web.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.revature.schoolDatabase.datasource.models.CourseHeader;
 import com.revature.schoolDatabase.datasource.models.User;
 
 import java.util.ArrayList;
