@@ -8,16 +8,21 @@ import com.mongodb.client.MongoClient;
 import com.revature.schoolDatabase.datasource.repositories.UserRepository;
 import com.revature.schoolDatabase.datasource.util.MongoClientFactory;
 import com.revature.schoolDatabase.services.UserService;
+import com.revature.schoolDatabase.web.filters.AuthFilter;
 import com.revature.schoolDatabase.web.servlets.HealthCheckServlet;
-import com.revature.schoolDatabase.web.servlets.RegisterServlet;
+import com.revature.schoolDatabase.web.servlets.UserServlet;
 import com.revature.schoolDatabase.web.servlets.LoginServlet;
 import com.revature.schoolDatabase.web.servlets.TestServlet;
+import com.revature.schoolDatabase.web.util.security.JwtConfig;
+import com.revature.schoolDatabase.web.util.security.TokenGenerator;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.io.File;
+import java.util.EnumSet;
 
 public class ContextLoaderListener implements ServletContextListener {
 
@@ -30,22 +35,28 @@ public class ContextLoaderListener implements ServletContextListener {
         System.out.println("DB Connection Established!");
 //        PasswordUtils passwordUtils = new PasswordUtils();
         ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+        JwtConfig jwtConfig = new JwtConfig();
+        TokenGenerator tokenGenerator = new TokenGenerator(jwtConfig);
 
         UserRepository userRepo = new UserRepository(mapper);
         UserService userService = new UserService(userRepo);
         System.out.println("Services Created!");
 
-        LoginServlet loginServlet = new LoginServlet(userService, mapper);
+        AuthFilter authFilter = new AuthFilter(jwtConfig);
+
+        LoginServlet loginServlet = new LoginServlet(userService, mapper, tokenGenerator);
         HealthCheckServlet healthCheckServlet = new HealthCheckServlet();
         TestServlet testServlet = new TestServlet();
-        RegisterServlet registerServlet = new RegisterServlet(userService, mapper);
+        UserServlet userServlet = new UserServlet(userService, mapper);
 
 
         ServletContext servletContext = sce.getServletContext();
+
+        servletContext.addFilter("AuthFilter", authFilter).addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
         servletContext.addServlet("LoginServlet", loginServlet).addMapping("/login");
         servletContext.addServlet("HealthServlet", healthCheckServlet).addMapping("/health");
         servletContext.addServlet("TestServlet", testServlet).addMapping("/test");
-        servletContext.addServlet("RegisterServlet", registerServlet).addMapping("/register");
+        servletContext.addServlet("UserServlet", userServlet).addMapping("/users");
         System.out.println("TestServlet Context Added!");
 
         configureLogback(servletContext);

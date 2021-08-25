@@ -6,6 +6,7 @@ import com.revature.schoolDatabase.util.exceptions.AuthenticationException;
 import com.revature.schoolDatabase.web.dtos.Credentials;
 import com.revature.schoolDatabase.web.dtos.ErrorResponse;
 import com.revature.schoolDatabase.web.dtos.Principal;
+import com.revature.schoolDatabase.web.util.security.TokenGenerator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,11 +26,14 @@ public class LoginServlet extends HttpServlet {
 
     private final UserService userService;
     private final ObjectMapper mapper;
+    private final TokenGenerator tokenGenerator;
 
-    public LoginServlet(UserService userService, ObjectMapper mapper) {
+    public LoginServlet(UserService userService, ObjectMapper mapper, TokenGenerator tokenGenerator) {
         this.userService = userService;
         this.mapper = mapper;
+        this.tokenGenerator = tokenGenerator;
     }
+
 
     /**
      * The doPost method accepts a POST request and forwards the message body contents, which are expected to be
@@ -64,8 +68,8 @@ public class LoginServlet extends HttpServlet {
             respWriter.write(payload);
 
             // Establish a session with user
-            HttpSession session = req.getSession();
-            session.setAttribute("auth-user", principal);
+            String token = tokenGenerator.createToken(principal);
+            resp.setHeader(tokenGenerator.getJwtConfig().getHeader(), token);
 
         } catch (AuthenticationException ae) {
             resp.setStatus(401); // Unauthorized client error status

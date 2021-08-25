@@ -33,6 +33,7 @@ public class CorsFilter extends HttpFilter {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        resp.setHeader("Access-Control-Expose-Headers", "Authorization");
         chain.doFilter(req, resp);
     }
 }
