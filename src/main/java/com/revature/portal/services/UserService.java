@@ -60,7 +60,6 @@ public class UserService {
         if (firstName == null ||
                 firstName.trim().equals("") ||
                 !pattern.matcher(firstName).find()) {
-            System.out.println("--- Bad First Name!");
             return false;
         }
 
@@ -68,7 +67,6 @@ public class UserService {
         if (lastName == null ||
                 lastName.trim().equals("") ||
                 !pattern.matcher(lastName).find()) {
-            System.out.println("--- Bad Last Name!");
             return false;
         }
 
@@ -110,7 +108,6 @@ public class UserService {
         if (username == null ||
                 username.trim().equals("") ||
                 !pattern.matcher(username).find()) {
-            System.out.println("--- Bad Username!");
             return false;
         }
 
