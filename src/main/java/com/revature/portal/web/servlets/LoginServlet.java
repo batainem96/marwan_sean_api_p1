@@ -1,6 +1,7 @@
 package com.revature.portal.web.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.portal.web.util.security.TokenGenerator;
 import com.revature.portal.services.UserService;
 import com.revature.portal.util.exceptions.AuthenticationException;
 import com.revature.portal.web.dtos.Credentials;
@@ -19,17 +20,20 @@ import java.io.PrintWriter;
  * The LoginServlet HttpServlet class processes login requests from the web application.
  *
  * Date: 19 August 2021
- * Last Modified: 19 August 2021
+ * Last Modified: 25 August 2021
  */
 public class LoginServlet extends HttpServlet {
 
     private final UserService userService;
     private final ObjectMapper mapper;
+    private final TokenGenerator tokenGenerator;
 
-    public LoginServlet(UserService userService, ObjectMapper mapper) {
+    public LoginServlet(UserService userService, ObjectMapper mapper, TokenGenerator tokenGenerator) {
         this.userService = userService;
         this.mapper = mapper;
+        this.tokenGenerator = tokenGenerator;
     }
+
 
     /**
      * The doPost method accepts a POST request and forwards the message body contents, which are expected to be
@@ -64,8 +68,8 @@ public class LoginServlet extends HttpServlet {
             respWriter.write(payload);
 
             // Establish a session with user
-            HttpSession session = req.getSession();
-            session.setAttribute("auth-user", principal);
+            String token = tokenGenerator.createToken(principal);
+            resp.setHeader(tokenGenerator.getJwtConfig().getHeader(), token);
 
         } catch (AuthenticationException ae) {
             resp.setStatus(401); // Unauthorized client error status
