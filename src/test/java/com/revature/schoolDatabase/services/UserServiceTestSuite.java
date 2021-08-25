@@ -11,9 +11,6 @@ import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -61,8 +58,8 @@ public class UserServiceTestSuite {
 
         // Arrange
         boolean expectedResult = true;
-        User validStudent = new Student("valid", "valid", "valid", "valid");
-        User validFaculty = new Faculty("valid", "valid", "valid", "valid");
+        User validStudent = new Student("valid", "valid", "valid", "valid", "valid");
+        User validFaculty = new Faculty("valid", "valid", "valid", "valid", "valid");
 
         // Act
         boolean actualResult1 = sut.isUserValid(validStudent);
@@ -77,13 +74,13 @@ public class UserServiceTestSuite {
     public void isUserValid_returnsFalse_givenUserWithNullOrEmptyFirstName() {
 
         // Arrange
-        User invalidStudent1 = new Student(null, "valid", "valid", "valid");
-        User invalidStudent2 = new Student("", "valid", "valid", "valid");
-        User invalidStudent3 = new Student("        ", "valid", "valid", "valid");
+        User invalidStudent1 = new Student(null, "valid", "valid", "valid", "valid");
+        User invalidStudent2 = new Student("", "valid", "valid", "valid", "valid");
+        User invalidStudent3 = new Student("        ", "valid", "valid", "valid", "valid");
 
-        User invalidFaculty1 = new Faculty(null, "valid", "valid", "valid");
-        User invalidFaculty2 = new Faculty("", "valid", "valid", "valid");
-        User invalidFaculty3 = new Faculty("        ", "valid", "valid", "valid");
+        User invalidFaculty1 = new Faculty(null, "valid", "valid", "valid", "valid");
+        User invalidFaculty2 = new Faculty("", "valid", "valid", "valid", "valid");
+        User invalidFaculty3 = new Faculty("        ", "valid", "valid", "valid", "valid");
 
         // Act
         boolean actualResult1 = sut.isUserValid(invalidStudent1);
@@ -108,7 +105,7 @@ public class UserServiceTestSuite {
     public void register_returnsSuccessfully_whenGivenValidUser() {
         // Arrange
         User expectedResult = new Student("1", "valid", "valid", "valid", "valid");
-        User validUser = new Student("valid", "valid", "valid", "valid");
+        User validUser = new Student("valid", "valid", "valid", "valid", "valid");
         when(mockUserRepo.save(any())).thenReturn(expectedResult);
 
         // Act
@@ -122,7 +119,7 @@ public class UserServiceTestSuite {
     @Test(expected = InvalidRequestException.class)
     public void register_throwsException_whenGivenInvalidUser() {
         // Arrange
-        User invalidUser = new Student(null, "", "", "");
+        User invalidUser = new Student(null, "", "", "", "");
 
         // Act
         try {
@@ -136,16 +133,16 @@ public class UserServiceTestSuite {
     @Test(expected = ResourcePersistenceException.class)
     public void register_throwsException_whenGivenUserWithDuplicateUsername() {
         // Arrange
-        User existingUser = new Student("original", "last", "duplicate", "original");
-        User duplicate = new Student("first", "last", "duplicate", "password");
-        when(mockUserRepo.findUserByCredentials(duplicate.getUsername())).thenReturn(existingUser);
+        User existingUser = new Student("original", "last", "email", "duplicate", "original");
+        User duplicate = new Student("first", "last", "email", "duplicate", "password");
+        when(mockUserRepo.findUserByUsername(duplicate.getUsername())).thenReturn(existingUser);
 
         // Act
         try {
             sut.register(duplicate);
         } finally {
             // Assert
-            verify(mockUserRepo, times(1)).findUserByCredentials(duplicate.getUsername());
+            verify(mockUserRepo, times(1)).findUserByUsername(duplicate.getUsername());
             verify(mockUserRepo, times(0)).save(duplicate);
         };
     }

@@ -143,7 +143,7 @@ public class CourseServiceTestSuite {
         // Arrange
         when(mockCourseRepo.retrieveCourses()).thenReturn(null);
         when(mockCourseRepo.retrieveInstructorCourses("Test","Test")).thenReturn(null);
-        Faculty user = new Faculty("Test", "Test", "Test", "Test");
+        Faculty user = new Faculty("Test", "Test", "Test", "Test", "Test");
 
         PrintStream oldOut = System.out;
         // Create new System output stream
@@ -167,7 +167,7 @@ public class CourseServiceTestSuite {
         // Arrange
         Course course = new Course("Test", "Test", 101, 1);
         when(mockCourseRepo.findByCredentials("Test", 101, 1)).thenReturn(course);
-        Student stud = new Student("Test", "Test", "Test", "Test");
+        Student stud = new Student("Test", "Test", "Test", "Test", "Test");
 
         // Act
         try {
@@ -193,7 +193,7 @@ public class CourseServiceTestSuite {
     @Test
     public void removeCourseFromSchedule_worksAsImplied() {
         // Arrange
-        User user = new Student("Test", "Test", "Test", "Test");
+        User user = new Student("Test", "Test", "Test", "Test", "Test");
         ArrayList<CourseHeader> newSched = new ArrayList<CourseHeader>();
         CourseHeader course = new CourseHeader("TEST", 101, 1);
         newSched.add(course);
@@ -225,7 +225,7 @@ public class CourseServiceTestSuite {
     public void generateSchedule_doesNotThrowException() {
         // Arrange
         Faculty user = new Faculty();
-        Faculty user1 = new Faculty("Test", "Test", "Test", "Test");
+        Faculty user1 = new Faculty("Test", "Test", "Test", "Test", "Test");
         List<Course> courseList = new ArrayList<>();
         when(mockCourseRepo.retrieveInstructorCourses(any(), any())).thenReturn(courseList);
 

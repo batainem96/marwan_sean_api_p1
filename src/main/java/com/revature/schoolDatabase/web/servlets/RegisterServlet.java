@@ -3,7 +3,6 @@ package com.revature.schoolDatabase.web.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.revature.schoolDatabase.datasource.models.Student;
-import com.revature.schoolDatabase.datasource.models.User;
 import com.revature.schoolDatabase.services.UserService;
 import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
 import com.revature.schoolDatabase.util.exceptions.ResourceNotFoundException;
@@ -24,6 +23,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+/**
+ * The RegisterServlet HttpServlet class processes register requests from the web application.
+ *
+ * Date: 19 August 2021
+ * Last Modified: 23 August 2021
+ */
 public class RegisterServlet extends HttpServlet {
 
     private final Logger logger = LoggerFactory.getLogger(RegisterServlet.class);
@@ -35,94 +40,66 @@ public class RegisterServlet extends HttpServlet {
         this.mapper = mapper;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println(req.getAttribute("filtered"));
-        PrintWriter respWriter = resp.getWriter();
-        resp.setContentType("application/json");
-        
-        // Get the session from the request, if it exists (do not create one)
-        HttpSession session = req.getSession(false);
-        
-        // If the session is not null, then grab the auth-user attribute from it
-        Principal requestingUser = (session == null) ? null : (Principal) session.getAttribute("auth-user");
-        
-        // Check to see if there was a valid auth-user attribute
-        if (requestingUser == null) {
-            String msg = "No session found, please login.";
-            logger.info(msg);
-            resp.setStatus(401);
-            ErrorResponse errResp = new ErrorResponse(401, msg);
-            respWriter.write(mapper.writeValueAsString(errResp));
-            return;
-        }
-
-        String userIDParam = req.getParameter("id");
-
-        try {
-            if (userIDParam == null) {
-                // Return a list of all User DTOs
-                List<UserDTO> users = userService.retrieveUsers();
-                respWriter.write(mapper.writeValueAsString(users));
-            } else {
-                // Return User DTO corresponding to userIDParam
-                UserDTO currentUser = userService.findUserById(userIDParam);
-                respWriter.write(mapper.writeValueAsString(currentUser));
-            }
-
-        } catch (ResourceNotFoundException rnfe) {
-            resp.setStatus(404);
-            ErrorResponse errResp = new ErrorResponse(404, rnfe.getMessage());
-            respWriter.write(mapper.writeValueAsString(errResp));
-        } catch (Exception e) {
-            e.printStackTrace();
-            resp.setStatus(500);    // server's fault
-            ErrorResponse errResp = new ErrorResponse(500, "The server experienced an issue, please try again later.");
-            respWriter.write(mapper.writeValueAsString(errResp));
-        }
-
-    }
-
     /**
-     * Reads a JSON object and converts it to User Information to insert into the MongoDB
+     * The doPost method takes in a POST request containing User information, which is constructed into a User
+     *      class and persisted to the Mongo Database. If an exception is thrown, for reasons such as invalid
+     *      credentials, or credentials already existing in the database, registration logic fails and an error
+     *      message is returned to the sender to handle.
      *
-     * @param req
-     * @param resp
+     * @param req - HttpServletRequest object
+     * @param resp - HttpServletResponse object
      * @throws ServletException
      * @throws IOException
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         System.out.println(req.getAttribute("filtered"));
         PrintWriter respWriter = resp.getWriter();
         resp.setContentType("application/json");
 
         try {
+
             // TODO Read input as either Student or Faculty
             ServletInputStream sis = req.getInputStream();
             Student newUser = mapper.readValue(sis, Student.class);
-//            respWriter.write(newUser.toString());
-//            Student newUser = new Student("username", "password", "username", "password");
             Principal principal = new Principal(userService.register(newUser));
             String payload = mapper.writeValueAsString(principal);
             respWriter.write(payload);
             resp.setStatus(201);
+            logger.info("User successfully registered!");
+
         } catch (InvalidRequestException | MismatchedInputException e) {
+
+            // Invalid user info
             e.printStackTrace();
-            resp.setStatus(400);    // client's fault
+            resp.setStatus(400);
             ErrorResponse errResp = new ErrorResponse(400, e.getMessage());
             respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("Invalid user info!", e);
+
         } catch (ResourcePersistenceException rpe) {
+
+            // Duplicate user info
             resp.setStatus(409);
             ErrorResponse errResp = new ErrorResponse(409, rpe.getMessage());
             respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("Error writing to database. This was most likely due to duplicate user infomation.", rpe);
+
         } catch (IOException ie) {
-            ie.printStackTrace();
-            respWriter.write("Error reading input stream!");
+
             resp.setStatus(501);
+            ErrorResponse errResp = new ErrorResponse(501, ie.getMessage());
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("Error reading input stream", ie);
+
         } catch (Exception e) {
-            e.printStackTrace();
-            resp.setStatus(500);    // server's fault
+
+            resp.setStatus(500);
+            ErrorResponse errResp = new ErrorResponse(500, "An unknown exception occurred.");
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("An unknown exception occurred.", e);
+
         }
     }
 

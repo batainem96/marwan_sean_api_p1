@@ -9,9 +9,12 @@ import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 import com.revature.schoolDatabase.web.dtos.UserDTO;
 
 import com.revature.schoolDatabase.web.dtos.Principal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -21,11 +24,12 @@ import java.util.stream.Collectors;
  *
  * Authors: Sean Dunn, Marwan Bataineh
  * Date: 19 August 2021
- * Last Modified: 21 August 2021
+ * Last Modified: 23 August 2021
  */
 public class UserService {
 
     private final UserRepository userRepo;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public UserService(UserRepository userRepo) {
         this.userRepo = userRepo;
@@ -33,21 +37,85 @@ public class UserService {
 
     /**
      * The isUserValid method accepts a User object and validates its fields. Method checks for: object validity (not
-     * null), first/last name validity (names are not null/empty), username validity (username is not null/empty), and
-     * password validity (password is not null/empty).
-     * TODO: Expand validity checking to include: first/last names do not contain numbers or special characters (i.e.
-     *  $, @, &, *, etc.), username/password does not contain illegal characters (protect against db code injection -
-     *  i.e. some query string [db.users.find()]!), email (currently no email validity checking/protection).
+     * null), first/last name validity (names are not null/empty, do not exceed 24 characters, do not contain illegal
+     * characters), username validity (username is not null/empty, is between 5-20 characters long, does not contain
+     * illegal characters, starts and ends with alphanumeric), and password validity (password is not null/empty).
+     * TODO: mostly complete, but there is the question of how to validate an encrypted password (see below)
      *
      * @param user - The User object containing user information that needs to be validated.
      * @return - Returns true if user fields passed validity checks; false if one or more user fields did not pass
      *  validity checks.
      */
     public boolean isUserValid(User user) {
+
+        /* Ensure User object exists */
         if (user == null) return false;
-        if (user.getFirstName() == null || user.getFirstName().trim().equals("")) return false;
-        if (user.getLastName() == null || user.getLastName().trim().equals("")) return false;
-        if (user.getUsername() == null || user.getUsername().trim().equals("")) return false;
+
+        /* Check first/lase names for: null/empty, no greater than 99 characters (protect against malicious mega dump),
+            numbers, illegal characters */
+        final String VALID_NAME_PATTERN = "^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\\\/<>?:;|=.,0-9]{1,99}$";
+        Pattern pattern = Pattern.compile(VALID_NAME_PATTERN);
+
+        String firstName = user.getFirstName();
+        if (firstName == null ||
+                firstName.trim().equals("") ||
+                !pattern.matcher(firstName).find()) {
+            System.out.println("--- Bad First Name!");
+            return false;
+        }
+
+        String lastName = user.getLastName();
+        if (lastName == null ||
+                lastName.trim().equals("") ||
+                !pattern.matcher(lastName).find()) {
+            System.out.println("--- Bad Last Name!");
+            return false;
+        }
+
+        /* Check email for: null/empty, unwanted characters, length, proper domain/domain name fields, username field,
+            etc. */
+        //TODO: use regex expression to simplify this validation for email
+        String email = user.getEmail();
+
+        String eUsername = "";
+        String domainFull = "";
+        try {
+            eUsername = email.split("@")[0];
+            domainFull = email.split("@")[1];
+        } catch(Exception e) {
+            return false;
+        }
+        if(eUsername.length() < 3) return false;
+        if(eUsername.trim().equals("")) return false;
+        if(eUsername.matches("\\s+") || eUsername.matches("[^A-Za-z0-9\\.\\-]")) return false;
+        if(domainFull.trim().equals("")) return false;
+
+        String domainName = "";
+        String domain = "";
+        try{
+            domainName = domainFull.split("\\.")[0];
+            domain = domainFull.split("\\.")[1];
+        } catch(Exception e) {
+            return false;
+        }
+        if(domainName.equals("") || domainName.trim().equals("") || domainName.matches("\\s+")) return false;
+        if(domain.equals("") || domain.trim().equals("") || domain.matches("\\s+")) return false;
+
+        /* Check username for: null/empty, at least 5 characters long (no greater than 20), starts and ends with an
+            alphanumeric character illegal characters */
+        final String VALID_USERNAME_PATTERN = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$";
+        pattern = Pattern.compile(VALID_USERNAME_PATTERN);
+
+        String username = user.getUsername();
+        if (username == null ||
+                username.trim().equals("") ||
+                !pattern.matcher(username).find()) {
+            System.out.println("--- Bad Username!");
+            return false;
+        }
+
+        /* Check password for: null/empty */
+        // TODO: the password will be encrypted by this point, so how can we validate it?
         return user.getPassword() != null && !user.getPassword().trim().equals("");
     }
 
@@ -60,16 +128,31 @@ public class UserService {
      */
     public User register(User newUser) {
 
-        if (!isUserValid(newUser)) {
+        if (!isUserValid(newUser))
             throw new InvalidRequestException("Invalid user data provided!");
-        }
 
-        if (userRepo.findUserByCredentials(newUser.getUsername()) != null) {
-            throw new ResourcePersistenceException("Provided username is already taken!");
-        }
+        boolean isUsernameTaken = userRepo.findUserByUsername(newUser.getUsername()) != null;
+        boolean isEmailTaken = userRepo.findUserByEmail(newUser.getEmail()) != null;
 
-        // Return user object from save method call (if it's null, something went wrong)
-        return userRepo.save(newUser);
+        /* Check if username and/or email are taken */
+        if (isUsernameTaken && isEmailTaken)
+            throw new ResourcePersistenceException("Provided Username and Email are taken!");
+        else if (isUsernameTaken)
+            throw new ResourcePersistenceException("Provided Username is taken!");
+        else if (isEmailTaken)
+            throw new ResourcePersistenceException("Provided email is already taken!");
+
+        try {
+            // If user already exists, register will fail and return null
+            newUser = userRepo.save(newUser);
+            logger.info("userRepo.save() invoked!");
+            return newUser;
+        } catch (InvalidRequestException ire) {
+            throw new ResourcePersistenceException("ERROR: User already exists in database!");
+        } catch (Exception e) {
+            logger.error("An unexpected exception occurred", e);
+            return null;
+        }
     }
 
     /**
