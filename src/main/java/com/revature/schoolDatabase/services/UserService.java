@@ -59,23 +59,47 @@ public class UserService {
         String firstName = user.getFirstName();
         if (firstName == null ||
                 firstName.trim().equals("") ||
-                !pattern.matcher(firstName).find()) { return false; }
+                !pattern.matcher(firstName).find()) {
+            System.out.println("--- Bad First Name!");
+            return false;
+        }
 
         String lastName = user.getLastName();
         if (lastName == null ||
                 lastName.trim().equals("") ||
-                !pattern.matcher(lastName).find()) { return false; }
+                !pattern.matcher(lastName).find()) {
+            System.out.println("--- Bad Last Name!");
+            return false;
+        }
 
         /* Check email for: null/empty, unwanted characters, length, proper domain/domain name fields, username field,
             etc. */
-        final String VALID_EMAIL_PATTERN = "^[\\\\w!#$%&’*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&’*+/=?`{|}~^-]+)*@(?:" +
-                "[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$";
-        pattern = Pattern.compile(VALID_EMAIL_PATTERN);
-
+        //TODO: use regex expression to simplify this validation for email
         String email = user.getEmail();
-        if(email == null ||
-                email.trim().equals("") ||
-                !pattern.matcher(email).find()) { return false; }
+
+        String eUsername = "";
+        String domainFull = "";
+        try {
+            eUsername = email.split("@")[0];
+            domainFull = email.split("@")[1];
+        } catch(Exception e) {
+            return false;
+        }
+        if(eUsername.length() < 3) return false;
+        if(eUsername.trim().equals("")) return false;
+        if(eUsername.matches("\\s+") || eUsername.matches("[^A-Za-z0-9\\.\\-]")) return false;
+        if(domainFull.trim().equals("")) return false;
+
+        String domainName = "";
+        String domain = "";
+        try{
+            domainName = domainFull.split("\\.")[0];
+            domain = domainFull.split("\\.")[1];
+        } catch(Exception e) {
+            return false;
+        }
+        if(domainName.equals("") || domainName.trim().equals("") || domainName.matches("\\s+")) return false;
+        if(domain.equals("") || domain.trim().equals("") || domain.matches("\\s+")) return false;
 
         /* Check username for: null/empty, at least 5 characters long (no greater than 20), starts and ends with an
             alphanumeric character illegal characters */
@@ -85,7 +109,10 @@ public class UserService {
         String username = user.getUsername();
         if (username == null ||
                 username.trim().equals("") ||
-                !pattern.matcher(username).find()) { return false; }
+                !pattern.matcher(username).find()) {
+            System.out.println("--- Bad Username!");
+            return false;
+        }
 
         /* Check password for: null/empty */
         // TODO: the password will be encrypted by this point, so how can we validate it?
@@ -104,14 +131,16 @@ public class UserService {
         if (!isUserValid(newUser))
             throw new InvalidRequestException("Invalid user data provided!");
 
-        if (userRepo.findUserByCredentials(newUser.getUsername()) != null)
-            throw new ResourcePersistenceException("Provided username is already taken!");
+        boolean isUsernameTaken = userRepo.findUserByUsername(newUser.getUsername()) != null;
+        boolean isEmailTaken = userRepo.findUserByEmail(newUser.getEmail()) != null;
 
-        if (userRepo.findUserByEmail(newUser.getEmail()) != null)
+        /* Check if username and/or email are taken */
+        if (isUsernameTaken && isEmailTaken)
+            throw new ResourcePersistenceException("Provided Username and Email are taken!");
+        else if (isUsernameTaken)
+            throw new ResourcePersistenceException("Provided Username is taken!");
+        else if (isEmailTaken)
             throw new ResourcePersistenceException("Provided email is already taken!");
-
-        if (userRepo.findUserByName(newUser.getFirstName(), newUser.getLastName()) != null)
-            throw new ResourcePersistenceException("Provided first and last name is already taken!");
 
         try {
             // If user already exists, register will fail and return null

@@ -11,9 +11,6 @@ import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
 
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -138,14 +135,14 @@ public class UserServiceTestSuite {
         // Arrange
         User existingUser = new Student("original", "last", "email", "duplicate", "original");
         User duplicate = new Student("first", "last", "email", "duplicate", "password");
-        when(mockUserRepo.findUserByCredentials(duplicate.getUsername())).thenReturn(existingUser);
+        when(mockUserRepo.findUserByUsername(duplicate.getUsername())).thenReturn(existingUser);
 
         // Act
         try {
             sut.register(duplicate);
         } finally {
             // Assert
-            verify(mockUserRepo, times(1)).findUserByCredentials(duplicate.getUsername());
+            verify(mockUserRepo, times(1)).findUserByUsername(duplicate.getUsername());
             verify(mockUserRepo, times(0)).save(duplicate);
         };
     }

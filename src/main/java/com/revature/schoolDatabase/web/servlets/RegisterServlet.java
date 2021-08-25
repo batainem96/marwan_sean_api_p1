@@ -53,11 +53,13 @@ public class RegisterServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         System.out.println(req.getAttribute("filtered"));
         PrintWriter respWriter = resp.getWriter();
         resp.setContentType("application/json");
 
         try {
+
             // TODO Read input as either Student or Faculty
             ServletInputStream sis = req.getInputStream();
             Student newUser = mapper.readValue(sis, Student.class);
@@ -66,29 +68,38 @@ public class RegisterServlet extends HttpServlet {
             respWriter.write(payload);
             resp.setStatus(201);
             logger.info("User successfully registered!");
+
         } catch (InvalidRequestException | MismatchedInputException e) {
+
             // Invalid user info
             e.printStackTrace();
             resp.setStatus(400);
             ErrorResponse errResp = new ErrorResponse(400, e.getMessage());
             respWriter.write(mapper.writeValueAsString(errResp));
             logger.error("Invalid user info!", e);
+
         } catch (ResourcePersistenceException rpe) {
+
             // Duplicate user info
             resp.setStatus(409);
             ErrorResponse errResp = new ErrorResponse(409, rpe.getMessage());
             respWriter.write(mapper.writeValueAsString(errResp));
             logger.error("Error writing to database. This was most likely due to duplicate user infomation.", rpe);
+
         } catch (IOException ie) {
+
             resp.setStatus(501);
             ErrorResponse errResp = new ErrorResponse(501, ie.getMessage());
             respWriter.write(mapper.writeValueAsString(errResp));
             logger.error("Error reading input stream", ie);
+
         } catch (Exception e) {
+
             resp.setStatus(500);
             ErrorResponse errResp = new ErrorResponse(500, "An unknown exception occurred.");
             respWriter.write(mapper.writeValueAsString(errResp));
             logger.error("An unknown exception occurred.", e);
+
         }
     }
 
