@@ -1,6 +1,6 @@
-package com.revature.schoolDatabase.web.util.security;
+package com.revature.portal.web.util.security;
 
-import com.revature.schoolDatabase.web.dtos.Principal;
+import com.revature.portal.web.dtos.Principal;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 

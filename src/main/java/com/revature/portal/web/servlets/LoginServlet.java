@@ -1,7 +1,7 @@
 package com.revature.portal.web.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.schoolDatabase.web.util.security.TokenGenerator;
+import com.revature.portal.web.util.security.TokenGenerator;
 import com.revature.portal.services.UserService;
 import com.revature.portal.util.exceptions.AuthenticationException;
 import com.revature.portal.web.dtos.Credentials;
@@ -20,7 +20,7 @@ import java.io.PrintWriter;
  * The LoginServlet HttpServlet class processes login requests from the web application.
  *
  * Date: 19 August 2021
- * Last Modified: 19 August 2021
+ * Last Modified: 25 August 2021
  */
 public class LoginServlet extends HttpServlet {
 

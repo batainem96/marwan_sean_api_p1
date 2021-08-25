@@ -1,4 +1,4 @@
-package com.revature.schoolDatabase.web.util.security;
+package com.revature.portal.web.util.security;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;

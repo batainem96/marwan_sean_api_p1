@@ -13,7 +13,6 @@ import com.revature.portal.datasource.repositories.UserRepository;
 import com.revature.portal.datasource.util.MongoClientFactory;
 import com.revature.portal.services.UserService;
 import com.revature.portal.web.servlets.HealthCheckServlet;
-import com.revature.portal.web.servlets.RegisterServlet;
 import com.revature.portal.web.servlets.LoginServlet;
 import com.revature.portal.web.servlets.TestServlet;
 import org.slf4j.LoggerFactory;

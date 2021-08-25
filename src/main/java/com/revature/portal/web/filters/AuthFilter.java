@@ -1,7 +1,7 @@
-package com.revature.schoolDatabase.web.filters;
+package com.revature.portal.web.filters;
 
-import com.revature.schoolDatabase.web.dtos.Principal;
-import com.revature.schoolDatabase.web.util.security.JwtConfig;
+import com.revature.portal.web.dtos.Principal;
+import com.revature.portal.web.util.security.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;

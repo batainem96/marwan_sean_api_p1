@@ -1,15 +1,15 @@
-package com.revature.schoolDatabase.web.servlets;
+package com.revature.portal.web.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.revature.schoolDatabase.datasource.models.Student;
-import com.revature.schoolDatabase.services.UserService;
-import com.revature.schoolDatabase.util.exceptions.InvalidRequestException;
-import com.revature.schoolDatabase.util.exceptions.ResourceNotFoundException;
-import com.revature.schoolDatabase.util.exceptions.ResourcePersistenceException;
-import com.revature.schoolDatabase.web.dtos.ErrorResponse;
-import com.revature.schoolDatabase.web.dtos.Principal;
-import com.revature.schoolDatabase.web.dtos.UserDTO;
+import com.revature.portal.datasource.models.Student;
+import com.revature.portal.services.UserService;
+import com.revature.portal.util.exceptions.InvalidRequestException;
+import com.revature.portal.util.exceptions.ResourceNotFoundException;
+import com.revature.portal.util.exceptions.ResourcePersistenceException;
+import com.revature.portal.web.dtos.ErrorResponse;
+import com.revature.portal.web.dtos.Principal;
+import com.revature.portal.web.dtos.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
