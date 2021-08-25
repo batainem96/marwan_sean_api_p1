@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
-    <display-name>schoolDatabase</display-name>
+    <display-name>Portal</display-name>
 
     <context-param>
         <param-name>logback-config</param-name>
@@ -16,7 +16,7 @@
     </welcome-file-list>
     
     <listener>
-        <listener-class>com.revature.schoolDatabase.web.util.ContextLoaderListener</listener-class>
+        <listener-class>com.revature.portal.web.util.ContextLoaderListener</listener-class>
     </listener>
 
 </web-app>
