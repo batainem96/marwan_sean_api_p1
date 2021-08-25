@@ -128,7 +128,7 @@ public class UserRepository {
      * @param username
      * @return New user if an entry was found, otherwise null.
      */
-    public User findUserByCredentials(String username) {
+    public User findUserByUsername(String username) {
         try {
             Document queryDoc = new Document("username", username);
             Document authUserDoc = usersCollection.find(queryDoc).first();
