@@ -2,6 +2,7 @@ package com.revature.portal.web.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+
 import com.revature.portal.datasource.models.Student;
 import com.revature.portal.services.UserService;
 import com.revature.portal.util.exceptions.InvalidRequestException;
@@ -10,6 +11,10 @@ import com.revature.portal.util.exceptions.ResourcePersistenceException;
 import com.revature.portal.web.dtos.ErrorResponse;
 import com.revature.portal.web.dtos.Principal;
 import com.revature.portal.web.dtos.UserDTO;
+
+// ------------------------------ Servlet Helpers
+import com.revature.portal.web.servlet_helpers.AvailabilityChecker;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +23,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -56,6 +61,18 @@ public class UserServlet extends HttpServlet {
         PrintWriter respWriter = resp.getWriter();
         resp.setContentType("application/json");
 
+        /*
+            * Get the Request Fragments
+            * Get the Request Parameters
+         */
+        String[] reqFrags = req.getRequestURI().split("/");
+        String idParam = req.getParameter("id");
+        String usernameParam = req.getParameter("username");
+        String emailParam = req.getParameter("email");
+
+        // Get the principal information from the request, if it exists.
+        Principal requestingUser = (Principal) req.getAttribute("principal");
+
         //------------------------------------------------------------------------------------------
 
         /*
@@ -64,7 +81,7 @@ public class UserServlet extends HttpServlet {
             of the request URI.
          */
 
-        String[] reqFrags = req.getRequestURI().split("/");
+
         boolean checkingAvailability = reqFrags[reqFrags.length - 1].equals("availability");
 
         if (checkingAvailability) {
@@ -80,16 +97,13 @@ public class UserServlet extends HttpServlet {
             unauthorized access and usage.
          */
 
-        // Get the principal information from the request, if it exists.
-        Principal requestingUser = (Principal) req.getAttribute("principal");
-
         // Check to see if there was a valid principal attribute
         if (requestingUser == null) {
             String msg = "No session found, please login.";
             logger.info(msg);
             writeErrorResponse(msg, 401, resp);
             return; // end here, do not proceed to the remainder of the method's logic
-        } else if (!requestingUser.getUsername().equals("wsingleton")) {
+        } else if (!requestingUser.getUsername().equals("ssmith")) {
             String msg = "Unauthorized attempt to access endpoint made by: " + requestingUser.getUsername();
             writeErrorResponse(msg, 403, resp);
             logger.info(msg);
@@ -105,15 +119,15 @@ public class UserServlet extends HttpServlet {
             all the users from the data source.
          */
 
-        String userIdParam = req.getParameter("id");
+
 
         try {
 
-            if (userIdParam == null) {
+            if (idParam == null) {
                 List<UserDTO> users = userService.retrieveUsers();
                 respWriter.write(mapper.writeValueAsString(users));
             } else {
-                UserDTO user = userService.findUserById(userIdParam);
+                UserDTO user = userService.findUserById(idParam);
                 respWriter.write(mapper.writeValueAsString(user));
             }
 

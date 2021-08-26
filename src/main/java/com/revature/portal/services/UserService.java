@@ -117,6 +117,26 @@ public class UserService {
     }
 
     /**
+     * Query the database for an existing user under the given username.
+     *
+     * @param username - Username being checked against database for status (taken or not taken).
+     * @return - True if the username is taken; false if otherwise.
+     */
+    public boolean isUsernameTaken(String username) {
+        return userRepo.findUserByUsername(username) != null;
+    }
+
+    /**
+     * Query the database for an existing user under the given email.
+     *
+     * @param email - Email being checked against database for status (taken or not taken).
+     * @return - True if the email is taken; false if otherwise.
+     */
+    public boolean isEmailTaken(String email) {
+        return userRepo.findUserByEmail(email) != null;
+    }
+
+    /**
      * The register method accepts a User object and passes it to the database access layer for the information to be
      * stored after ensuring the input fields are valid, and the entry is not a duplicate on any unique fields.
      *
@@ -128,8 +148,8 @@ public class UserService {
         if (!isUserValid(newUser))
             throw new InvalidRequestException("Invalid user data provided!");
 
-        boolean isUsernameTaken = userRepo.findUserByUsername(newUser.getUsername()) != null;
-        boolean isEmailTaken = userRepo.findUserByEmail(newUser.getEmail()) != null;
+        boolean isUsernameTaken = isUsernameTaken(newUser.getUsername());
+        boolean isEmailTaken = isEmailTaken(newUser.getEmail());
 
         /* Check if username and/or email are taken */
         if (isUsernameTaken && isEmailTaken)
