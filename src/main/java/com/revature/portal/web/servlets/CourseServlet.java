@@ -55,8 +55,9 @@ public class CourseServlet extends HttpServlet {
                 payload = mapper.writeValueAsString(course);
             } catch (Exception e) {
                 e.printStackTrace();
+                ErrorResponse errResp = new ErrorResponse(400, "No course found with that id.");
                 logger.error(e.getMessage(), e);
-                payload = "No course found with that id.";
+                payload = mapper.writeValueAsString(errResp);
             }
         }
         else {
@@ -65,8 +66,9 @@ public class CourseServlet extends HttpServlet {
                 payload = mapper.writeValueAsString(courses);
             } catch (Exception e) {
                 e.printStackTrace();
+                ErrorResponse errResp = new ErrorResponse(400, "No courses found.");
                 logger.error(e.getMessage(), e);
-                payload = "No courses found.";
+                payload = mapper.writeValueAsString(errResp);
             }
         }
         respWriter.write(payload);
