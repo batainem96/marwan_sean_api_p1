@@ -143,7 +143,7 @@ public class UserService {
      * @param newUser - The User object containing user information that should be saved to the database.
      * @return - Returns the returned User object from save method if no exception was thrown.
      */
-    public User register(User newUser) {
+    public UserDTO register(User newUser) {
 
         if (!isUserValid(newUser))
             throw new InvalidRequestException("Invalid user data provided!");
@@ -163,7 +163,7 @@ public class UserService {
             // If user already exists, register will fail and return null
             newUser = userRepo.save(newUser);
             logger.info("userRepo.save() invoked!");
-            return newUser;
+            return new UserDTO(newUser);
         } catch (InvalidRequestException ire) {
             throw new ResourcePersistenceException("ERROR: User already exists in database!");
         } catch (Exception e) {
@@ -190,7 +190,7 @@ public class UserService {
             throw new InvalidRequestException("Invalid user credentials provided!");
         }
 
-        User authUser = userRepo.findUserByCredentials(username, password);
+        UserDTO authUser = userRepo.findUserByCredentials(username, password);
 
         if (authUser == null) {
             throw new AuthenticationException("Invalid credentials provided!");
@@ -212,13 +212,45 @@ public class UserService {
             throw new InvalidRequestException("Invalid id provided");
         }
 
-        User user = userRepo.findById(id);
+        UserDTO user = userRepo.findById(id);
 
         if (user == null) {
             throw new ResourceNotFoundException("User with id=" + id + " not found!");
         }
 
-        return new UserDTO(user);
+        return user;
+
+    }
+
+    public UserDTO findUserByUsername(String username) {
+
+        if(username == null || username.trim().equals("")) {
+            throw new InvalidRequestException("Empty username query!");
+        }
+
+        UserDTO user = userRepo.findUserByUsername(username);
+
+        if(user == null) {
+            throw new ResourceNotFoundException("User with that username does not exist!");
+        }
+
+        return user;
+
+    }
+
+    public UserDTO findUserByEmail(String email) {
+
+        if(email == null || email.trim().equals("")) {
+            throw new InvalidRequestException("Empty email query!");
+        }
+
+        UserDTO user =  userRepo.findUserByEmail(email);
+
+        if(user == null) {
+            throw new ResourceNotFoundException("User with that email does not exist!");
+        }
+
+        return user;
 
     }
 
@@ -227,10 +259,7 @@ public class UserService {
      * @return - Returns a list of all users in the database.
      */
     public List<UserDTO> retrieveUsers() {
-        return userRepo.retrieveUsers()
-                        .stream()
-                        .map(UserDTO::new)
-                        .collect(Collectors.toList());
+        return userRepo.retrieveUsers();
     }
 
 

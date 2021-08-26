@@ -82,12 +82,12 @@ public class UserServlet extends HttpServlet {
          */
 
 
-        boolean checkingAvailability = reqFrags[reqFrags.length - 1].equals("availability");
-
-        if (checkingAvailability) {
-            availabilityCheck(req, resp);
-            return; // end here, do not proceed to the remainder of the method's logic
-        }
+//        boolean checkingAvailability = reqFrags[reqFrags.length - 1].equals("availability");
+//
+//        if (checkingAvailability) {
+//            availabilityCheck(req, resp);
+//            return; // end here, do not proceed to the remainder of the method's logic
+//        }
 
         //------------------------------------------------------------------------------------------
 
@@ -119,16 +119,28 @@ public class UserServlet extends HttpServlet {
             all the users from the data source.
          */
 
-
-
         try {
+
+            if(usernameParam != null) {
+                UserDTO user = userService.findUserByUsername(usernameParam);
+                respWriter.write(mapper.writeValueAsString(user));
+                return;
+            }
+
+            if(emailParam != null) {
+                UserDTO user = userService.findUserByEmail(emailParam);
+                respWriter.write(mapper.writeValueAsString(user));
+                return;
+            }
 
             if (idParam == null) {
                 List<UserDTO> users = userService.retrieveUsers();
                 respWriter.write(mapper.writeValueAsString(users));
+                return;
             } else {
                 UserDTO user = userService.findUserById(idParam);
                 respWriter.write(mapper.writeValueAsString(user));
+                return;
             }
 
         } catch (ResourceNotFoundException rnfe) {
