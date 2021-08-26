@@ -8,11 +8,14 @@ import com.revature.portal.util.exceptions.ResourcePersistenceException;
 import com.revature.portal.web.dtos.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.misc.IOUtils;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -29,6 +32,47 @@ public class CourseServlet extends HttpServlet {
     public CourseServlet(CourseService courseService, ObjectMapper mapper) {
         this.courseService = courseService;
         this.mapper = mapper;
+    }
+
+    /**
+     *  Service function to convert a request input stream to a readable string.
+     *
+     *  Credit: https://stackoverflow.com/questions/12260540/how-to-convert-an-httpservletrequest-to-string
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    String httpServletRequestToString(HttpServletRequest request) throws Exception {
+
+        ServletInputStream mServletInputStream = request.getInputStream();
+        byte[] httpInData = new byte[request.getContentLength()];
+        int retVal = -1;
+        StringBuilder stringBuilder = new StringBuilder();
+
+        while ((retVal = mServletInputStream.read(httpInData)) != -1) {
+            for (int i = 0; i < retVal; i++) {
+                stringBuilder.append(Character.toString((char) httpInData[i]));
+            }
+        }
+
+        return stringBuilder.toString();
+    }
+
+    /**
+     *  Overriding the generic service function allows us to define our own doPatch method, as it is not native to
+     *  the HttpServlet class.
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getMethod().equalsIgnoreCase("PATCH")) {
+            doPatch(req, resp);
+        } else super.service(req, resp);
     }
 
     /**
@@ -72,7 +116,6 @@ public class CourseServlet extends HttpServlet {
             }
         }
         respWriter.write(payload);
-
     }
 
     /**
@@ -117,4 +160,32 @@ public class CourseServlet extends HttpServlet {
         }
 
     }
+
+    /**
+     *  The doPatch method takes in partial information in the form of an HttpServletRequest, in order to partially
+     *  update a given course. Attributes of Course that are not explicitly given in the request are initialized as
+     *  either null or -1, and only the valid fields will be pushed in an update to the database.
+     *
+     * @param req
+     * @param res
+     * @throws ServletException
+     * @throws IOException
+     */
+    protected void doPatch(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        // Instantiate response writer object
+        PrintWriter respWriter = res.getWriter();
+        res.setContentType("application/json");
+
+        try {
+            // Map request message body to a Course object
+            Course updateCourse = mapper.readValue(req.getInputStream(), Course.class);
+            respWriter.write(mapper.writeValueAsString(courseService.updateCourse(updateCourse)));
+        } catch (Exception e) {
+            res.setStatus(500); // Internal server error status
+            ErrorResponse errResp = new ErrorResponse(500, e.getMessage());
+            respWriter.write(mapper.writeValueAsString(errResp));
+        }
+    }
+
+
 }

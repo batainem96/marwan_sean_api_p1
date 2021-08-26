@@ -2,6 +2,7 @@ package com.revature.portal.datasource.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
@@ -11,6 +12,7 @@ import com.revature.portal.util.exceptions.DataSourceException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -209,7 +211,7 @@ public class CourseRepository {
         }
     }
 
-    public boolean update(Course updatedCourse) {
+    public boolean replace(Course updatedCourse) {
         try {
             // Convert Course to BasicDBObject
             String courseJson = mapper.writeValueAsString(updatedCourse);
@@ -224,6 +226,43 @@ public class CourseRepository {
 
         }
         return false;
+    }
+
+    /**
+     *  The update method takes in a course, expected to be partially valid; Fields intended to be updated will
+     *  have valid information, otherwise, they will be null/-1. The valid information is then built into a query
+     *  object, which is appended to an update query of the form: findOneAndUpdate(eq(("_id"), id), $set: (field: updatedFieldValue)).
+     *
+     * @param course
+     * @return The newly updated course retrieved from the database.
+     */
+    public Course update(Course course) {
+        try {
+            BasicDBObject updateFields = new BasicDBObject();
+            ObjectId id = new ObjectId(course.getId());
+            for (Field field : course.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                if (field.getName().equals("id") || field.get(course) == null || field.get(course).equals(-1))
+                    continue;
+                else {
+                    updateFields.append(field.getName(), field.get(course));
+                }
+                field.setAccessible(false);
+            }
+
+            BasicDBObject setQuery = new BasicDBObject();
+            setQuery.append("$set", updateFields);
+
+            Document courseDoc = courseCollection.findOneAndUpdate(eq(("_id"), id), setQuery);
+            Course newCourse = mapper.readValue(courseDoc.toJson(), Course.class);
+            newCourse.setId(courseDoc.get("_id").toString());
+
+            return newCourse;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return course;
+        }
     }
 
     public boolean deleteById(String id) {

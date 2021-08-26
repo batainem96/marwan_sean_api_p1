@@ -30,7 +30,16 @@ public class Course {
 //    private final Logger logger = LogManager.getLogger(CourseService.class);
 
     // Constructors
-    public Course() {}
+    // Mapper constructor initializes all variables to null/-1
+    public Course() {
+        courseNo = -1;
+        sectionNo = -1;
+        credits = -1;
+        totalSeats = -1;
+        openSeats = -1;
+        prerequisites = null;
+        meetingTimes = null;
+    }
 
     // In order to be valid, a Course must at least be given a title, dept, courseNo, and sectionNo
     public Course(String title, String department, int courseNo, int sectionNo) {
@@ -184,6 +193,25 @@ public class Course {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, department, deptShort, courseNo, sectionNo, prerequisites, instructor, credits, totalSeats, openSeats, meetingTimes, description);
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", department='" + department + '\'' +
+                ", deptShort='" + deptShort + '\'' +
+                ", courseNo=" + courseNo +
+                ", sectionNo=" + sectionNo +
+                ", prerequisites=" + prerequisites +
+                ", instructor='" + instructor + '\'' +
+                ", credits=" + credits +
+                ", totalSeats=" + totalSeats +
+                ", openSeats=" + openSeats +
+                ", meetingTimes=" + meetingTimes +
+                ", description='" + description + '\'' +
+                '}';
     }
 
     // Methods
