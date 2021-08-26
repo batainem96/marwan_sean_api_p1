@@ -6,6 +6,8 @@ import com.revature.portal.services.CourseService;
 import com.revature.portal.util.exceptions.InvalidRequestException;
 import com.revature.portal.util.exceptions.ResourcePersistenceException;
 import com.revature.portal.web.dtos.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,18 +15,62 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * The AddCourseServlet class processes course creation requests from the web application.
  */
-public class AddCourseServlet extends HttpServlet {
+public class CourseServlet extends HttpServlet {
 
+    private final Logger logger = LoggerFactory.getLogger(CourseServlet.class);
     private final CourseService courseService;
     private final ObjectMapper mapper;
 
-    public AddCourseServlet(CourseService courseService, ObjectMapper mapper) {
+    public CourseServlet(CourseService courseService, ObjectMapper mapper) {
         this.courseService = courseService;
         this.mapper = mapper;
+    }
+
+    /**
+     *  The doGet method accepts a GET request and retrieves course(s) from the database, dependent on request
+     *  parameters. The 'id' parameter is used to specify which single course is to be retrieved from the database. If
+     *  there are no parameters, it is assumed that the method will return all courses in the database.
+     *  // TODO dept param, instructor param
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        PrintWriter respWriter = resp.getWriter();
+        resp.setContentType("application/json");
+        String payload;
+
+        String idParam = req.getParameter("id");
+        if (idParam != null) {
+            try {
+                Course course = courseService.findCourseByID(idParam);
+                payload = mapper.writeValueAsString(course);
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error(e.getMessage(), e);
+                payload = "No course found with that id.";
+            }
+        }
+        else {
+            try {
+                List<Course> courses = courseService.retrieveCourses();
+                payload = mapper.writeValueAsString(courses);
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error(e.getMessage(), e);
+                payload = "No courses found.";
+            }
+        }
+        respWriter.write(payload);
+
     }
 
     /**

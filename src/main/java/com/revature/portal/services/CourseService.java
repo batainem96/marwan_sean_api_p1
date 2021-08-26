@@ -100,15 +100,10 @@ public class CourseService {
     }
 
     /**
-     * Lists all courses in catalog
+     * Returns all courses in catalog
      */
-    public void showCourses() {
-        List<Course> courseList = courseRepo.retrieveCourses();
-        if (courseList == null)
-            return;
-        for (Course course : courseList) {
-            course.displayCourse();
-        }
+    public List<Course> retrieveCourses() {
+        return courseRepo.retrieveCourses();
     }
 
     /**
