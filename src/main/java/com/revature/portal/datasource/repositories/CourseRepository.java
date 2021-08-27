@@ -240,37 +240,6 @@ public class CourseRepository {
      */
     public Course update(Course course) {
         try {
-//            BasicDBObject updateFields = new BasicDBObject();
-//            ObjectId id = new ObjectId(course.getId());
-//            for (Field field : course.getClass().getDeclaredFields()) {
-//                field.setAccessible(true);
-//                if (field.getName().equals("id") || field.get(course) == null || field.get(course).equals(-1))
-//                    continue;
-//                else if (field.getName().equals("prerequisites")) {
-//                    List<Document> preReqDoc = new ArrayList<>();
-////                    Document preReqDoc = new Document();
-////                    Document setDocument = new Document();
-//
-//                    for (PreReq preReq : course.getPrerequisites()) {
-//                        Document preReqDocSingle = new Document("department", preReq.getDepartment())
-//                                                            .append("courseNo", preReq.getCourseNo())
-//                                                            .append("credits", preReq.getCredits());
-//                        preReqDoc.add(preReqDocSingle);
-////                        setDocument.append(preReqDocSingle);
-//                    }
-////                    setDocument.append("$set", preReqDoc);
-////                    preReqDoc.toArray();
-//                    updateFields.append("prerequisites", Arrays.asList(preReqDoc));
-//                }
-////                else if (field.getName().equals("meetingTimes")) {
-////                    updateFields.append("meetingTimes", Document.parse(mapper.writeValueAsString(course.getMeetingTimes())).toJson());
-////                }
-//                else {
-//                    updateFields.append(field.getName(), field.get(course));
-//                }
-//                field.setAccessible(false);
-//            }
-
             // Convert Course to BasicDBObject
             String id = course.getId();
             course.setId(null);
@@ -280,13 +249,11 @@ public class CourseRepository {
             BasicDBObject setQuery = new BasicDBObject();
             setQuery.append("$set", updateFields);
 
-            System.out.println(updateFields);
-
             Document courseDoc = courseCollection.findOneAndUpdate(eq(("_id"), new ObjectId(id)), setQuery);
             Course newCourse = mapper.readValue(courseDoc.toJson(), Course.class);
             newCourse.setId(courseDoc.get("_id").toString());
 
-            return course;
+            return newCourse;
 
         } catch (Exception e) {
             e.printStackTrace();

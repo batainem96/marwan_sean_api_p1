@@ -205,6 +205,9 @@ public class CourseServlet extends HttpServlet {
 
         try {
             courseService.deleteCourseByID(idParam);
+            String msg = "Successfully deleted Course, ID: " + idParam;
+            logger.info(msg);
+            respWriter.write(msg);
         } catch (Exception e) {
             e.printStackTrace();
             String msg = "Failed to delete course, ID: " + idParam;
@@ -233,7 +236,10 @@ public class CourseServlet extends HttpServlet {
         try {
             // Map request message body to a Course object
             Course updateCourse = mapper.readValue(req.getInputStream(), Course.class);
-            respWriter.write(mapper.writeValueAsString(courseService.updateCourse(updateCourse)));
+            // Update Course
+            updateCourse = courseService.updateCourse(updateCourse);
+            // Respond with updated course back to sender
+            respWriter.write(mapper.writeValueAsString(courseService.findCourseByID(updateCourse.getId())));
         } catch (Exception e) {
             res.setStatus(500); // Internal server error status
             ErrorResponse errResp = new ErrorResponse(500, e.getMessage());
