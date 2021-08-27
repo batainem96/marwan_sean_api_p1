@@ -216,6 +216,23 @@ public class Course {
 
     // Methods
     /**
+     *  Hacky workaround to problem of ObjectMapper initializing unknown variables to null/-1.
+     *  Variables can stay as null, but integers should be changed to 0.
+     */
+    public void reinitializeVariables() {
+        try {
+            for (Field field : this.getClass().getDeclaredFields()) {
+                if (field.get(this) == null)
+                    continue;
+                if (field.get(this).equals(-1))
+                    field.set(this, 0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Displays course information in an easily readable format
      */
     public void displayCourse() {

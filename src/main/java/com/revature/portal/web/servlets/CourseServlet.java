@@ -140,6 +140,9 @@ public class CourseServlet extends HttpServlet {
 
             // Map request message body to a Course object
             Course newCourse = mapper.readValue(req.getInputStream(), Course.class);
+            System.out.println(newCourse);
+            newCourse.reinitializeVariables();
+            System.out.println(newCourse);
 
             // TODO: currently doing nothing by setting newCourse equal to the return of createCourse(newCourse)
             //  should we keep this logic?
