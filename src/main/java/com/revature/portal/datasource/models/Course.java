@@ -10,23 +10,29 @@ import java.util.*;
 import static com.revature.portal.datasource.models.DeptShorthand.deptToShort;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Course {
     // Variables
-    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert ID to database if non null
+//    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert ID to database if non null
     private String id;
     private String title;
     private String department;
     private String deptShort;
     private int courseNo;
     private int sectionNo;
+//    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert prereqs to database if non null
     @JsonProperty("prerequisites")
-    private ArrayList<PreReq> prerequisites = new ArrayList<>();
+    private ArrayList<PreReq> prerequisites;
+//    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert instructor to database if non null
     private String instructor;
     private int credits;
     private int totalSeats;
-    private int openSeats = 0;
+    private int openSeats;
+//    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert meetingTimes to database if non null
     @JsonProperty("meetingTimes")
-    private ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
+    private ArrayList<MeetingTime> meetingTimes;
+//    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert description to database if non null
     private String description;
 
 //    private final Logger logger = LogManager.getLogger(CourseService.class);
@@ -34,13 +40,6 @@ public class Course {
     // Constructors
     // Mapper constructor initializes all variables to null/-1
     public Course() {
-        courseNo = -1;
-        sectionNo = -1;
-        credits = -1;
-        totalSeats = -1;
-        openSeats = -1;
-        prerequisites = null;
-        meetingTimes = null;
     }
 
     // In order to be valid, a Course must at least be given a title, dept, courseNo, and sectionNo

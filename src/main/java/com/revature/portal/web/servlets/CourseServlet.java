@@ -219,6 +219,7 @@ public class CourseServlet extends HttpServlet {
      *  update a given course. Attributes of Course that are not explicitly given in the request are initialized as
      *  either null or -1, and only the valid fields will be pushed in an update to the database.
      *
+     *  //TODO require authorization
      * @param req
      * @param res
      * @throws ServletException

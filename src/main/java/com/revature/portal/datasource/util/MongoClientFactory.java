@@ -6,6 +6,7 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.revature.portal.util.exceptions.DataSourceException;
+import org.bson.codecs.configuration.CodecRegistry;
 
 import java.io.FileNotFoundException;
 import java.util.Collections;
@@ -34,11 +35,14 @@ public class MongoClientFactory {
             String username = appProperties.getProperty("username");
             char[] password = appProperties.getProperty("password").toCharArray();
 
+//            CodecRegistry codecRegistry = CodecFactory.getInstance().getRegistry();
+
             List<ServerAddress> hosts = Collections.singletonList(new ServerAddress(ipAddress, port));
             MongoCredential credentials = MongoCredential.createScramSha1Credential(username, dbName, password);
             MongoClientSettings settings = MongoClientSettings.builder()
                                                               .applyToClusterSettings(builder -> builder.hosts(hosts))
                                                               .credential(credentials)
+//                                                              .codecRegistry(codecRegistry)
                                                               .build();
 
             this.mongoClient = MongoClients.create(settings);

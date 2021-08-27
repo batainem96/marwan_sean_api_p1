@@ -14,6 +14,7 @@ import com.revature.portal.web.util.security.TokenGenerator;
 import com.revature.portal.datasource.repositories.UserRepository;
 import com.revature.portal.datasource.util.MongoClientFactory;
 import com.revature.portal.services.UserService;
+import org.bson.codecs.configuration.CodecRegistry;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.DispatcherType;
@@ -24,6 +25,8 @@ import java.io.File;
 import java.util.EnumSet;
 
 public class ContextLoaderListener implements ServletContextListener {
+
+
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -88,6 +91,10 @@ public class ContextLoaderListener implements ServletContextListener {
             e.printStackTrace();
             System.out.println("An unexpected exception occurred. Unable to configure Logback.");
         }
+
+    }
+
+    private void configureCodecs() {
 
     }
 }

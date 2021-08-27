@@ -7,6 +7,7 @@ import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.revature.portal.datasource.models.Course;
+import com.revature.portal.datasource.models.PreReq;
 import com.revature.portal.datasource.util.MongoClientFactory;
 import com.revature.portal.util.exceptions.DataSourceException;
 import org.bson.Document;
@@ -14,6 +15,7 @@ import org.bson.types.ObjectId;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -238,26 +240,53 @@ public class CourseRepository {
      */
     public Course update(Course course) {
         try {
-            BasicDBObject updateFields = new BasicDBObject();
-            ObjectId id = new ObjectId(course.getId());
-            for (Field field : course.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                if (field.getName().equals("id") || field.get(course) == null || field.get(course).equals(-1))
-                    continue;
-                else {
-                    updateFields.append(field.getName(), field.get(course));
-                }
-                field.setAccessible(false);
-            }
+//            BasicDBObject updateFields = new BasicDBObject();
+//            ObjectId id = new ObjectId(course.getId());
+//            for (Field field : course.getClass().getDeclaredFields()) {
+//                field.setAccessible(true);
+//                if (field.getName().equals("id") || field.get(course) == null || field.get(course).equals(-1))
+//                    continue;
+//                else if (field.getName().equals("prerequisites")) {
+//                    List<Document> preReqDoc = new ArrayList<>();
+////                    Document preReqDoc = new Document();
+////                    Document setDocument = new Document();
+//
+//                    for (PreReq preReq : course.getPrerequisites()) {
+//                        Document preReqDocSingle = new Document("department", preReq.getDepartment())
+//                                                            .append("courseNo", preReq.getCourseNo())
+//                                                            .append("credits", preReq.getCredits());
+//                        preReqDoc.add(preReqDocSingle);
+////                        setDocument.append(preReqDocSingle);
+//                    }
+////                    setDocument.append("$set", preReqDoc);
+////                    preReqDoc.toArray();
+//                    updateFields.append("prerequisites", Arrays.asList(preReqDoc));
+//                }
+////                else if (field.getName().equals("meetingTimes")) {
+////                    updateFields.append("meetingTimes", Document.parse(mapper.writeValueAsString(course.getMeetingTimes())).toJson());
+////                }
+//                else {
+//                    updateFields.append(field.getName(), field.get(course));
+//                }
+//                field.setAccessible(false);
+//            }
+
+            // Convert Course to BasicDBObject
+            String id = course.getId();
+            course.setId(null);
+            String courseJson = mapper.writeValueAsString(course);
+            Document updateFields = Document.parse(courseJson);
 
             BasicDBObject setQuery = new BasicDBObject();
             setQuery.append("$set", updateFields);
 
-            Document courseDoc = courseCollection.findOneAndUpdate(eq(("_id"), id), setQuery);
+            System.out.println(updateFields);
+
+            Document courseDoc = courseCollection.findOneAndUpdate(eq(("_id"), new ObjectId(id)), setQuery);
             Course newCourse = mapper.readValue(courseDoc.toJson(), Course.class);
             newCourse.setId(courseDoc.get("_id").toString());
 
-            return newCourse;
+            return course;
 
         } catch (Exception e) {
             e.printStackTrace();
