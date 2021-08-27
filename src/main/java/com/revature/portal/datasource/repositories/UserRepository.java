@@ -17,6 +17,8 @@ import com.revature.portal.datasource.models.Student;
 import com.revature.portal.datasource.util.MongoClientFactory;
 import com.revature.portal.util.exceptions.DataSourceException;
 import com.revature.portal.util.exceptions.InvalidRequestException;
+import com.revature.portal.util.exceptions.ResourcePersistenceException;
+import com.revature.portal.web.dtos.UserDTO;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -47,44 +49,36 @@ public class UserRepository {
      *
      * @param authUserDoc - A MongoDB document containing the result of the last query.
      */
-    public User mapUser(Document authUserDoc) {
-        User authUser;
+    public UserDTO mapUser(Document authUserDoc) {
+        UserDTO user;
         // Retrieves the value of the userType field in the database
         String userType = authUserDoc.get("userType").toString();
         try {
-            switch (userType) {
-                case "student":
-                    authUser = mapper.readValue(authUserDoc.toJson(), Student.class);
-                    break;
-                case "faculty":
-                case "pendingFaculty":  // TODO Fully implement pendingFaculty
-                    authUser = mapper.readValue(authUserDoc.toJson(), Faculty.class);
-                    break;
-                default:
-                    Throwable cause = new Throwable("Invalid user type");
-                    throw new DataSourceException("An exception occurred while mapping the document.", cause);
-            }
+            user = mapper.readValue(authUserDoc.toJson(), UserDTO.class);
+
         } catch (JsonMappingException jme) {
             throw new DataSourceException("An exception occurred while mapping the document.", jme);
+
         } catch (Exception e) {
             throw new DataSourceException("An unexpected exception occurred while mapping the document.", e);
+
         }
 
-        authUser.setId(authUserDoc.get("_id").toString());
-        return authUser;
+        user.setId(authUserDoc.get("_id").toString());
+        return user;
     }
 
     /**
      * Finds and retrieves all users currently stored in database.
      */
-    public List<User> retrieveUsers() {
-        List<User> users = new ArrayList<>();
+    public List<UserDTO> retrieveUsers() {
+        List<UserDTO> users = new ArrayList<>();
         try {
             // Store all documents into a findIterable object
             MongoCursor<Document> cursor = usersCollection.find().iterator();
             while (cursor.hasNext()) {
                 Document curUser = cursor.next();
-                User newUser = mapUser(curUser);
+                UserDTO newUser = mapUser(curUser);
                 users.add(newUser);
             }
             cursor.close();
@@ -101,14 +95,14 @@ public class UserRepository {
      * @param id
      * @return New user if an entry was found, otherwise null.
      */
-    public User findById(String id) {
+    public UserDTO findById(String id) {
         try {
             Document queryDoc = new Document("_id", new ObjectId(id));
             Document authUserDoc = usersCollection.find(queryDoc).first();
 
             if (authUserDoc == null)
                 return null;
-            User authUser = mapUser(authUserDoc);
+            UserDTO authUser = mapUser(authUserDoc);
             return authUser;
 
         } catch (DataSourceException dse) {
@@ -125,14 +119,14 @@ public class UserRepository {
      * @param username
      * @return New user if an entry was found, otherwise null.
      */
-    public User findUserByUsername(String username) {
+    public UserDTO findUserByUsername(String username) {
         try {
             Document queryDoc = new Document("username", username);
             Document authUserDoc = usersCollection.find(queryDoc).first();
 
             if (authUserDoc == null)
                 return null;
-            User authUser = mapUser(authUserDoc);
+            UserDTO authUser = mapUser(authUserDoc);
             return authUser;
 
         } catch (DataSourceException dse) {
@@ -150,14 +144,14 @@ public class UserRepository {
      * @param password
      * @return New user if an entry was found, otherwise null.
      */
-    public User findUserByCredentials(String username, String password) {
+    public UserDTO findUserByCredentials(String username, String password) {
         try {
             Document queryDoc = new Document("username", username).append("password", password);
             Document authUserDoc = usersCollection.find(queryDoc).first();
 
             if (authUserDoc == null)
                 return null;
-            User authUser = mapUser(authUserDoc);
+            UserDTO authUser = mapUser(authUserDoc);
             return authUser;
 
         } catch (DataSourceException dse) {
@@ -173,14 +167,14 @@ public class UserRepository {
      * @param firstName, lastName
      * @return New user if an entry was found, otherwise null.
      */
-    public User findUserByName(String firstName, String lastName) {
+    public UserDTO findUserByName(String firstName, String lastName) {
         try {
             Document queryDoc = new Document("firstName", firstName).append("lastName", lastName);
             Document authUserDoc = usersCollection.find(queryDoc).first();
 
             if (authUserDoc == null)
                 return null;
-            User authUser = mapUser(authUserDoc);
+            UserDTO authUser = mapUser(authUserDoc);
             return authUser;
 
         } catch (DataSourceException dse) {
@@ -196,14 +190,14 @@ public class UserRepository {
      * @param email
      * @return New user if an entry was found, otherwise null.
      */
-    public User findUserByEmail(String email) {
+    public UserDTO findUserByEmail(String email) {
         try {
             Document queryDoc = new Document("email", email);
             Document authUserDoc = usersCollection.find(queryDoc).first();
 
             if (authUserDoc == null)
                 return null;
-            User authUser = mapUser(authUserDoc);
+            UserDTO authUser = mapUser(authUserDoc);
             return authUser;
 
         } catch (DataSourceException dse) {
@@ -246,19 +240,34 @@ public class UserRepository {
      * @param updatedUser
      * @return
      */
-    public boolean update(User updatedUser) {
+    public UserDTO update(User updatedUser) {
         try {
             // Convert Person to BasicDBObject
             String userJson = mapper.writeValueAsString(updatedUser);
-            Document userDoc = Document.parse(userJson);
-            UpdateResult result = usersCollection.replaceOne(eq(("_id"), new ObjectId(updatedUser.getId())), userDoc);
+//            Document userDoc = Document.parse(userJson);
+            Document fieldsDoc = new Document();
 
-            return result.wasAcknowledged();
+            if(updatedUser.getFirstName() != null) fieldsDoc.append("firstName", updatedUser.getFirstName());
+            if(updatedUser.getLastName() != null) fieldsDoc.append("lastName", updatedUser.getLastName());
+            if(updatedUser.getEmail() != null) fieldsDoc.append("email", updatedUser.getEmail());
+            if(updatedUser.getUsername() != null) fieldsDoc.append("username", updatedUser.getUsername());
+            if(updatedUser.getPassword() != null) fieldsDoc.append("password", updatedUser.getPassword());
+
+            Document updateDoc = new Document("$set", fieldsDoc);
+
+            System.out.println(fieldsDoc);
+
+            Document result = usersCollection.findOneAndUpdate(eq(("_id"), new ObjectId(updatedUser.getId())), updateDoc);
+            UserDTO updatedUserDTO = mapper.readValue(result.toJson(), UserDTO.class);
+            updatedUserDTO.setId(result.get("_id").toString());
+
+            //return result.wasAcknowledged();
+            return updatedUserDTO;
 
         } catch (Exception e) {
             e.printStackTrace();
+            throw new ResourcePersistenceException("Failed to update user!");
         }
-        return false;
     }
 
     /**

@@ -13,6 +13,7 @@ public class UserDTO {
     protected String id;
     protected String firstName;
     protected String lastName;
+    protected String email;
     protected String username;
     protected String userType;
     protected ArrayList<CourseHeader> schedule = new ArrayList<>();
@@ -26,6 +27,7 @@ public class UserDTO {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
+        this.email = user.getEmail();
         this.username = user.getUsername();
         this.userType = user.getUserType();
         this.schedule = user.getSchedule();
@@ -54,6 +56,14 @@ public class UserDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUsername() {

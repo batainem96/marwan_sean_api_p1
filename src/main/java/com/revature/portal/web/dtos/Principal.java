@@ -19,6 +19,11 @@ public class Principal {
         this.username = subject.getUsername();
     }
 
+    public Principal(UserDTO subject) {
+        this.id = subject.getId();
+        this.username = subject.getUsername();
+    }
+
     public Principal(Claims jwtClaims) {
         this.id = jwtClaims.getId();
         this.username = jwtClaims.getSubject();

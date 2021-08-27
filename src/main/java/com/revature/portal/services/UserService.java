@@ -1,5 +1,6 @@
 package com.revature.portal.services;
 
+import com.revature.portal.datasource.models.Student;
 import com.revature.portal.datasource.models.User;
 import com.revature.portal.datasource.repositories.UserRepository;
 import com.revature.portal.util.exceptions.AuthenticationException;
@@ -15,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * The UserService class provides a service abstraction layer between the application layer and database connection
@@ -117,19 +117,39 @@ public class UserService {
     }
 
     /**
+     * Query the database for an existing user under the given username.
+     *
+     * @param username - Username being checked against database for status (taken or not taken).
+     * @return - True if the username is taken; false if otherwise.
+     */
+    public boolean isUsernameTaken(String username) {
+        return userRepo.findUserByUsername(username) != null;
+    }
+
+    /**
+     * Query the database for an existing user under the given email.
+     *
+     * @param email - Email being checked against database for status (taken or not taken).
+     * @return - True if the email is taken; false if otherwise.
+     */
+    public boolean isEmailTaken(String email) {
+        return userRepo.findUserByEmail(email) != null;
+    }
+
+    /**
      * The register method accepts a User object and passes it to the database access layer for the information to be
      * stored after ensuring the input fields are valid, and the entry is not a duplicate on any unique fields.
      *
      * @param newUser - The User object containing user information that should be saved to the database.
      * @return - Returns the returned User object from save method if no exception was thrown.
      */
-    public User register(User newUser) {
+    public UserDTO register(User newUser) {
 
         if (!isUserValid(newUser))
             throw new InvalidRequestException("Invalid user data provided!");
 
-        boolean isUsernameTaken = userRepo.findUserByUsername(newUser.getUsername()) != null;
-        boolean isEmailTaken = userRepo.findUserByEmail(newUser.getEmail()) != null;
+        boolean isUsernameTaken = isUsernameTaken(newUser.getUsername());
+        boolean isEmailTaken = isEmailTaken(newUser.getEmail());
 
         /* Check if username and/or email are taken */
         if (isUsernameTaken && isEmailTaken)
@@ -143,7 +163,7 @@ public class UserService {
             // If user already exists, register will fail and return null
             newUser = userRepo.save(newUser);
             logger.info("userRepo.save() invoked!");
-            return newUser;
+            return new UserDTO(newUser);
         } catch (InvalidRequestException ire) {
             throw new ResourcePersistenceException("ERROR: User already exists in database!");
         } catch (Exception e) {
@@ -170,7 +190,7 @@ public class UserService {
             throw new InvalidRequestException("Invalid user credentials provided!");
         }
 
-        User authUser = userRepo.findUserByCredentials(username, password);
+        UserDTO authUser = userRepo.findUserByCredentials(username, password);
 
         if (authUser == null) {
             throw new AuthenticationException("Invalid credentials provided!");
@@ -192,13 +212,45 @@ public class UserService {
             throw new InvalidRequestException("Invalid id provided");
         }
 
-        User user = userRepo.findById(id);
+        UserDTO user = userRepo.findById(id);
 
         if (user == null) {
             throw new ResourceNotFoundException("User with id=" + id + " not found!");
         }
 
-        return new UserDTO(user);
+        return user;
+
+    }
+
+    public UserDTO findUserByUsername(String username) {
+
+        if(username == null || username.trim().equals("")) {
+            throw new InvalidRequestException("Empty username query!");
+        }
+
+        UserDTO user = userRepo.findUserByUsername(username);
+
+        if(user == null) {
+            throw new ResourceNotFoundException("User with that username does not exist!");
+        }
+
+        return user;
+
+    }
+
+    public UserDTO findUserByEmail(String email) {
+
+        if(email == null || email.trim().equals("")) {
+            throw new InvalidRequestException("Empty email query!");
+        }
+
+        UserDTO user =  userRepo.findUserByEmail(email);
+
+        if(user == null) {
+            throw new ResourceNotFoundException("User with that email does not exist!");
+        }
+
+        return user;
 
     }
 
@@ -207,10 +259,7 @@ public class UserService {
      * @return - Returns a list of all users in the database.
      */
     public List<UserDTO> retrieveUsers() {
-        return userRepo.retrieveUsers()
-                        .stream()
-                        .map(UserDTO::new)
-                        .collect(Collectors.toList());
+        return userRepo.retrieveUsers();
     }
 
 
@@ -220,10 +269,21 @@ public class UserService {
      * ResourcePersistenceException will be thrown (assuming an exception from the database access layer is not thrown
      * first).
      */
-    public void updateUser(User user) {
-        if (!userRepo.update(user)) {
-            throw new ResourcePersistenceException("Failed to update user");
+    public UserDTO updateUser(User user) {
+
+        Student modelUser = new Student("Validname", "Validlast", "valid.email@valid.com", "validusername", "validpassword");
+
+        if(user.getFirstName() != null) modelUser.setFirstName(user.getFirstName());
+        if(user.getLastName() != null) modelUser.setLastName(user.getLastName());
+        if(user.getEmail() != null) modelUser.setEmail(user.getEmail());
+        if(user.getUsername() != null) modelUser.setUsername(user.getUsername());
+        if(user.getPassword() != null) modelUser.setPassword(user.getPassword());
+
+        if(!isUserValid(modelUser)) {
+            throw new InvalidRequestException("Provided user data is not valid!");
         }
+
+        return userRepo.update(user);
     }
 
     /**

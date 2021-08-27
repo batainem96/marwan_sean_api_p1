@@ -2,6 +2,7 @@ package com.revature.portal.web.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+
 import com.revature.portal.datasource.models.Student;
 import com.revature.portal.services.UserService;
 import com.revature.portal.util.exceptions.InvalidRequestException;
@@ -10,6 +11,10 @@ import com.revature.portal.util.exceptions.ResourcePersistenceException;
 import com.revature.portal.web.dtos.ErrorResponse;
 import com.revature.portal.web.dtos.Principal;
 import com.revature.portal.web.dtos.UserDTO;
+
+// ------------------------------ Servlet Helpers
+import com.revature.portal.web.servlet_helpers.AvailabilityChecker;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +23,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -56,6 +61,18 @@ public class UserServlet extends HttpServlet {
         PrintWriter respWriter = resp.getWriter();
         resp.setContentType("application/json");
 
+        /*
+            * Get the Request Fragments
+            * Get the Request Parameters
+         */
+        String[] reqFrags = req.getRequestURI().split("/");
+        String idParam = req.getParameter("id");
+        String usernameParam = req.getParameter("username");
+        String emailParam = req.getParameter("email");
+
+        // Get the principal information from the request, if it exists.
+        Principal requestingUser = (Principal) req.getAttribute("principal");
+
         //------------------------------------------------------------------------------------------
 
         /*
@@ -64,13 +81,13 @@ public class UserServlet extends HttpServlet {
             of the request URI.
          */
 
-        String[] reqFrags = req.getRequestURI().split("/");
-        boolean checkingAvailability = reqFrags[reqFrags.length - 1].equals("availability");
 
-        if (checkingAvailability) {
-            availabilityCheck(req, resp);
-            return; // end here, do not proceed to the remainder of the method's logic
-        }
+//        boolean checkingAvailability = reqFrags[reqFrags.length - 1].equals("availability");
+//
+//        if (checkingAvailability) {
+//            availabilityCheck(req, resp);
+//            return; // end here, do not proceed to the remainder of the method's logic
+//        }
 
         //------------------------------------------------------------------------------------------
 
@@ -80,16 +97,13 @@ public class UserServlet extends HttpServlet {
             unauthorized access and usage.
          */
 
-        // Get the principal information from the request, if it exists.
-        Principal requestingUser = (Principal) req.getAttribute("principal");
-
         // Check to see if there was a valid principal attribute
         if (requestingUser == null) {
             String msg = "No session found, please login.";
             logger.info(msg);
             writeErrorResponse(msg, 401, resp);
             return; // end here, do not proceed to the remainder of the method's logic
-        } else if (!requestingUser.getUsername().equals("wsingleton")) {
+        } else if (!requestingUser.getUsername().equals("ssmith")) {
             String msg = "Unauthorized attempt to access endpoint made by: " + requestingUser.getUsername();
             writeErrorResponse(msg, 403, resp);
             logger.info(msg);
@@ -105,21 +119,33 @@ public class UserServlet extends HttpServlet {
             all the users from the data source.
          */
 
-        String userIdParam = req.getParameter("id");
-
         try {
 
-            if (userIdParam == null) {
+            if(usernameParam != null) {
+                UserDTO user = userService.findUserByUsername(usernameParam);
+                respWriter.write(mapper.writeValueAsString(user));
+                return;
+            }
+
+            if(emailParam != null) {
+                UserDTO user = userService.findUserByEmail(emailParam);
+                respWriter.write(mapper.writeValueAsString(user));
+                return;
+            }
+
+            if (idParam == null) {
                 List<UserDTO> users = userService.retrieveUsers();
                 respWriter.write(mapper.writeValueAsString(users));
+                return;
             } else {
-                UserDTO user = userService.findUserById(userIdParam);
+                UserDTO user = userService.findUserById(idParam);
                 respWriter.write(mapper.writeValueAsString(user));
+                return;
             }
 
         } catch (ResourceNotFoundException rnfe) {
             logger.info(rnfe.getMessage());
-            writeErrorResponse(rnfe.getMessage(), 404, resp);
+            writeErrorResponse(rnfe.getMessage(), 400, resp);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             writeErrorResponse("An unexpected error occurred on the server.", 500, resp);
@@ -143,7 +169,6 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        System.out.println(req.getAttribute("filtered"));
         PrintWriter respWriter = resp.getWriter();
         resp.setContentType("application/json");
 
@@ -190,6 +215,57 @@ public class UserServlet extends HttpServlet {
             logger.error("An unknown exception occurred.", e);
 
         }
+    }
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        PrintWriter respWriter = resp.getWriter();
+        resp.setContentType("application/json");
+//        Principal principal = new Principal(mapper.)
+
+        try {
+
+            ServletInputStream sis = req.getInputStream();
+            Student user = mapper.readValue(sis, Student.class);
+            Principal principal = (Principal) req.getAttribute("principal");
+            user.setId(principal.getId());
+            UserDTO updatedUser = userService.updateUser(user);
+            respWriter.write(mapper.writeValueAsString(updatedUser));
+//            UserDTO user = new UserDTO(full);
+//            String password = full.getPassword();
+
+        } catch (InvalidRequestException | MismatchedInputException e) {
+
+            // Invalid user info
+            e.printStackTrace();
+            resp.setStatus(400);
+            ErrorResponse errResp = new ErrorResponse(400, e.getMessage());
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("Invalid user info!", e);
+
+        } catch (ResourcePersistenceException rpe) {
+
+            // Duplicate user info
+            resp.setStatus(409);
+            ErrorResponse errResp = new ErrorResponse(409, rpe.getMessage());
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("Error writing to database. This was most likely due to duplicate user information.", rpe);
+
+        } catch (IOException ie) {
+
+            resp.setStatus(501);
+            ErrorResponse errResp = new ErrorResponse(501, ie.getMessage());
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("Error reading input stream", ie);
+
+        } catch (Exception e) {
+
+            resp.setStatus(500);
+            ErrorResponse errResp = new ErrorResponse(500, "An unknown exception occurred.");
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("An unknown exception occurred.", e);
+        }
+
     }
 
     /**
