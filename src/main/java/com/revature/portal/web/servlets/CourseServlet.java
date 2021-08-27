@@ -1,8 +1,10 @@
 package com.revature.portal.web.servlets;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.portal.datasource.models.Course;
 import com.revature.portal.services.CourseService;
+import com.revature.portal.util.exceptions.AuthenticationException;
 import com.revature.portal.util.exceptions.InvalidRequestException;
 import com.revature.portal.util.exceptions.ResourcePersistenceException;
 import com.revature.portal.web.dtos.ErrorResponse;
@@ -58,6 +60,31 @@ public class CourseServlet extends HttpServlet {
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     *  Authorization function: checks principal for id/username/token/role/etc to decide if current user is
+     *  allowed to perform current action.
+     */
+    public boolean authorize(HttpServletRequest req, HttpServletResponse resp) throws JsonProcessingException {
+        // Get the principal information from the request, if it exists.
+        Principal requestingUser = (Principal) req.getAttribute("principal");
+
+        // Check to see if there was a valid principal attribute
+        if (requestingUser == null) {
+            String msg = "No session found, please login.";
+            ErrorResponse errResp = new ErrorResponse(401, msg);
+            throw new AuthenticationException(mapper.writeValueAsString(errResp));
+        } else if (requestingUser.getRole() == null) {
+            String msg = "Unauthorized attempt to access endpoint made by: " + requestingUser.getUsername();
+            ErrorResponse errResp = new ErrorResponse(403, msg);
+            throw new AuthenticationException(mapper.writeValueAsString(errResp));
+        } else if (!requestingUser.getRole().equals("faculty")) {
+            String msg = "Unauthorized attempt to access endpoint made by: " + requestingUser.getUsername();
+            ErrorResponse errResp = new ErrorResponse(403, msg);
+            throw new AuthenticationException(mapper.writeValueAsString(errResp));
+        }
+        return true;
     }
 
     /**
@@ -138,6 +165,14 @@ public class CourseServlet extends HttpServlet {
         resp.setContentType("application/json");
 
         try {
+            authorize(req, resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            respWriter.write(e.getMessage());
+            return;
+        }
+
+        try {
 
             // Map request message body to a Course object
             Course newCourse = mapper.readValue(req.getInputStream(), Course.class);
@@ -182,23 +217,12 @@ public class CourseServlet extends HttpServlet {
         PrintWriter respWriter = resp.getWriter();
         resp.setContentType("application/json");
 
-        // Get the principal information from the request, if it exists.
-        Principal requestingUser = (Principal) req.getAttribute("principal");
-
-        // Check to see if there was a valid principal attribute
-        if (requestingUser == null) {
-            String msg = "No session found, please login.";
-            ErrorResponse errResp = new ErrorResponse(401, msg);
-            respWriter.write(mapper.writeValueAsString(errResp));
-            logger.info(msg);
-            return; // end here, do not proceed to the remainder of the method's logic
-            // TODO Change this to check for a faculty userType
-        } else if (!requestingUser.getUsername().equals("wsingleton")) {
-            String msg = "Unauthorized attempt to access endpoint made by: " + requestingUser.getUsername();
-            ErrorResponse errResp = new ErrorResponse(403, msg);
-            respWriter.write(mapper.writeValueAsString(errResp));
-            logger.info(msg);
-            return; // end here, do not proceed to the remainder of the method's logic
+        try {
+            authorize(req, resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            respWriter.write(e.getMessage());
+            return;
         }
 
         String idParam = req.getParameter("id");
@@ -232,6 +256,14 @@ public class CourseServlet extends HttpServlet {
         // Instantiate response writer object
         PrintWriter respWriter = res.getWriter();
         res.setContentType("application/json");
+
+        try {
+            authorize(req, res);
+        } catch (Exception e) {
+            e.printStackTrace();
+            respWriter.write(e.getMessage());
+            return;
+        }
 
         try {
             // Map request message body to a Course object
