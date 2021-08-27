@@ -17,6 +17,7 @@ import com.revature.portal.datasource.models.Student;
 import com.revature.portal.datasource.util.MongoClientFactory;
 import com.revature.portal.util.exceptions.DataSourceException;
 import com.revature.portal.util.exceptions.InvalidRequestException;
+import com.revature.portal.util.exceptions.ResourcePersistenceException;
 import com.revature.portal.web.dtos.UserDTO;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -239,19 +240,20 @@ public class UserRepository {
      * @param updatedUser
      * @return
      */
-    public boolean update(User updatedUser) {
+    public UserDTO update(User updatedUser) {
         try {
             // Convert Person to BasicDBObject
             String userJson = mapper.writeValueAsString(updatedUser);
             Document userDoc = Document.parse(userJson);
             UpdateResult result = usersCollection.replaceOne(eq(("_id"), new ObjectId(updatedUser.getId())), userDoc);
 
-            return result.wasAcknowledged();
+            //return result.wasAcknowledged();
+            return new UserDTO(updatedUser);
 
         } catch (Exception e) {
             e.printStackTrace();
+            throw new ResourcePersistenceException("Failed to update user!");
         }
-        return false;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.revature.portal.services;
 
+import com.revature.portal.datasource.models.Student;
 import com.revature.portal.datasource.models.User;
 import com.revature.portal.datasource.repositories.UserRepository;
 import com.revature.portal.util.exceptions.AuthenticationException;
@@ -15,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * The UserService class provides a service abstraction layer between the application layer and database connection
@@ -269,10 +269,21 @@ public class UserService {
      * ResourcePersistenceException will be thrown (assuming an exception from the database access layer is not thrown
      * first).
      */
-    public void updateUser(User user) {
-        if (!userRepo.update(user)) {
-            throw new ResourcePersistenceException("Failed to update user");
+    public UserDTO updateUser(User user) {
+
+        Student modelUser = new Student("Validname", "Validlast", "valid.email@valid.com", "validusername", "validpassword");
+
+        if(user.getFirstName() != null) modelUser.setFirstName(user.getFirstName());
+        if(user.getLastName() != null) modelUser.setLastName(user.getLastName());
+        if(user.getEmail() != null) modelUser.setEmail(user.getEmail());
+        if(user.getUsername() != null) modelUser.setUsername(user.getUsername());
+        if(user.getPassword() != null) modelUser.setPassword(user.getPassword());
+
+        if(!isUserValid(modelUser)) {
+            throw new InvalidRequestException("Provided user data is not valid!");
         }
+
+        return userRepo.update(user);
     }
 
     /**

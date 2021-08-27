@@ -145,7 +145,7 @@ public class UserServlet extends HttpServlet {
 
         } catch (ResourceNotFoundException rnfe) {
             logger.info(rnfe.getMessage());
-            writeErrorResponse(rnfe.getMessage(), 404, resp);
+            writeErrorResponse(rnfe.getMessage(), 400, resp);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             writeErrorResponse("An unexpected error occurred on the server.", 500, resp);
@@ -169,7 +169,6 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        System.out.println(req.getAttribute("filtered"));
         PrintWriter respWriter = resp.getWriter();
         resp.setContentType("application/json");
 
@@ -216,6 +215,55 @@ public class UserServlet extends HttpServlet {
             logger.error("An unknown exception occurred.", e);
 
         }
+    }
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        PrintWriter respWriter = resp.getWriter();
+        resp.setContentType("application/json");
+//        Principal principal = new Principal(mapper.)
+
+        try {
+
+            ServletInputStream sis = req.getInputStream();
+            Student user = mapper.readValue(sis, Student.class);
+            userService.updateUser(user);
+            respWriter.write(mapper.writeValueAsString(user));
+//            UserDTO user = new UserDTO(full);
+//            String password = full.getPassword();
+
+        } catch (InvalidRequestException | MismatchedInputException e) {
+
+            // Invalid user info
+            e.printStackTrace();
+            resp.setStatus(400);
+            ErrorResponse errResp = new ErrorResponse(400, e.getMessage());
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("Invalid user info!", e);
+
+        } catch (ResourcePersistenceException rpe) {
+
+            // Duplicate user info
+            resp.setStatus(409);
+            ErrorResponse errResp = new ErrorResponse(409, rpe.getMessage());
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("Error writing to database. This was most likely due to duplicate user information.", rpe);
+
+        } catch (IOException ie) {
+
+            resp.setStatus(501);
+            ErrorResponse errResp = new ErrorResponse(501, ie.getMessage());
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("Error reading input stream", ie);
+
+        } catch (Exception e) {
+
+            resp.setStatus(500);
+            ErrorResponse errResp = new ErrorResponse(500, "An unknown exception occurred.");
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.error("An unknown exception occurred.", e);
+        }
+
     }
 
     /**
