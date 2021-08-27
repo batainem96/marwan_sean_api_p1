@@ -270,4 +270,14 @@ public class CourseService {
             throw new ResourcePersistenceException("Failed to delete course");
         else return result;
     }
+
+    /**
+     *  Deletes a course from the database with the given id.
+     */
+    public boolean deleteCourseByID(String id) {
+        boolean result = courseRepo.deleteById(id);
+        if (!result)
+            throw new ResourcePersistenceException("No course was found with given id.");
+        else return true;
+    }
 }

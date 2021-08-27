@@ -6,6 +6,7 @@ import com.revature.portal.services.CourseService;
 import com.revature.portal.util.exceptions.InvalidRequestException;
 import com.revature.portal.util.exceptions.ResourcePersistenceException;
 import com.revature.portal.web.dtos.ErrorResponse;
+import com.revature.portal.web.dtos.Principal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,5 +117,54 @@ public class CourseServlet extends HttpServlet {
             respWriter.write(mapper.writeValueAsString(errResp));
         }
 
+    }
+
+    /**
+     *  The doDelete method takes in a HttpServletRequest with a parameter in the uri specifying the id of the course
+     *  to be deleted. As this method is used to remove entries from the database, proper authorization in the form
+     *  of a JWT is required in the header. This authorization is picked up by AuthFilter, which in turn, generates a
+     *  Principal object out of the token and provides it for doDelete to read.
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Instantiate response writer object
+        PrintWriter respWriter = resp.getWriter();
+        resp.setContentType("application/json");
+
+        // Get the principal information from the request, if it exists.
+        Principal requestingUser = (Principal) req.getAttribute("principal");
+
+        // Check to see if there was a valid principal attribute
+        if (requestingUser == null) {
+            String msg = "No session found, please login.";
+            ErrorResponse errResp = new ErrorResponse(401, msg);
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.info(msg);
+            return; // end here, do not proceed to the remainder of the method's logic
+            // TODO Change this to check for a faculty userType
+        } else if (!requestingUser.getUsername().equals("wsingleton")) {
+            String msg = "Unauthorized attempt to access endpoint made by: " + requestingUser.getUsername();
+            ErrorResponse errResp = new ErrorResponse(403, msg);
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.info(msg);
+            return; // end here, do not proceed to the remainder of the method's logic
+        }
+
+        String idParam = req.getParameter("id");
+
+        try {
+            courseService.deleteCourseByID(idParam);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String msg = "Failed to delete course, ID: " + idParam;
+            ErrorResponse errResp = new ErrorResponse(500, msg);
+            respWriter.write(mapper.writeValueAsString(errResp));
+            logger.info(msg);
+        }
     }
 }

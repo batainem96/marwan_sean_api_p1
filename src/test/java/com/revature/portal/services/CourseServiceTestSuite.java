@@ -138,29 +138,6 @@ public class CourseServiceTestSuite {
         }
     }
 
-    @Test
-    public void showCourses_displaysNothing_withNoError_ifNoCourses() {
-        // Arrange
-        when(mockCourseRepo.retrieveCourses()).thenReturn(null);
-        when(mockCourseRepo.retrieveInstructorCourses("Test","Test")).thenReturn(null);
-        Faculty user = new Faculty("Test", "Test", "Test", "Test", "Test");
-
-        PrintStream oldOut = System.out;
-        // Create new System output stream
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(baos));
-
-        // Act
-        sut.showCourses();
-        sut.showCourses(user, "instructor");
-        String output = new String(baos.toByteArray());
-        System.setOut(oldOut);
-
-        // Assert
-        verify(mockCourseRepo, times(1)).retrieveCourses();
-        verify(mockCourseRepo, times(1)).retrieveInstructorCourses("Test", "Test");
-        assertFalse(output.contains("null"));
-    }
 
     @Test(expected = SchedulingException.class)
     public void addCourse_throwsException_ifNoOpenSeats() {

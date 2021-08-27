@@ -226,13 +226,22 @@ public class CourseRepository {
         return false;
     }
 
+    /**
+     *  Removes a course from the database matching the given id. If no course is found matching the id, return false.
+     *
+     * @param id
+     * @return
+     */
     public boolean deleteById(String id) {
         try {
             Document queryDoc = new Document("_id", new ObjectId(id));
 
             // delete course
-            DeleteResult result = courseCollection.deleteOne(queryDoc);
-            return result.wasAcknowledged();
+            Document result = courseCollection.findOneAndDelete(queryDoc);
+
+            // Return true if course was found (and deleted), otherwise return false
+            if (result != null) return true;
+            else return false;
         } catch (Exception e) {
             throw new DataSourceException("An unexpected exception occurred.", e);
         }
