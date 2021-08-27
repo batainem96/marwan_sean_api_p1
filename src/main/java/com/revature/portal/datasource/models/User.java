@@ -18,7 +18,7 @@ public abstract class User {
     protected String email;
     protected String username;
     protected String password;
-    protected String userType;
+    protected String role;
     protected ArrayList<CourseHeader> schedule = new ArrayList<>();
 
     public User() {
@@ -26,7 +26,7 @@ public abstract class User {
     }
 
     public User(String userType) {
-        this.userType = userType;
+        this.role = userType;
     }
 
     public User(String firstName, String lastName, String email, String username, String password, String userType) {
@@ -35,7 +35,7 @@ public abstract class User {
         this.email = email;
         this.username = username;
         this.password = password;
-        this.userType = userType;
+        this.role = userType;
     }
 
     public User(String id, String firstName, String lastName, String email, String username, String password, String userType) {
@@ -91,12 +91,12 @@ public abstract class User {
         this.password = password;
     }
 
-    public String getUserType() {
-        return userType;
+    public String getRole() {
+        return role;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public ArrayList<CourseHeader> getSchedule() {
@@ -127,7 +127,7 @@ public abstract class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", username='" + username + '\'' +
-                ", userType='" + userType + '\'' +
+                ", userType='" + role + '\'' +
                 ", schedule=" + schedule +
                 '}';
     }

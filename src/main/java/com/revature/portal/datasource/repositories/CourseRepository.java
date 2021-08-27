@@ -7,6 +7,7 @@ import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.revature.portal.datasource.models.Course;
+import com.revature.portal.datasource.models.PreReq;
 import com.revature.portal.datasource.util.MongoClientFactory;
 import com.revature.portal.util.exceptions.DataSourceException;
 import org.bson.Document;
@@ -14,6 +15,7 @@ import org.bson.types.ObjectId;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -238,22 +240,16 @@ public class CourseRepository {
      */
     public Course update(Course course) {
         try {
-            BasicDBObject updateFields = new BasicDBObject();
-            ObjectId id = new ObjectId(course.getId());
-            for (Field field : course.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                if (field.getName().equals("id") || field.get(course) == null || field.get(course).equals(-1))
-                    continue;
-                else {
-                    updateFields.append(field.getName(), field.get(course));
-                }
-                field.setAccessible(false);
-            }
+            // Convert Course to BasicDBObject
+            String id = course.getId();
+            course.setId(null);
+            String courseJson = mapper.writeValueAsString(course);
+            Document updateFields = Document.parse(courseJson);
 
             BasicDBObject setQuery = new BasicDBObject();
             setQuery.append("$set", updateFields);
 
-            Document courseDoc = courseCollection.findOneAndUpdate(eq(("_id"), id), setQuery);
+            Document courseDoc = courseCollection.findOneAndUpdate(eq(("_id"), new ObjectId(id)), setQuery);
             Course newCourse = mapper.readValue(courseDoc.toJson(), Course.class);
             newCourse.setId(courseDoc.get("_id").toString());
 

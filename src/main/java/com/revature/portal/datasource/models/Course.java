@@ -10,9 +10,9 @@ import java.util.*;
 import static com.revature.portal.datasource.models.DeptShorthand.deptToShort;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Course {
     // Variables
-    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert ID to database if non null
     private String id;
     private String title;
     private String department;
@@ -20,28 +20,19 @@ public class Course {
     private int courseNo;
     private int sectionNo;
     @JsonProperty("prerequisites")
-    private ArrayList<PreReq> prerequisites = new ArrayList<>();
+    private ArrayList<PreReq> prerequisites;
     private String instructor;
     private int credits;
     private int totalSeats;
-    private int openSeats = 0;
+    private int openSeats;
     @JsonProperty("meetingTimes")
-    private ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
+    private ArrayList<MeetingTime> meetingTimes;
     private String description;
 
 //    private final Logger logger = LogManager.getLogger(CourseService.class);
 
     // Constructors
-    // Mapper constructor initializes all variables to null/-1
-    public Course() {
-        courseNo = -1;
-        sectionNo = -1;
-        credits = -1;
-        totalSeats = -1;
-        openSeats = -1;
-        prerequisites = null;
-        meetingTimes = null;
-    }
+    public Course() {}
 
     // In order to be valid, a Course must at least be given a title, dept, courseNo, and sectionNo
     public Course(String title, String department, int courseNo, int sectionNo) {

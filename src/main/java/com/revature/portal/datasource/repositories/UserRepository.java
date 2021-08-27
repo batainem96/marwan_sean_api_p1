@@ -52,7 +52,7 @@ public class UserRepository {
     public UserDTO mapUser(Document authUserDoc) {
         UserDTO user;
         // Retrieves the value of the userType field in the database
-        String userType = authUserDoc.get("userType").toString();
+        String role = authUserDoc.get("role").toString();
         try {
             user = mapper.readValue(authUserDoc.toJson(), UserDTO.class);
 
