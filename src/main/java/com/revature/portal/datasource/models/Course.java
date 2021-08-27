@@ -1,6 +1,7 @@
 package com.revature.portal.datasource.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.lang.reflect.Field;
@@ -11,6 +12,7 @@ import static com.revature.portal.datasource.models.DeptShorthand.deptToShort;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Course {
     // Variables
+    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert ID to database if non null
     private String id;
     private String title;
     private String department;
