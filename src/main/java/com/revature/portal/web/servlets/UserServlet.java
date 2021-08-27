@@ -227,8 +227,10 @@ public class UserServlet extends HttpServlet {
 
             ServletInputStream sis = req.getInputStream();
             Student user = mapper.readValue(sis, Student.class);
-            userService.updateUser(user);
-            respWriter.write(mapper.writeValueAsString(user));
+            Principal principal = (Principal) req.getAttribute("principal");
+            user.setId(principal.getId());
+            UserDTO updatedUser = userService.updateUser(user);
+            respWriter.write(mapper.writeValueAsString(updatedUser));
 //            UserDTO user = new UserDTO(full);
 //            String password = full.getPassword();
 

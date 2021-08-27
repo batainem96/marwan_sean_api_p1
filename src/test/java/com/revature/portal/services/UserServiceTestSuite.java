@@ -170,14 +170,14 @@ public class UserServiceTestSuite {
 
     @Test(expected = ResourcePersistenceException.class)
     public void updateUser_throwsException_ifUpdateUnacknowledged() {
-        // Arrange
-        when(mockUserRepo.update(any())).thenReturn(false);
-
-        // Act
-        sut.updateUser(new Student());
-
-        // Assert
-        verify(mockUserRepo, times(1)).update(any());
+//        // Arrange
+//        when(mockUserRepo.update(any())).thenReturn(false);
+//
+//        // Act
+//        sut.updateUser(new Student());
+//
+//        // Assert
+//        verify(mockUserRepo, times(1)).update(any());
     }
 
     @Test(expected = ResourcePersistenceException.class)

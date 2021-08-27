@@ -244,11 +244,25 @@ public class UserRepository {
         try {
             // Convert Person to BasicDBObject
             String userJson = mapper.writeValueAsString(updatedUser);
-            Document userDoc = Document.parse(userJson);
-            UpdateResult result = usersCollection.replaceOne(eq(("_id"), new ObjectId(updatedUser.getId())), userDoc);
+//            Document userDoc = Document.parse(userJson);
+            Document fieldsDoc = new Document();
+
+            if(updatedUser.getFirstName() != null) fieldsDoc.append("firstName", updatedUser.getFirstName());
+            if(updatedUser.getLastName() != null) fieldsDoc.append("lastName", updatedUser.getLastName());
+            if(updatedUser.getEmail() != null) fieldsDoc.append("email", updatedUser.getEmail());
+            if(updatedUser.getUsername() != null) fieldsDoc.append("username", updatedUser.getUsername());
+            if(updatedUser.getPassword() != null) fieldsDoc.append("password", updatedUser.getPassword());
+
+            Document updateDoc = new Document("$set", fieldsDoc);
+
+            System.out.println(fieldsDoc);
+
+            Document result = usersCollection.findOneAndUpdate(eq(("_id"), new ObjectId(updatedUser.getId())), updateDoc);
+            UserDTO updatedUserDTO = mapper.readValue(result.toJson(), UserDTO.class);
+            updatedUserDTO.setId(result.get("_id").toString());
 
             //return result.wasAcknowledged();
-            return new UserDTO(updatedUser);
+            return updatedUserDTO;
 
         } catch (Exception e) {
             e.printStackTrace();
