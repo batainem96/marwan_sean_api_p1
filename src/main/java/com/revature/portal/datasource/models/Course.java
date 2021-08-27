@@ -186,7 +186,43 @@ public class Course {
         return Objects.hash(id, title, department, deptShort, courseNo, sectionNo, prerequisites, instructor, credits, totalSeats, openSeats, meetingTimes, description);
     }
 
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", department='" + department + '\'' +
+                ", deptShort='" + deptShort + '\'' +
+                ", courseNo=" + courseNo +
+                ", sectionNo=" + sectionNo +
+                ", prerequisites=" + prerequisites +
+                ", instructor='" + instructor + '\'' +
+                ", credits=" + credits +
+                ", totalSeats=" + totalSeats +
+                ", openSeats=" + openSeats +
+                ", meetingTimes=" + meetingTimes +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
     // Methods
+    /**
+     *  Hacky workaround to problem of ObjectMapper initializing unknown variables to null/-1.
+     *  Variables can stay as null, but integers should be changed to 0.
+     */
+    public void reinitializeVariables() {
+        try {
+            for (Field field : this.getClass().getDeclaredFields()) {
+                if (field.get(this) == null)
+                    continue;
+                if (field.get(this).equals(-1))
+                    field.set(this, 0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Displays course information in an easily readable format
      */
