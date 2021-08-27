@@ -138,7 +138,6 @@ public class CourseServiceTestSuite {
         }
     }
 
-
     @Test(expected = SchedulingException.class)
     public void addCourse_throwsException_ifNoOpenSeats() {
         // Arrange
@@ -159,10 +158,10 @@ public class CourseServiceTestSuite {
     public void updateCourse_throwsException_ifUpdateFailed() {
         // Arrange
         Course course = new Course("Test", "Test", 101, 1);
-        when(mockCourseRepo.update(course)).thenReturn(false);
+        when(mockCourseRepo.replace(course)).thenReturn(false);
 
         // Act
-        sut.updateCourse(course);
+        sut.replaceCourse(course);
 
         // Assert
     }

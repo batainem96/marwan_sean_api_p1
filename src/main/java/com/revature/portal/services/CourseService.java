@@ -207,12 +207,21 @@ public class CourseService {
      *
      * @param course
      */
-    public void updateCourse(Course course) {
+    public void replaceCourse(Course course) {
         if (!isCourseValid(course))
             throw new InvalidRequestException("Course is not valid!");
-        boolean result = courseRepo.update(course);
+        boolean result = courseRepo.replace(course);
         if (!result)
             throw new ResourcePersistenceException("Failed to update course");
+    }
+
+    /**
+     * Persist any changes made to Course to the database.
+     *
+     */
+    public Course updateCourse(Course course) {
+        Course updatedCourse = courseRepo.update(course);
+        return updatedCourse;
     }
 
     /**
