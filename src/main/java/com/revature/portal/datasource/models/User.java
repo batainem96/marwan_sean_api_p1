@@ -9,7 +9,7 @@ import java.util.Objects;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class User {
+public class User {
     // Variables
     @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert ID to database if non null
     protected String id;
@@ -22,7 +22,7 @@ public abstract class User {
     protected ArrayList<CourseHeader> schedule = new ArrayList<>();
 
     public User() {
-        super();
+
     }
 
     public User(String userType) {
