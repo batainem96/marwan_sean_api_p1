@@ -55,6 +55,10 @@ public class UserServlet extends HttpServlet {
     public boolean authorize(HttpServletRequest req, HttpServletResponse resp) throws JsonProcessingException {
         // Get the principal information from the request, if it exists.
         Principal requestingUser = (Principal) req.getAttribute("principal");
+        boolean isFaculty = requestingUser.getRole().equals("faculty");
+        boolean isStudent = requestingUser.getRole().equals("student");
+        boolean isUserAccessingOwnData = req.getParameter("id") != null ||
+                requestingUser.getId().equals(req.getParameter("id"));
 
         // Check to see if there was a valid principal attribute
         if (requestingUser == null) {
@@ -65,6 +69,8 @@ public class UserServlet extends HttpServlet {
             String msg = "Unauthorized attempt to access endpoint made by: " + requestingUser.getUsername();
             ErrorResponse errResp = new ErrorResponse(403, msg);
             throw new AuthenticationException(mapper.writeValueAsString(errResp));
+        } else if (isUserAccessingOwnData) { // Student allowed access to own information
+            return true;
         } else if (!requestingUser.getRole().equals("faculty")) {
             String msg = "Unauthorized attempt to access endpoint made by: " + requestingUser.getUsername();
             ErrorResponse errResp = new ErrorResponse(403, msg);
@@ -133,7 +139,6 @@ public class UserServlet extends HttpServlet {
         String idParam = req.getParameter("id");
         String usernameParam = req.getParameter("username");
         String emailParam = req.getParameter("email");
-
 
         //------------------------------------------------------------------------------------------
 
