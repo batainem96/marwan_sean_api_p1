@@ -125,6 +125,7 @@ public class CourseServlet extends HttpServlet {
         if (idParam != null) {
             try {
                 Course course = courseService.findCourseByID(idParam);
+
                 payload = mapper.writeValueAsString(course);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -277,6 +278,7 @@ public class CourseServlet extends HttpServlet {
         try {
             // Map request message body to a Course object
             Course updateCourse = mapper.readValue(req.getInputStream(), Course.class);
+            System.out.println(updateCourse);
             // Update Course
             updateCourse = courseService.updateCourse(updateCourse);
             // Respond with updated course back to sender
