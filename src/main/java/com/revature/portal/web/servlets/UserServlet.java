@@ -55,8 +55,8 @@ public class UserServlet extends HttpServlet {
     public boolean authorize(HttpServletRequest req, HttpServletResponse resp) throws JsonProcessingException {
         // Get the principal information from the request, if it exists.
         Principal requestingUser = (Principal) req.getAttribute("principal");
-        boolean isFaculty = requestingUser.getRole().equals("faculty");
-        boolean isStudent = requestingUser.getRole().equals("student");
+//        boolean isFaculty = requestingUser.getRole().equals("faculty");
+//        boolean isStudent = requestingUser.getRole().equals("student");
         boolean isUserAccessingOwnData = req.getParameter("id") != null ||
                 requestingUser.getId().equals(req.getParameter("id"));
 

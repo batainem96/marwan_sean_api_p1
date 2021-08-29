@@ -1,7 +1,9 @@
 package com.revature.portal.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.portal.datasource.models.*;
 import com.revature.portal.datasource.repositories.CourseRepository;
+import com.revature.portal.datasource.repositories.UserRepository;
 import com.revature.portal.util.exceptions.*;
 import com.revature.portal.datasource.models.Course;
 import com.revature.portal.web.dtos.CourseHeader;
@@ -264,8 +266,10 @@ public class CourseService {
      *  Deletes a course from the database with the given id.
      */
     public boolean deleteCourseByID(String id) {
+        UserRepository userRepo = new UserRepository(new ObjectMapper().findAndRegisterModules());
         boolean result = courseRepo.deleteById(id);
-        if (!result)
+        boolean result2 = userRepo.deleteCourseByIdFromUsers(id);
+        if (!result || !result2)
             throw new ResourcePersistenceException("No course was found with given id.");
         else return true;
     }

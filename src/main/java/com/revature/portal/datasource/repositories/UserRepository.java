@@ -352,6 +352,28 @@ public class UserRepository {
         }
     }
 
+    public boolean deleteCourseByIdFromUsers(String id) {
+        try {
+
+            if(id == null || id.trim().equals("")) {
+                throw new InvalidRequestException("Invalid Course ID given.");
+            }
+
+            Document queryDoc = new Document("schedule.id", id);
+            Document pullDoc = new Document("schedule",
+                    new Document("id", id));
+
+            usersCollection.updateMany(queryDoc,
+                    new Document("$pull",
+                    pullDoc));
+
+            System.out.println("Course (ID): " + id + " successfully removed from students.");
+            return true;
+        } catch (Exception e) {
+            throw new ResourcePersistenceException("Failed to remove courses from users' schedules.");
+        }
+    }
+
     /**
      * Searches the database for an entry with the given username and, if it exists, deletes it.
      *
