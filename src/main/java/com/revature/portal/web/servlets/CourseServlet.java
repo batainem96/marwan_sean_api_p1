@@ -221,6 +221,7 @@ public class CourseServlet extends HttpServlet {
         try {
             authorize(req, resp);
         } catch (Exception e) {
+            resp.setStatus(401);
             e.printStackTrace();
             respWriter.write(e.getMessage());
             return;
