@@ -8,13 +8,12 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
-import com.revature.portal.datasource.models.Course;
-import com.revature.portal.datasource.models.Faculty;
-import com.revature.portal.datasource.models.User;
-import com.revature.portal.datasource.models.Student;
+import com.revature.portal.datasource.models.*;
 import com.revature.portal.datasource.util.MongoClientFactory;
 import com.revature.portal.util.exceptions.DataSourceException;
 import com.revature.portal.util.exceptions.InvalidRequestException;
@@ -254,29 +253,50 @@ public class UserRepository {
             if(updatedUser.getUsername() != null) fieldsDoc.append("username", updatedUser.getUsername());
             if(updatedUser.getPassword() != null) fieldsDoc.append("password", updatedUser.getPassword());
             if(updatedUser.getSchedule() != null) {
-                Document coursesSetDoc = new Document();
-                Document coursesListDoc = new Document();
+
+                List<Document> courseListDoc = new ArrayList<>();
+
                 for (Course course : updatedUser.getSchedule()) {
-                    coursesListDoc.append("_id", new ObjectId(course.getId()));
-                    coursesListDoc.append("title", course.getTitle());
-                    coursesListDoc.append("department", course.getDepartment());
-                    coursesListDoc.append("deptShort", course.getDeptShort());
-                    coursesListDoc.append("courseNo", course.getCourseNo());
-                    coursesListDoc.append("sectionNo", course.getSectionNo());
-                    coursesListDoc.append("instructor", course.getInstructor());
-                    coursesListDoc.append("credits", course.getCredits());
-                    coursesListDoc.append("totalSeats", course.getTotalSeats());
-                    coursesListDoc.append("openSeats", course.getOpenSeats());
-                    coursesListDoc.append("description", course.getDescription());
+
+                    List<Document> meetingTimesDoc = new ArrayList<>();
+                    for(MeetingTime meet : course.getMeetingTimes()) {
+                        meetingTimesDoc.add(new Document("day", meet.getDay())
+                                        .append("startTime", meet.getStartTime())
+                                        .append("endTime", meet.getEndTime())
+                                        .append("classType", meet.getClassType()));
+                    }
+
+                    List<Document> prerequisitesDoc = new ArrayList<>();
+                    for (PreReq preReq : course.getPrerequisites()) {
+                        prerequisitesDoc.add(new Document("department", preReq.getDepartment())
+                                        .append("courseNo", preReq.getCourseNo())
+                                        .append("credits", preReq.getCredits()));
+                    }
+
+                    courseListDoc.add(new Document("_id", new ObjectId(course.getId()))
+                            .append("title", course.getTitle())
+                            .append("department", course.getDepartment())
+                            .append("deptShort", course.getDeptShort())
+                            .append("courseNo", course.getCourseNo())
+                            .append("sectionNo", course.getSectionNo())
+                            .append("instructor", course.getInstructor())
+                            .append("credits", course.getCredits())
+                            .append("totalSeats", course.getTotalSeats())
+                            .append("openSeats", course.getOpenSeats())
+                            .append("description", course.getDescription())
+                            .append("meetingTimes", meetingTimesDoc)
+                            .append("prerequisites", prerequisitesDoc));
                 }
-                coursesSetDoc.append("$set", coursesListDoc);
+
+                fieldsDoc.append("schedule", courseListDoc);
             }
+
 
             Document updateDoc = new Document("$set", fieldsDoc);
 
             System.out.println(fieldsDoc);
 
-            Document result = usersCollection.findOneAndUpdate(eq(("_id"), new ObjectId(updatedUser.getId())), updateDoc);
+            Document result = usersCollection.findOneAndUpdate(eq(("_id"), new ObjectId(updatedUser.getId())), updateDoc, new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
             UserDTO updatedUserDTO = mapper.readValue(result.toJson(), UserDTO.class);
             updatedUserDTO.setId(result.get("_id").toString());
 
