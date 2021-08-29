@@ -263,6 +263,22 @@ public class UserService {
     }
 
 
+    public UserDTO replaceUser(User user) {
+        User modelUser = new User("Validname", "Validlast", "valid.email@valid.com", "validusername", "validpassword", "student");
+
+        if(user.getFirstName() != null) modelUser.setFirstName(user.getFirstName());
+        if(user.getLastName() != null) modelUser.setLastName(user.getLastName());
+        if(user.getEmail() != null) modelUser.setEmail(user.getEmail());
+        if(user.getUsername() != null) modelUser.setUsername(user.getUsername());
+        if(user.getPassword() != null) modelUser.setPassword(user.getPassword());
+
+        if(!isUserValid(modelUser)) {
+            throw new InvalidRequestException("Provided user data is not valid!");
+        }
+
+        return userRepo.replace(user);
+    }
+
     /**
      * The updateUser method accepts a User object from the application layer and passes it to the database access layer
      * to update an existing user. If the user does not exist, or the operation otherwise fails, a
