@@ -5,21 +5,29 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.revature.portal.web.dtos.CourseHeader;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert fields to database if non null
 public class User {
     // Variables
-    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert ID to database if non null
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String id;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String firstName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String lastName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String email;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String username;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String password;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String role;
-    protected ArrayList<CourseHeader> schedule = new ArrayList<>();
+    protected List<Course> schedule = new ArrayList<>();
 
     public User() {
 
@@ -99,11 +107,11 @@ public class User {
         this.role = role;
     }
 
-    public ArrayList<CourseHeader> getSchedule() {
+    public List<Course> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(ArrayList<CourseHeader> schedule) {
+    public void setSchedule(ArrayList<Course> schedule) {
         this.schedule = schedule;
     }
 
@@ -132,11 +140,11 @@ public class User {
                 '}';
     }
 
-    public void addToSchedule(CourseHeader courseHeader) {
-        this.schedule.add(courseHeader);
+    public void addToSchedule(Course course) {
+        this.schedule.add(course);
     }
 
-    public boolean removeFromSchedule(CourseHeader courseHeader) {
+    public boolean removeFromSchedule(Course courseHeader) {
         if (this.schedule.contains(courseHeader)) {
             this.schedule.remove(courseHeader);
             return true;

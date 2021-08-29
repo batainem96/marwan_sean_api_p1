@@ -2,18 +2,19 @@ package com.revature.portal.datasource.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
-import com.revature.portal.datasource.models.Faculty;
-import com.revature.portal.datasource.models.User;
-import com.revature.portal.datasource.models.Student;
+import com.revature.portal.datasource.models.*;
 import com.revature.portal.datasource.util.MongoClientFactory;
 import com.revature.portal.util.exceptions.DataSourceException;
 import com.revature.portal.util.exceptions.InvalidRequestException;
@@ -240,7 +241,7 @@ public class UserRepository {
      * @param updatedUser
      * @return
      */
-    public UserDTO update(User updatedUser) {
+    public UserDTO replace(User updatedUser) {
         try {
             // Convert Person to BasicDBObject
             String userJson = mapper.writeValueAsString(updatedUser);
@@ -252,12 +253,51 @@ public class UserRepository {
             if(updatedUser.getEmail() != null) fieldsDoc.append("email", updatedUser.getEmail());
             if(updatedUser.getUsername() != null) fieldsDoc.append("username", updatedUser.getUsername());
             if(updatedUser.getPassword() != null) fieldsDoc.append("password", updatedUser.getPassword());
+            if(updatedUser.getSchedule() != null) {
+
+                List<Document> courseListDoc = new ArrayList<>();
+
+                for (Course course : updatedUser.getSchedule()) {
+
+                    List<Document> meetingTimesDoc = new ArrayList<>();
+                    for(MeetingTime meet : course.getMeetingTimes()) {
+                        meetingTimesDoc.add(new Document("day", meet.getDay())
+                                        .append("startTime", meet.getStartTime())
+                                        .append("endTime", meet.getEndTime())
+                                        .append("classType", meet.getClassType()));
+                    }
+
+                    List<Document> prerequisitesDoc = new ArrayList<>();
+                    for (PreReq preReq : course.getPrerequisites()) {
+                        prerequisitesDoc.add(new Document("department", preReq.getDepartment())
+                                        .append("courseNo", preReq.getCourseNo())
+                                        .append("credits", preReq.getCredits()));
+                    }
+
+                    courseListDoc.add(new Document("_id", new ObjectId(course.getId()))
+                            .append("title", course.getTitle())
+                            .append("department", course.getDepartment())
+                            .append("deptShort", course.getDeptShort())
+                            .append("courseNo", course.getCourseNo())
+                            .append("sectionNo", course.getSectionNo())
+                            .append("instructor", course.getInstructor())
+                            .append("credits", course.getCredits())
+                            .append("totalSeats", course.getTotalSeats())
+                            .append("openSeats", course.getOpenSeats())
+                            .append("description", course.getDescription())
+                            .append("meetingTimes", meetingTimesDoc)
+                            .append("prerequisites", prerequisitesDoc));
+                }
+
+                fieldsDoc.append("schedule", courseListDoc);
+            }
+
 
             Document updateDoc = new Document("$set", fieldsDoc);
 
             System.out.println(fieldsDoc);
 
-            Document result = usersCollection.findOneAndUpdate(eq(("_id"), new ObjectId(updatedUser.getId())), updateDoc);
+            Document result = usersCollection.findOneAndUpdate(eq(("_id"), new ObjectId(updatedUser.getId())), updateDoc, new FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER));
             UserDTO updatedUserDTO = mapper.readValue(result.toJson(), UserDTO.class);
             updatedUserDTO.setId(result.get("_id").toString());
 
@@ -267,6 +307,30 @@ public class UserRepository {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResourcePersistenceException("Failed to update user!");
+        }
+    }
+
+    public UserDTO update(User user) {
+        try {
+            // Convert User to BasicDBObject
+            String id = user.getId();
+            user.setId(null);
+            String userJson = mapper.writeValueAsString(user);
+            Document updateFields = Document.parse(userJson);
+
+            BasicDBObject setQuery = new BasicDBObject();
+            setQuery.append("$set", updateFields);
+
+            usersCollection.updateOne(eq(("_id"), new ObjectId(id)), setQuery);
+            Document userDoc = usersCollection.find(eq(("_id"), new ObjectId(id))).first();
+            UserDTO newUser = mapper.readValue(userDoc.toJson(), UserDTO.class);
+            newUser.setId(userDoc.get("_id").toString());
+
+            return newUser;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new UserDTO(user);
         }
     }
 
