@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.revature.portal.web.dtos.CourseHeader;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -19,7 +20,7 @@ public class User {
     protected String username;
     protected String password;
     protected String role;
-    protected ArrayList<CourseHeader> schedule = new ArrayList<>();
+    protected List<Course> schedule = new ArrayList<>();
 
     public User() {
 
@@ -99,11 +100,11 @@ public class User {
         this.role = role;
     }
 
-    public ArrayList<CourseHeader> getSchedule() {
+    public List<Course> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(ArrayList<CourseHeader> schedule) {
+    public void setSchedule(ArrayList<Course> schedule) {
         this.schedule = schedule;
     }
 
@@ -132,11 +133,11 @@ public class User {
                 '}';
     }
 
-    public void addToSchedule(CourseHeader courseHeader) {
-        this.schedule.add(courseHeader);
+    public void addToSchedule(Course course) {
+        this.schedule.add(course);
     }
 
-    public boolean removeFromSchedule(CourseHeader courseHeader) {
+    public boolean removeFromSchedule(Course courseHeader) {
         if (this.schedule.contains(courseHeader)) {
             this.schedule.remove(courseHeader);
             return true;

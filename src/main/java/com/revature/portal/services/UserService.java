@@ -271,7 +271,7 @@ public class UserService {
      */
     public UserDTO updateUser(User user) {
 
-        Student modelUser = new Student("Validname", "Validlast", "valid.email@valid.com", "validusername", "validpassword");
+        User modelUser = new User("Validname", "Validlast", "valid.email@valid.com", "validusername", "validpassword", "student");
 
         if(user.getFirstName() != null) modelUser.setFirstName(user.getFirstName());
         if(user.getLastName() != null) modelUser.setLastName(user.getLastName());

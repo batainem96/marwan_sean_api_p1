@@ -1,9 +1,11 @@
 package com.revature.portal.web.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.revature.portal.datasource.models.Course;
 import com.revature.portal.datasource.models.User;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -16,7 +18,7 @@ public class UserDTO {
     protected String email;
     protected String username;
     protected String role;
-    protected ArrayList<CourseHeader> schedule = new ArrayList<>();
+    protected List<Course> schedule = new ArrayList<>();
 
     // Constructors
     public UserDTO() {
@@ -82,11 +84,11 @@ public class UserDTO {
         this.role = role;
     }
 
-    public ArrayList<CourseHeader> getSchedule() {
+    public List<Course> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(ArrayList<CourseHeader> schedule) {
+    public void setSchedule(ArrayList<Course> schedule) {
         this.schedule = schedule;
     }
 

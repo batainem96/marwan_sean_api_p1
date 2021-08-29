@@ -2,10 +2,7 @@ package com.revature.portal.services;
 
 import com.revature.portal.datasource.models.*;
 import com.revature.portal.datasource.repositories.CourseRepository;
-import com.revature.portal.util.exceptions.DataSourceException;
-import com.revature.portal.util.exceptions.InvalidRequestException;
-import com.revature.portal.util.exceptions.ResourcePersistenceException;
-import com.revature.portal.util.exceptions.SchedulingException;
+import com.revature.portal.util.exceptions.*;
 import com.revature.portal.datasource.models.Course;
 import com.revature.portal.web.dtos.CourseHeader;
 
@@ -59,22 +56,7 @@ public class CourseService {
     public Faculty generateSchedule(Faculty fac) {
         if (fac == null) return fac;
 
-        List<Course> courseList = courseRepo.retrieveInstructorCourses(fac.getFirstName(), fac.getLastName());
-        if (courseList == null)
-            return fac;
-
-        // Add to Faculty schedule if the courses do not exist
-        for (Course course : courseList) {
-            String dept = course.getDeptShort();
-            int courseNo = course.getCourseNo();
-            int sectionNo = course.getSectionNo();
-            ArrayList<MeetingTime> meetingTimes = course.getMeetingTimes();
-            CourseHeader newSched = new CourseHeader(dept, courseNo, sectionNo, meetingTimes);
-
-            if (!fac.getSchedule().contains(newSched))
-                fac.getSchedule().add(newSched);
-//            course.displayShortCourse();
-        }
+        fac.setSchedule((ArrayList<Course>) courseRepo.retrieveInstructorCourses(fac.getFirstName(), fac.getLastName()));
 
         return fac;
     }
@@ -147,27 +129,25 @@ public class CourseService {
 
     /**
      * Adds a new course to a Student's schedule
+     * TODO: This is not functional
      *
      * @param stud
-     * @param dept, courseNo, sectionNo
      */
-    public User addCourse(Student stud, String dept, int courseNo, int sectionNo) {
+    public User addCourse(Student stud, Course course) {
 
         // Find course in database given courseID
-        Course newCourse = courseRepo.findByCredentials(dept, courseNo, sectionNo);
+        Course newCourse = courseRepo.findByCredentials(course.getDeptShort(), course.getCourseNo(), course.getSectionNo());
+
+        if(newCourse == null) {
+            throw new ResourceNotFoundException("Course not found!");
+        }
 
         // Check if course has open seats
         if ((newCourse.getOpenSeats() == 0))
             throw new SchedulingException("Class has no open seats!");
 
-        String newDeptShort = newCourse.getDeptShort();
-        int newCourseNo = newCourse.getCourseNo();
-        int newSectionNo = newCourse.getSectionNo();
-        ArrayList<MeetingTime> newMeetingTimes = newCourse.getMeetingTimes();
-
-        CourseHeader courseData = new CourseHeader(newDeptShort, newCourseNo, newSectionNo, newMeetingTimes);
         try {
-            stud.getSchedule().add(courseData);
+            stud.getSchedule().add(newCourse);
             newCourse.setOpenSeats(newCourse.getOpenSeats() - 1);
         } catch (Exception e) {
             throw new DataSourceException("Error adding course to schedule", e);
@@ -232,7 +212,7 @@ public class CourseService {
      * @param course
      * @return
      */
-    public User addCourseToSchedule(User user, CourseHeader course) {
+    public User addCourseToSchedule(User user, Course course) {
 //        List<Schedule> schedule = user.getSchedule();
 //        for (Schedule existingCourse : schedule) {
 //            if (existingCourse.equals(course)) {
@@ -254,7 +234,7 @@ public class CourseService {
      * @param course
      * @return
      */
-    public User removeCourseFromSchedule(User user, CourseHeader course) {
+    public User removeCourseFromSchedule(User user, Course course) {
 //        List<Schedule> schedule = user.getSchedule();
 //        for (Schedule existingCourse : schedule) {
 //            if (existingCourse.equals(course)) {

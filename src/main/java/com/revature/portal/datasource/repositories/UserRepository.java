@@ -11,6 +11,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
+import com.revature.portal.datasource.models.Course;
 import com.revature.portal.datasource.models.Faculty;
 import com.revature.portal.datasource.models.User;
 import com.revature.portal.datasource.models.Student;
@@ -252,6 +253,24 @@ public class UserRepository {
             if(updatedUser.getEmail() != null) fieldsDoc.append("email", updatedUser.getEmail());
             if(updatedUser.getUsername() != null) fieldsDoc.append("username", updatedUser.getUsername());
             if(updatedUser.getPassword() != null) fieldsDoc.append("password", updatedUser.getPassword());
+            if(updatedUser.getSchedule() != null) {
+                Document coursesSetDoc = new Document();
+                Document coursesListDoc = new Document();
+                for (Course course : updatedUser.getSchedule()) {
+                    coursesListDoc.append("_id", new ObjectId(course.getId()));
+                    coursesListDoc.append("title", course.getTitle());
+                    coursesListDoc.append("department", course.getDepartment());
+                    coursesListDoc.append("deptShort", course.getDeptShort());
+                    coursesListDoc.append("courseNo", course.getCourseNo());
+                    coursesListDoc.append("sectionNo", course.getSectionNo());
+                    coursesListDoc.append("instructor", course.getInstructor());
+                    coursesListDoc.append("credits", course.getCredits());
+                    coursesListDoc.append("totalSeats", course.getTotalSeats());
+                    coursesListDoc.append("openSeats", course.getOpenSeats());
+                    coursesListDoc.append("description", course.getDescription());
+                }
+                coursesSetDoc.append("$set", coursesListDoc);
+            }
 
             Document updateDoc = new Document("$set", fieldsDoc);
 
