@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -225,20 +226,27 @@ public class CourseServlet extends HttpServlet {
             return;
         }
 
-        String idParam = req.getParameter("id");
+        String[] idParam = req.getParameterValues("id");
+        List<String> endmsg = new ArrayList<>();
 
-        try {
-            courseService.deleteCourseByID(idParam);
-            String msg = "Successfully deleted Course, ID: " + idParam;
-            logger.info(msg);
-            respWriter.write(msg);
-        } catch (Exception e) {
-            e.printStackTrace();
-            String msg = "Failed to delete course, ID: " + idParam;
-            ErrorResponse errResp = new ErrorResponse(500, msg);
-            respWriter.write(mapper.writeValueAsString(errResp));
-            logger.info(msg);
+        for (String id : idParam) {
+            System.out.println(id);
+            resp.setStatus(200);
+            try {
+                courseService.deleteCourseByID(id);
+                String msg = "Successfully deleted Course, ID: " + id;
+                logger.info(msg);
+                endmsg.add(msg);
+            } catch (Exception e) {
+                resp.setStatus(409);
+                e.printStackTrace();
+                String msg = "Failed to delete course, ID: " + id;
+                ErrorResponse errResp = new ErrorResponse(409, msg);
+                endmsg.add(msg);
+                logger.info(msg);
+            }
         }
+        respWriter.write(mapper.writeValueAsString(endmsg));
     }
   
     /**
