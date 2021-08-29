@@ -10,15 +10,22 @@ import java.util.Objects;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert fields to database if non null
 public class User {
     // Variables
-    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert ID to database if non null
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String id;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String firstName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String lastName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String email;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String username;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String password;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String role;
     protected List<Course> schedule = new ArrayList<>();
 

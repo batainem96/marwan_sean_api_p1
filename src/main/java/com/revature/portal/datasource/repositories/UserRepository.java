@@ -2,6 +2,7 @@ package com.revature.portal.datasource.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -240,7 +241,7 @@ public class UserRepository {
      * @param updatedUser
      * @return
      */
-    public UserDTO update(User updatedUser) {
+    public UserDTO replace(User updatedUser) {
         try {
             // Convert Person to BasicDBObject
             String userJson = mapper.writeValueAsString(updatedUser);
@@ -306,6 +307,30 @@ public class UserRepository {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResourcePersistenceException("Failed to update user!");
+        }
+    }
+
+    public UserDTO update(User user) {
+        try {
+            // Convert User to BasicDBObject
+            String id = user.getId();
+            user.setId(null);
+            String userJson = mapper.writeValueAsString(user);
+            Document updateFields = Document.parse(userJson);
+
+            BasicDBObject setQuery = new BasicDBObject();
+            setQuery.append("$set", updateFields);
+
+            usersCollection.updateOne(eq(("_id"), new ObjectId(id)), setQuery);
+            Document userDoc = usersCollection.find(eq(("_id"), new ObjectId(id))).first();
+            UserDTO newUser = mapper.readValue(userDoc.toJson(), UserDTO.class);
+            newUser.setId(userDoc.get("_id").toString());
+
+            return newUser;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new UserDTO(user);
         }
     }
 
