@@ -97,32 +97,6 @@ public class CourseServiceTestSuite {
         Assert.assertEquals("Expected user to be considered invalid!", expectedResult, actualResult1);
     }
 
-
-    /**
-     * For this test we want to ensure that displayCourse at least prints out Title, Dept, and ID.
-     * We also want other information the Course may have to display.
-     */
-    @Test
-    public void displayCourse_ignoresMissingInformation_exceptTitleAndCourseID() {
-        // Arrange
-        Course newCourse = new Course("TestTitle", "TestDepartment", 101, 1);
-        PrintStream oldOut = System.out;
-        // Create new System output stream
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(baos));
-
-        // Act
-        newCourse.displayCourse();
-        String output = new String(baos.toByteArray());
-        System.setOut(oldOut);
-
-        // Assert
-        assertTrue(output.contains("TestTitle"));
-        assertTrue(output.contains("TEST"));
-        assertTrue(output.contains("101-1"));
-        newCourse.displayCourse();
-    }
-
     @Test(expected = ResourcePersistenceException.class)
     public void createCourse_throwsException_ifDuplicate() {
         // Arrange
@@ -136,22 +110,6 @@ public class CourseServiceTestSuite {
             // Assert
             verify(mockCourseRepo, times(1)).save(dupCourse);
         }
-    }
-
-    @Test(expected = SchedulingException.class)
-    public void addCourse_throwsException_ifNoOpenSeats() {
-//        // Arrange
-//        Course course = new Course("Test", "Test", 101, 1);
-//        when(mockCourseRepo.findByCredentials("Test", 101, 1)).thenReturn(course);
-//        Student stud = new Student("Test", "Test", "Test", "Test", "Test");
-//
-//        // Act
-//        try {
-//            sut.addCourse(stud, "Test", 101, 1);
-//        } finally {
-//            // Assert
-//            assertEquals(course.getOpenSeats(), 0);
-//        }
     }
 
     @Test(expected = ResourcePersistenceException.class )
