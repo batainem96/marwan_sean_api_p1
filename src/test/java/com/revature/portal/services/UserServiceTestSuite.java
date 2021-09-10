@@ -124,11 +124,4 @@ public class UserServiceTestSuite {
         // Assert
         verify(mockUserRepo, times(1)).deleteById(any());
     }
-
-    @Test
-    public void isIsDefinitelyTrue_returnsTrue_whenGivenTrue() {
-        boolean actualResult = sut.isTrue(true);
-
-        Assert.assertTrue(actualResult);
-    }
 }
