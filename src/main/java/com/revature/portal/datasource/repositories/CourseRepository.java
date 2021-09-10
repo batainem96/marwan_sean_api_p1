@@ -246,6 +246,8 @@ public class CourseRepository {
             String courseJson = mapper.writeValueAsString(course);
             Document updateFields = Document.parse(courseJson);
 
+            System.out.println(updateFields);
+
             BasicDBObject setQuery = new BasicDBObject();
             setQuery.append("$set", updateFields);
 
