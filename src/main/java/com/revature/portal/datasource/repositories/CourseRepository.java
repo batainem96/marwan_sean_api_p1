@@ -2,16 +2,20 @@ package com.revature.portal.datasource.repositories;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.revature.portal.datasource.models.Course;
+import com.revature.portal.datasource.models.PreReq;
 import com.revature.portal.datasource.util.MongoClientFactory;
 import com.revature.portal.util.exceptions.DataSourceException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -209,7 +213,7 @@ public class CourseRepository {
         }
     }
 
-    public boolean update(Course updatedCourse) {
+    public boolean replace(Course updatedCourse) {
         try {
             // Convert Course to BasicDBObject
             String courseJson = mapper.writeValueAsString(updatedCourse);
@@ -226,13 +230,53 @@ public class CourseRepository {
         return false;
     }
 
+    /**
+     *  The update method takes in a course, expected to be partially valid; Fields intended to be updated will
+     *  have valid information, otherwise, they will be null/-1. The valid information is then built into a query
+     *  object, which is appended to an update query of the form: findOneAndUpdate(eq(("_id"), id), $set: (field: updatedFieldValue)).
+     *
+     * @param course
+     * @return The newly updated course retrieved from the database.
+     */
+    public Course update(Course course) {
+        try {
+            // Convert Course to BasicDBObject
+            String id = course.getId();
+            course.setId(null);
+            String courseJson = mapper.writeValueAsString(course);
+            Document updateFields = Document.parse(courseJson);
+
+            BasicDBObject setQuery = new BasicDBObject();
+            setQuery.append("$set", updateFields);
+
+            Document courseDoc = courseCollection.findOneAndUpdate(eq(("_id"), new ObjectId(id)), setQuery);
+            Course newCourse = mapper.readValue(courseDoc.toJson(), Course.class);
+            newCourse.setId(courseDoc.get("_id").toString());
+
+            return newCourse;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return course;
+        }
+    }
+
+    /**
+     *  Removes a course from the database matching the given id. If no course is found matching the id, return false.
+     *
+     * @param id
+     * @return
+     */
     public boolean deleteById(String id) {
         try {
             Document queryDoc = new Document("_id", new ObjectId(id));
 
             // delete course
-            DeleteResult result = courseCollection.deleteOne(queryDoc);
-            return result.wasAcknowledged();
+            Document result = courseCollection.findOneAndDelete(queryDoc);
+
+            // Return true if course was found (and deleted), otherwise return false
+            if (result != null) return true;
+            else return false;
         } catch (Exception e) {
             throw new DataSourceException("An unexpected exception occurred.", e);
         }

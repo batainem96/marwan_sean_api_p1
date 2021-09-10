@@ -5,16 +5,16 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoClient;
+import com.revature.portal.datasource.repositories.CourseRepository;
+import com.revature.portal.services.CourseService;
 import com.revature.portal.web.filters.AuthFilter;
-import com.revature.portal.web.servlets.UserServlet;
+import com.revature.portal.web.servlets.*;
 import com.revature.portal.web.util.security.JwtConfig;
 import com.revature.portal.web.util.security.TokenGenerator;
 import com.revature.portal.datasource.repositories.UserRepository;
 import com.revature.portal.datasource.util.MongoClientFactory;
 import com.revature.portal.services.UserService;
-import com.revature.portal.web.servlets.HealthCheckServlet;
-import com.revature.portal.web.servlets.LoginServlet;
-import com.revature.portal.web.servlets.TestServlet;
+import org.bson.codecs.configuration.CodecRegistry;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.DispatcherType;
@@ -25,6 +25,8 @@ import java.io.File;
 import java.util.EnumSet;
 
 public class ContextLoaderListener implements ServletContextListener {
+
+
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -40,6 +42,10 @@ public class ContextLoaderListener implements ServletContextListener {
 
         UserRepository userRepo = new UserRepository(mapper);
         UserService userService = new UserService(userRepo);
+
+        CourseRepository courseRepo = new CourseRepository(mapper);
+        CourseService courseService = new CourseService(courseRepo);
+
         System.out.println("Services Created!");
 
         AuthFilter authFilter = new AuthFilter(jwtConfig);
@@ -48,7 +54,7 @@ public class ContextLoaderListener implements ServletContextListener {
         HealthCheckServlet healthCheckServlet = new HealthCheckServlet();
         TestServlet testServlet = new TestServlet();
         UserServlet userServlet = new UserServlet(userService, mapper);
-
+        CourseServlet courseServlet = new CourseServlet(courseService, mapper);
 
         ServletContext servletContext = sce.getServletContext();
 
@@ -57,6 +63,7 @@ public class ContextLoaderListener implements ServletContextListener {
         servletContext.addServlet("HealthServlet", healthCheckServlet).addMapping("/health");
         servletContext.addServlet("TestServlet", testServlet).addMapping("/test");
         servletContext.addServlet("UserServlet", userServlet).addMapping("/users");
+        servletContext.addServlet("CourseServlet", courseServlet).addMapping("/courses");
         System.out.println("TestServlet Context Added!");
 
         configureLogback(servletContext);
@@ -84,6 +91,10 @@ public class ContextLoaderListener implements ServletContextListener {
             e.printStackTrace();
             System.out.println("An unexpected exception occurred. Unable to configure Logback.");
         }
+
+    }
+
+    private void configureCodecs() {
 
     }
 }

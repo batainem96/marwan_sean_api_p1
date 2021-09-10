@@ -1,9 +1,11 @@
 package com.revature.portal.web.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.revature.portal.datasource.models.Course;
 import com.revature.portal.datasource.models.User;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -13,9 +15,10 @@ public class UserDTO {
     protected String id;
     protected String firstName;
     protected String lastName;
+    protected String email;
     protected String username;
-    protected String userType;
-    protected ArrayList<CourseHeader> schedule = new ArrayList<>();
+    protected String role;
+    protected List<Course> schedule = new ArrayList<>();
 
     // Constructors
     public UserDTO() {
@@ -26,8 +29,9 @@ public class UserDTO {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
+        this.email = user.getEmail();
         this.username = user.getUsername();
-        this.userType = user.getUserType();
+        this.role = user.getRole();
         this.schedule = user.getSchedule();
     }
 
@@ -56,6 +60,14 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -64,19 +76,19 @@ public class UserDTO {
         this.username = username;
     }
 
-    public String getUserType() {
-        return userType;
+    public String getRole() {
+        return role;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public ArrayList<CourseHeader> getSchedule() {
+    public List<Course> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(ArrayList<CourseHeader> schedule) {
+    public void setSchedule(ArrayList<Course> schedule) {
         this.schedule = schedule;
     }
 
@@ -86,12 +98,12 @@ public class UserDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDTO userDTO = (UserDTO) o;
-        return Objects.equals(id, userDTO.id) && Objects.equals(firstName, userDTO.firstName) && Objects.equals(lastName, userDTO.lastName) && Objects.equals(username, userDTO.username) && Objects.equals(userType, userDTO.userType) && Objects.equals(schedule, userDTO.schedule);
+        return Objects.equals(id, userDTO.id) && Objects.equals(firstName, userDTO.firstName) && Objects.equals(lastName, userDTO.lastName) && Objects.equals(username, userDTO.username) && Objects.equals(role, userDTO.role) && Objects.equals(schedule, userDTO.schedule);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, username, userType, schedule);
+        return Objects.hash(id, firstName, lastName, username, role, schedule);
     }
 
     @Override
@@ -101,7 +113,7 @@ public class UserDTO {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", username='" + username + '\'' +
-                ", userType='" + userType + '\'' +
+                ", userType='" + role + '\'' +
                 ", schedule=" + schedule +
                 '}';
     }

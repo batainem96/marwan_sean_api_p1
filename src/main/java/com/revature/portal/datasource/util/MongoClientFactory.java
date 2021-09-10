@@ -6,6 +6,7 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.revature.portal.util.exceptions.DataSourceException;
+import org.bson.codecs.configuration.CodecRegistry;
 
 import java.io.FileNotFoundException;
 import java.util.Collections;

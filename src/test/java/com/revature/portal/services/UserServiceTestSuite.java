@@ -5,6 +5,7 @@ import com.revature.portal.datasource.models.User;
 import com.revature.portal.datasource.models.Student;
 import com.revature.portal.datasource.repositories.UserRepository;
 import com.revature.portal.web.dtos.Principal;
+import com.revature.portal.web.dtos.UserDTO;
 import org.junit.*;
 import com.revature.portal.util.exceptions.InvalidRequestException;
 import com.revature.portal.util.exceptions.ResourcePersistenceException;
@@ -58,16 +59,13 @@ public class UserServiceTestSuite {
 
         // Arrange
         boolean expectedResult = true;
-        User validStudent = new Student("valid", "valid", "valid", "valid", "valid");
-        User validFaculty = new Faculty("valid", "valid", "valid", "valid", "valid");
+        User validStudent = new User("valid", "valid", "valid@email.com", "valid", "valid", "student");
 
         // Act
         boolean actualResult1 = sut.isUserValid(validStudent);
-        boolean actualResult2 = sut.isUserValid(validFaculty);
 
         // Assert
         Assert.assertEquals("Expected user to be considered valid!", expectedResult, actualResult1);
-        Assert.assertEquals("Expected user to be considered valid!", expectedResult, actualResult2);
     }
 
     @Test
@@ -101,21 +99,6 @@ public class UserServiceTestSuite {
         Assert.assertFalse("User first name cannot be only whitespace!", actualResult6);
     }
 
-    @Test
-    public void register_returnsSuccessfully_whenGivenValidUser() {
-        // Arrange
-        User expectedResult = new Student("1", "valid", "valid", "valid", "valid");
-        User validUser = new Student("valid", "valid", "valid", "valid", "valid");
-        when(mockUserRepo.save(any())).thenReturn(expectedResult);
-
-        // Act
-        User actualResult = sut.register(validUser);
-
-        // Assert
-        Assert.assertEquals(expectedResult, actualResult);
-        verify(mockUserRepo, times(1)).save(any());
-    }
-
     @Test(expected = InvalidRequestException.class)
     public void register_throwsException_whenGivenInvalidUser() {
         // Arrange
@@ -128,55 +111,6 @@ public class UserServiceTestSuite {
             // Assert
             verify(mockUserRepo, times(0)).save(any());
         }
-    }
-
-    @Test(expected = ResourcePersistenceException.class)
-    public void register_throwsException_whenGivenUserWithDuplicateUsername() {
-        // Arrange
-        User existingUser = new Student("original", "last", "email", "duplicate", "original");
-        User duplicate = new Student("first", "last", "email", "duplicate", "password");
-        when(mockUserRepo.findUserByUsername(duplicate.getUsername())).thenReturn(existingUser);
-
-        // Act
-        try {
-            sut.register(duplicate);
-        } finally {
-            // Assert
-            verify(mockUserRepo, times(1)).findUserByUsername(duplicate.getUsername());
-            verify(mockUserRepo, times(0)).save(duplicate);
-        };
-    }
-
-    @Test
-    public void login_returnsNull_whenGivenBadCredentials() {
-        // Arrange
-        String newUsername = "blankblank";
-        String newPassword = "password";
-        Principal expectedResult1 = null;
-
-        String existingUsername = "sdunn";
-        String wrongPassword = "wrongpassword";
-        Principal expectedResult2 = null;
-
-        // Act
-        Principal actualResult1 = sut.login(newUsername, newPassword);
-        Principal actualResult2 = sut.login(existingUsername, wrongPassword);
-
-        // Assert
-        Assert.assertEquals("User not found in database.", expectedResult1, actualResult1);
-        Assert.assertEquals("Username or password is incorrect.", expectedResult2, actualResult2);
-    }
-
-    @Test(expected = ResourcePersistenceException.class)
-    public void updateUser_throwsException_ifUpdateUnacknowledged() {
-        // Arrange
-        when(mockUserRepo.update(any())).thenReturn(false);
-
-        // Act
-        sut.updateUser(new Student());
-
-        // Assert
-        verify(mockUserRepo, times(1)).update(any());
     }
 
     @Test(expected = ResourcePersistenceException.class)

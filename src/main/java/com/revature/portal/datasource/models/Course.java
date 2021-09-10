@@ -1,6 +1,7 @@
 package com.revature.portal.datasource.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.lang.reflect.Field;
@@ -9,6 +10,7 @@ import java.util.*;
 import static com.revature.portal.datasource.models.DeptShorthand.deptToShort;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Course {
     // Variables
     private String id;
@@ -18,13 +20,13 @@ public class Course {
     private int courseNo;
     private int sectionNo;
     @JsonProperty("prerequisites")
-    private ArrayList<PreReq> prerequisites = new ArrayList<>();
+    private ArrayList<PreReq> prerequisites;
     private String instructor;
     private int credits;
     private int totalSeats;
-    private int openSeats = 0;
+    private int openSeats;
     @JsonProperty("meetingTimes")
-    private ArrayList<MeetingTime> meetingTimes = new ArrayList<>();
+    private ArrayList<MeetingTime> meetingTimes;
     private String description;
 
 //    private final Logger logger = LogManager.getLogger(CourseService.class);
@@ -186,7 +188,43 @@ public class Course {
         return Objects.hash(id, title, department, deptShort, courseNo, sectionNo, prerequisites, instructor, credits, totalSeats, openSeats, meetingTimes, description);
     }
 
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", department='" + department + '\'' +
+                ", deptShort='" + deptShort + '\'' +
+                ", courseNo=" + courseNo +
+                ", sectionNo=" + sectionNo +
+                ", prerequisites=" + prerequisites +
+                ", instructor='" + instructor + '\'' +
+                ", credits=" + credits +
+                ", totalSeats=" + totalSeats +
+                ", openSeats=" + openSeats +
+                ", meetingTimes=" + meetingTimes +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
     // Methods
+    /**
+     *  Hacky workaround to problem of ObjectMapper initializing unknown variables to null/-1.
+     *  Variables can stay as null, but integers should be changed to 0.
+     */
+    public void reinitializeVariables() {
+        try {
+            for (Field field : this.getClass().getDeclaredFields()) {
+                if (field.get(this) == null)
+                    continue;
+                if (field.get(this).equals(-1))
+                    field.set(this, 0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Displays course information in an easily readable format
      */

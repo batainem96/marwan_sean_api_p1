@@ -5,28 +5,36 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.revature.portal.web.dtos.CourseHeader;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class User {
+//@JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert fields to database if non null
+public class User {
     // Variables
-    @JsonInclude(JsonInclude.Include.NON_NULL)  // Only insert ID to database if non null
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String id;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String firstName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String lastName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String email;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String username;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     protected String password;
-    protected String userType;
-    protected ArrayList<CourseHeader> schedule = new ArrayList<>();
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    protected String role;
+    protected List<Course> schedule = new ArrayList<>();
 
     public User() {
-        super();
+
     }
 
     public User(String userType) {
-        this.userType = userType;
+        this.role = userType;
     }
 
     public User(String firstName, String lastName, String email, String username, String password, String userType) {
@@ -35,7 +43,7 @@ public abstract class User {
         this.email = email;
         this.username = username;
         this.password = password;
-        this.userType = userType;
+        this.role = userType;
     }
 
     public User(String id, String firstName, String lastName, String email, String username, String password, String userType) {
@@ -91,19 +99,19 @@ public abstract class User {
         this.password = password;
     }
 
-    public String getUserType() {
-        return userType;
+    public String getRole() {
+        return role;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public ArrayList<CourseHeader> getSchedule() {
+    public List<Course> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(ArrayList<CourseHeader> schedule) {
+    public void setSchedule(ArrayList<Course> schedule) {
         this.schedule = schedule;
     }
 
@@ -127,16 +135,16 @@ public abstract class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", username='" + username + '\'' +
-                ", userType='" + userType + '\'' +
+                ", userType='" + role + '\'' +
                 ", schedule=" + schedule +
                 '}';
     }
 
-    public void addToSchedule(CourseHeader courseHeader) {
-        this.schedule.add(courseHeader);
+    public void addToSchedule(Course course) {
+        this.schedule.add(course);
     }
 
-    public boolean removeFromSchedule(CourseHeader courseHeader) {
+    public boolean removeFromSchedule(Course courseHeader) {
         if (this.schedule.contains(courseHeader)) {
             this.schedule.remove(courseHeader);
             return true;
